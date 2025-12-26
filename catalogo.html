@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- --- SEO & METADATA START --- -->
+    <title>Orçamento Bespoke AVX | Monte sua Casa</title>
+    <meta name="description" content="Ferramenta de orçamentação inteligente AVX. Defina ambientes, escolha dispositivos e receba um projeto de automação completo via IA.">
+    <meta name="robots" content="noindex, nofollow">
+
+    <!-- FAVICON -->
+    <link rel="icon" type="image/png" sizes="32x32" href="Assets/img_D15Q12.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="Assets/img_D15Q12.png">
+
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Libraries -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+    
+    <!-- Configurações Personalizadas do Tailwind -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        avx: { red: '#DA291C', dark: '#0f172a', light: '#f8fafc', gray: '#64748b', gold: '#C5A059' }
+                    },
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    boxShadow: {
+                        'soft': '0 20px 40px -15px rgba(0, 0, 0, 0.05)',
+                        'glow': '0 0 20px rgba(255, 255, 255, 0.5)',
+                        'float': '0 10px 30px -10px rgba(218, 41, 28, 0.3)',
+                    },
+                    animation: {
+                        'slide-in-right': 'slideInRight 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                        'fade-out': 'fadeOut 0.5s forwards',
+                    },
+                    keyframes: {
+                        slideInRight: { '0%': { transform: 'translateX(100%)', opacity: '0' }, '100%': { transform: 'translateX(0)', opacity: '1' } },
+                        fadeOut: { '0%': { opacity: '1' }, '100%': { opacity: '0' } }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Estilos Globais */
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #0f172a; overflow-x: hidden; padding-bottom: 140px; transition: background-color 0.3s, color 0.3s; }
+        html.dark body { background-color: #020617; color: #f1f5f9; }
+
+        /* Nav Blur */
+        .nav-blur { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); background-color: rgba(255, 255, 255, 0.9); }
+        html.dark .nav-blur { background-color: rgba(15, 23, 42, 0.9); border-bottom-color: #1e293b; }
+
+        /* Ambiente Sticky Header */
+        .room-bar { position: fixed; top: 80px; left: 0; width: 100%; z-index: 40; background: white; border-bottom: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); transition: all 0.3s ease; }
+        html.dark .room-bar { background-color: #0f172a; border-bottom-color: #1e293b; }
+
+        /* Barra de Progresso Inteligente */
+        .intelligence-line-container { position: absolute; bottom: 0; left: 0; width: 100%; height: 3px; background: #f1f5f9; }
+        html.dark .intelligence-line-container { background: #1e293b; }
+        .intelligence-line-fill { height: 100%; background: linear-gradient(90deg, #DA291C, #fbbf24); width: 0%; transition: width 1s cubic-bezier(0.4, 0, 0.2, 1); }
+
+        /* Wizard Bar Compacta */
+        .wizard-scroll { display: flex; align-items: center; gap: 8px; overflow-x: auto; white-space: nowrap; padding: 8px 0; }
+        .wizard-btn { font-size: 0.7rem; font-weight: 600; padding: 6px 12px; border-radius: 999px; border: 1px solid #e2e8f0; background: white; color: #64748b; transition: all 0.2s; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; box-shadow: 0 1px 1px rgba(0,0,0,0.05); flex-shrink: 0; }
+        html.dark .wizard-btn { background: #1e293b; border-color: #334155; color: #94a3b8; }
+        .wizard-btn:hover { border-color: #DA291C; color: #DA291C; background: #fff5f5; }
+        html.dark .wizard-btn:hover { background: rgba(218, 41, 28, 0.1); }
+
+        /* Sidebar Summary */
+        .sidebar-sticky { position: sticky; top: 240px; max-height: calc(100vh - 260px); overflow-y: auto; }
+
+        /* Custom Select Styling */
+        .custom-select-wrapper { position: relative; display: inline-block; width: 100%; }
+        .custom-select { appearance: none; background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e"); background-position: right 0.5rem center; background-repeat: no-repeat; background-size: 1.2em 1.2em; padding-right: 2rem; }
+        html.dark .custom-select { background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23cbd5e1' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e"); }
+
+        /* Chart Styles (Restaurado) */
+        .chart-container { display: flex; height: 24px; width: 100%; background: #f1f5f9; border-radius: 12px; overflow: hidden; margin-top: 10px; }
+        .chart-segment { height: 100%; transition: width 1s ease-out; }
+        
+        .pie-chart-wrapper { position: relative; width: 220px; height: 220px; border-radius: 50%; background: #f1f5f9; box-shadow: inset 0 0 20px rgba(0,0,0,0.05); }
+        html.dark .pie-chart-wrapper { background: #1e293b; box-shadow: inset 0 0 20px rgba(0,0,0,0.2); }
+        .pie-hole { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 140px; height: 140px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-direction: column; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        html.dark .pie-hole { background: #020617; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+
+        /* Modal Animation */
+        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(4px); z-index: 2000; display: none; opacity: 0; transition: opacity 0.3s ease; align-items: center; justify-content: center; }
+        .modal-overlay.open { display: flex; opacity: 1; }
+        .modal-content { background: white; width: 95%; max-width: 1000px; max-height: 90vh; border-radius: 24px; overflow-y: auto; transform: translateY(20px); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); }
+        html.dark .modal-content { background: #0f172a; border: 1px solid #1e293b; }
+        .modal-overlay.open .modal-content { transform: translateY(0); }
+
+        /* Budget Bar Floating */
+        .budget-float { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(150%); width: 92%; max-width: 600px; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(10px); color: white; padding: 0.8rem 1.2rem; border-radius: 100px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 20px 40px rgba(0,0,0,0.3); z-index: 100; transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); border: 1px solid rgba(255,255,255,0.1); }
+        .budget-float.visible { transform: translateX(-50%) translateY(0); }
+
+        /* Quantity Buttons */
+        .qty-control { display: flex; align-items: center; background: #f1f5f9; border-radius: 999px; padding: 0.2rem; border: 1px solid #e2e8f0; }
+        html.dark .qty-control { background: #1e293b; border-color: #334155; }
+        .qty-btn { width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: white; color: #64748b; cursor: pointer; transition: all 0.2s; box-shadow: 0 1px 2px rgba(0,0,0,0.05); font-size: 0.8rem; }
+        html.dark .qty-btn { background: #334155; color: #cbd5e1; }
+        .qty-btn:hover { background: #DA291C; color: white; }
+        .qty-value { width: 32px; text-align: center; font-weight: 700; font-size: 0.9rem; color: #0f172a; }
+        html.dark .qty-value { color: #fff; }
+
+        /* Admin Mode */
+        .admin-price { display: none; font-size: 0.75rem; font-weight: 700; color: #C5A059; background-color: #fffbeb; padding: 2px 6px; border-radius: 4px; border: 1px solid #fcd34d; }
+        html.dark .admin-price { background-color: #451a03; border-color: #78350f; color: #fbbf24; }
+        body.is-admin .admin-price { display: inline-block; }
+
+        /* Toast Notifications */
+        @keyframes slide-in-right { 0% { transform: translateX(100%); opacity: 0; } 100% { transform: translateX(0); opacity: 1; } }
+        @keyframes fade-out { 0% { opacity: 1; } 100% { opacity: 0; } }
+
+        .toast-container { position: fixed; bottom: 100px; right: 20px; z-index: 3000; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
+        .toast { pointer-events: auto; background: white; border-left: 4px solid #DA291C; padding: 12px 16px; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); max-width: 320px; display: flex; align-items: start; gap: 12px; transform: translateX(100%); opacity: 0; animation: slide-in-right 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        html.dark .toast { background: #1e293b; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .toast.hiding { animation: fade-out 0.5s forwards; }
+        
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="antialiased selection:bg-avx-red selection:text-white dark:bg-slate-950 dark:text-slate-100 transition-colors duration-300">
+
+    <!-- Navbar -->
+    <nav class="fixed w-full z-50 nav-blur border-b border-gray-100 dark:border-slate-800 transition-all duration-300 h-20" id="navbar">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex-shrink-0 cursor-pointer" onclick="window.location.href='index.html'">
+                    <span class="text-3xl font-extrabold tracking-tighter text-slate-900 dark:text-white">AVX<span class="text-avx-red">.</span></span>
+                </div>
+                <div class="hidden md:flex space-x-8 items-center">
+                    <a href="index.html" class="nav-link text-sm font-medium text-slate-600 hover:text-avx-red dark:text-slate-300 dark:hover:text-avx-red transition-colors">Início</a>
+                    <a href="index.html#conceito" class="nav-link text-sm font-medium text-slate-600 hover:text-avx-red dark:text-slate-300 dark:hover:text-avx-red transition-colors">Conceito</a>
+                    <a href="index.html#solucoes" class="nav-link text-sm font-medium text-slate-600 hover:text-avx-red dark:text-slate-300 dark:hover:text-avx-red transition-colors">Soluções</a>
+                    <a href="#" class="text-sm font-bold text-avx-red hover:text-red-700 transition-colors">Catálogo</a>
+                    <a href="index.html#processo" class="nav-link text-sm font-medium text-slate-600 hover:text-avx-red dark:text-slate-300 dark:hover:text-avx-red transition-colors">Processo</a>
+                    <a href="index.html#compliance" class="nav-link text-sm font-medium text-slate-600 hover:text-avx-red dark:text-slate-300 dark:hover:text-avx-red transition-colors">Compliance</a>
+                    <div class="h-4 w-px bg-slate-300 dark:bg-slate-700"></div>
+                    <button onclick="toggleTheme()" id="theme-toggle-desktop" class="text-slate-400 hover:text-avx-red dark:text-slate-400 dark:hover:text-avx-red transition-colors p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800" title="Alternar Modo Escuro">
+                        <i data-lucide="moon" class="w-4 h-4"></i>
+                    </button>
+                    <button onclick="toggleAdmin()" id="btn-admin-lock-desktop" class="text-slate-400 hover:text-avx-red transition-colors p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800" title="Acesso Admin">
+                        <i data-lucide="lock" class="w-4 h-4"></i>
+                    </button>
+                    <a href="index.html#contato" class="group bg-slate-900 hover:bg-avx-red text-white px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300 shadow-lg hover:shadow-avx-red/30 flex items-center gap-2 dark:bg-slate-800 dark:hover:bg-avx-red">
+                        <span>Iniciar Projeto</span>
+                        <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+                    </a>
+                </div>
+                <div class="md:hidden flex items-center gap-4">
+                    <button onclick="toggleTheme()" id="theme-toggle-mobile" class="text-slate-400 hover:text-avx-red transition-colors p-2" title="Alternar Modo Escuro"><i data-lucide="moon" class="w-5 h-5"></i></button>
+                    <button onclick="toggleAdmin()" id="btn-admin-lock-mobile" class="text-slate-400 hover:text-avx-red transition-colors p-2" title="Acesso Admin"><i data-lucide="lock" class="w-5 h-5"></i></button>
+                    <button id="mobile-btn" class="text-slate-900 dark:text-white focus:outline-none z-50"><i data-lucide="menu" class="w-8 h-8"></i></button>
+                </div>
+            </div>
+        </div>
+        <div id="mobile-menu" class="hidden md:hidden bg-white dark:bg-slate-900 border-t border-gray-100 dark:border-slate-800 absolute w-full px-6 py-4 shadow-xl z-50">
+            <div class="flex flex-col space-y-4">
+                <a href="index.html" class="text-lg font-medium text-slate-800 dark:text-slate-200">Início</a>
+                <a href="index.html#conceito" class="text-lg font-medium text-slate-800 dark:text-slate-200">Conceito</a>
+                <a href="index.html#solucoes" class="text-lg font-medium text-slate-800 dark:text-slate-200">Soluções</a>
+                <a href="#" class="text-lg font-bold text-avx-red">Catálogo de Produtos</a>
+                <a href="index.html#processo" class="text-lg font-medium text-slate-800 dark:text-slate-200">Processo</a>
+                <a href="index.html#contato" class="text-avx-red font-semibold">Iniciar Projeto</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Room Management Bar -->
+    <div id="room-bar" class="room-bar px-4 lg:px-8 pt-2 pb-0 flex flex-col transition-colors duration-300">
+        <div class="max-w-7xl mx-auto w-full flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-2 lg:gap-4 mb-2">
+            <div class="flex items-center gap-2 w-full lg:w-auto flex-grow">
+                <div class="custom-select-wrapper flex-grow">
+                    <select id="room-select" onchange="switchRoom(this.value)" class="custom-select w-full px-3 py-1.5 rounded-md border border-slate-300 bg-white text-slate-900 font-semibold focus:outline-none focus:border-avx-red focus:ring-1 focus:ring-avx-red shadow-sm cursor-pointer disabled:bg-slate-100 disabled:text-slate-400 text-xs h-9 dark:bg-slate-800 dark:border-slate-700 dark:text-white dark:disabled:bg-slate-900 dark:disabled:text-slate-600 transition-colors">
+                        <option value="" disabled selected>Nenhum ambiente criado</option>
+                    </select>
+                </div>
+                <button id="clone-btn" onclick="cloneRoom()" disabled class="bg-white border border-slate-300 text-slate-600 hover:text-avx-red hover:border-avx-red px-3 py-1.5 rounded-md transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed group flex items-center gap-2 font-bold text-xs h-9 whitespace-nowrap dark:bg-slate-800 dark:border-slate-700 dark:text-slate-400 dark:hover:text-avx-red dark:hover:border-avx-red" title="Duplicar Ambiente">
+                    <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                    <span class="hidden sm:inline">Duplicar</span>
+                </button>
+                <button id="delete-btn" onclick="deleteRoom()" disabled class="bg-white border border-slate-300 text-slate-400 hover:text-red-600 hover:border-red-600 px-3 py-1.5 rounded-md transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed group flex items-center justify-center h-9 w-9 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-500" title="Excluir Ambiente">
+                    <i data-lucide="trash-2" class="w-4 h-4"></i>
+                </button>
+            </div>
+            <div class="flex items-center gap-2 w-full lg:w-auto">
+                <input type="text" id="new-room-input" placeholder="Novo ambiente..." class="flex-grow px-3 py-1.5 rounded-md border border-slate-300 bg-slate-50 focus:bg-white focus:outline-none focus:border-avx-red focus:ring-1 focus:ring-avx-red transition-all text-xs shadow-inner h-9 w-full lg:w-48 dark:bg-slate-900 dark:border-slate-700 dark:text-white dark:placeholder-slate-500 dark:focus:bg-slate-800">
+                <button onclick="createRoom()" class="bg-slate-900 hover:bg-avx-red text-white px-4 py-1.5 rounded-md font-bold text-xs transition-colors whitespace-nowrap shadow-md flex items-center gap-1.5 h-9 dark:bg-slate-800 dark:hover:bg-avx-red">
+                    <i data-lucide="plus" class="w-3.5 h-3.5"></i> <span>Criar</span>
+                </button>
+                <button onclick="resetProject()" class="text-xs font-bold text-red-500 hover:text-red-700 transition-colors flex items-center gap-1 border border-red-200 hover:border-red-400 px-3 py-1.5 rounded-md h-9 bg-red-50 hover:bg-red-100 dark:bg-red-900/20 dark:border-red-900/40 dark:text-red-400 dark:hover:bg-red-900/40" title="Novo Projeto">
+                    <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+                </button>
+            </div>
+            <div class="hidden lg:flex items-center gap-2 text-xs font-bold text-slate-500 bg-slate-50 px-3 py-1.5 rounded-md border border-slate-100 h-9 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-400">
+                <i data-lucide="brain-circuit" class="w-4 h-4 text-amber-500"></i>
+                <span>Nível IA: <span id="intelligence-value-desktop" class="text-slate-900 dark:text-white">0%</span></span>
+            </div>
+        </div>
+        <div id="wizard-container" class="w-full border-t border-slate-100 dark:border-slate-800 hidden">
+            <div class="max-w-7xl mx-auto w-full flex items-center gap-2 py-2">
+                <span class="text-[9px] font-bold text-slate-400 uppercase tracking-wide whitespace-nowrap flex-shrink-0">Kits Rápidos:</span>
+                <div class="wizard-scroll no-scrollbar">
+                    <button onclick="applyKit('cinema')" class="wizard-btn"><i data-lucide="clapperboard" class="w-3 h-3 text-purple-500"></i> Cinema</button>
+                    <button onclick="applyKit('security')" class="wizard-btn"><i data-lucide="shield" class="w-3 h-3 text-avx-red"></i> Segurança</button>
+                    <button onclick="applyKit('climate')" class="wizard-btn"><i data-lucide="snowflake" class="w-3 h-3 text-blue-400"></i> Clima</button>
+                    <button onclick="applyKit('gourmet')" class="wizard-btn"><i data-lucide="utensils" class="w-3 h-3 text-orange-400"></i> Gourmet</button>
+                    <button onclick="applyKit('suite')" class="wizard-btn"><i data-lucide="bed" class="w-3 h-3 text-indigo-400"></i> Suíte</button>
+                </div>
+            </div>
+        </div>
+        <div class="intelligence-line-container"><div id="intelligence-fill" class="intelligence-line-fill"></div></div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Main Content -->
+    <div id="main-content" class="pt-[180px] pb-32 min-h-screen opacity-50 pointer-events-none transition-opacity duration-500">
+        <div class="max-w-7xl mx-auto px-4 lg:px-8">
+            <div class="grid grid-cols-1 xl:grid-cols-4 gap-8">
+                <!-- Catalog Grid -->
+                <div class="xl:col-span-3">
+                    
+                    <!-- 1. Central -->
+                    <section class="mb-10">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-1 h-6 bg-avx-red rounded-full"></div>
+                            <div>
+                                <h2 class="text-lg font-bold text-slate-900 dark:text-white">1. Central de Controle</h2>
+                                <p class="text-[10px] text-slate-500 dark:text-slate-400">O Coração do Organismo Vivo (Obrigatório).</p>
+                            </div>
+                        </div>
+                        <div id="grid-central" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+                    </section>
+
+                    <!-- 2. Iluminação -->
+                    <section class="mb-10">
+                        <div class="flex items-center gap-3 mb-4"><div class="w-1 h-6 bg-avx-red rounded-full"></div><h2 class="text-lg font-bold text-slate-900 dark:text-white">2. Iluminação</h2></div>
+                        <div id="grid-iluminacao" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+                    </section>
+
+                    <!-- 3. Tomadas -->
+                    <section class="mb-10">
+                        <div class="flex items-center gap-3 mb-4"><div class="w-1 h-6 bg-avx-red rounded-full"></div><h2 class="text-lg font-bold text-slate-900 dark:text-white">3. Tomadas & Acabamentos</h2></div>
+                        <div id="grid-tomadas" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+                    </section>
+
+                    <!-- 4. Climatização -->
+                    <section class="mb-10">
+                        <div class="flex items-center gap-3 mb-4"><div class="w-1 h-6 bg-avx-red rounded-full"></div><h2 class="text-lg font-bold text-slate-900 dark:text-white">4. Climatização</h2></div>
+                        <div id="grid-climatizacao" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+                    </section>
+
+                    <!-- 5. Cortinas -->
+                    <section class="mb-10">
+                        <div class="flex items-center gap-3 mb-4"><div class="w-1 h-6 bg-avx-red rounded-full"></div><h2 class="text-lg font-bold text-slate-900 dark:text-white">5. Cortinas e Persianas</h2></div>
+                        <div id="grid-cortinas" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+                    </section>
+
+                    <!-- 6. Multimídia -->
+                    <section class="mb-10">
+                        <div class="flex items-center gap-3 mb-4"><div class="w-1 h-6 bg-avx-red rounded-full"></div><h2 class="text-lg font-bold text-slate-900 dark:text-white">6. Multimídia</h2></div>
+                        <div id="grid-multimidia" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+                    </section>
+
+                    <!-- 7. Segurança -->
+                    <section class="mb-10">
+                        <div class="flex items-center gap-3 mb-4"><div class="w-1 h-6 bg-avx-red rounded-full"></div><h2 class="text-lg font-bold text-slate-900 dark:text-white">7. AI Security</h2></div>
+                        <div id="grid-seguranca" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+                    </section>
+                </div>
+
+                <!-- Sidebar -->
+                <div class="hidden xl:block xl:col-span-1">
+                    <div class="sidebar-sticky p-4 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm transition-colors">
+                        <div class="flex items-center justify-between mb-4 border-b border-slate-100 dark:border-slate-700 pb-3">
+                            <h3 class="font-bold text-slate-900 dark:text-white text-xs uppercase tracking-wide">Resumo do Ambiente</h3>
+                            <span class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-[10px] font-bold px-2 py-1 rounded-full" id="sidebar-room-name">...</span>
+                        </div>
+                        <div id="sidebar-items-list" class="space-y-2 min-h-[100px]">
+                            <div class="text-center py-8 text-slate-400 text-[10px]"><i data-lucide="package-open" class="w-6 h-6 mx-auto mb-2 opacity-50"></i>Nenhum item</div>
+                        </div>
+                        <div class="mt-4 pt-4 border-t border-slate-100 dark:border-slate-700">
+                            <div class="flex justify-between items-center mb-1">
+                                <span class="text-[10px] text-slate-500 dark:text-slate-400 font-medium">Total de Itens</span>
+                                <span class="text-base font-bold text-slate-900 dark:text-white" id="sidebar-total-qty">0</span>
+                            </div>
+                            <div id="sidebar-subtotal-container" class="hidden justify-between items-center">
+                                <span class="text-[10px] text-slate-500 dark:text-slate-400 font-medium">Subtotal (R$)</span>
+                                <span class="text-base font-bold text-avx-gold" id="sidebar-subtotal">R$ 0,00</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Float Bar -->
+        <div id="budget-float" class="budget-float">
+            <div class="flex items-center gap-3">
+                <div class="bg-avx-red p-2 rounded-full"><i data-lucide="shopping-bag" class="w-5 h-5 text-white"></i></div>
+                <div>
+                    <p class="text-[10px] text-slate-300 font-medium flex items-center gap-1">Resumo Geral <span id="save-indicator" class="text-[8px] bg-green-500/20 text-green-400 px-1 rounded opacity-0 transition-opacity">Salvo</span></p>
+                    <p class="font-bold text-white text-sm"><span id="total-rooms-badge">0</span> Amb. | <span id="total-items-badge">0</span> Itens <span class="admin-price ml-2 text-white bg-avx-gold/20 border-avx-gold/40">Total: <span id="float-total-price">R$ 0</span></span></p>
+                </div>
+            </div>
+            <button onclick="openBudgetModal()" class="bg-white text-slate-900 hover:bg-slate-100 font-bold py-2 px-6 rounded-full shadow-lg transition-all transform hover:scale-105 text-xs">Finalizar</button>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="budget-modal" class="modal-overlay">
+        <div class="modal-content relative p-6">
+            <button onclick="closeBudgetModal()" class="absolute top-4 right-4 p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"><i data-lucide="x" class="w-5 h-5 text-slate-500 dark:text-slate-400"></i></button>
+            <div class="max-w-4xl mx-auto">
+                <div class="text-center mb-8">
+                    <span class="text-avx-red font-bold tracking-widest uppercase text-[10px]">Seu Projeto Exclusivo</span>
+                    <h2 class="text-2xl font-bold text-slate-900 dark:text-white mt-1">Resumo do Orçamento</h2>
+                </div>
+                <div class="grid md:grid-cols-2 gap-8 mb-8 items-center">
+                    <div class="flex flex-col items-center">
+                        <div id="pie-chart" class="pie-chart-wrapper">
+                            <div class="pie-hole">
+                                <span class="text-2xl font-bold text-slate-900 dark:text-white" id="total-items-pie">0</span>
+                                <span class="text-[10px] text-slate-500 dark:text-slate-400 uppercase">Itens</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-xs font-bold text-slate-500 dark:text-slate-400 mb-3 uppercase tracking-wide">Legenda</h3>
+                        <div id="chart-legend" class="space-y-2"></div>
+                    </div>
+                </div>
+                <div id="budget-list" class="space-y-6 mb-8 max-h-[40vh] overflow-y-auto"></div>
+                <div class="border-t border-slate-200 dark:border-slate-700 pt-6 flex flex-col md:flex-row justify-between items-center gap-4">
+                     <div class="text-slate-500 dark:text-slate-400 text-xs">Total: <span id="modal-total-items" class="font-bold text-slate-900 dark:text-white">0</span> <span class="admin-price ml-2 text-lg">Valor Total: <span id="modal-total-price">R$ 0,00</span></span></div>
+                    <div class="flex gap-2 w-full md:w-auto">
+                         <button onclick="generatePDF()" class="flex-1 md:flex-none px-4 py-2.5 rounded-lg bg-slate-800 text-white font-bold shadow-lg text-xs flex items-center justify-center gap-2 hover:bg-slate-700"><i data-lucide="file-down" class="w-4 h-4"></i> PDF</button>
+                        <button onclick="sendToWhatsApp()" class="flex-1 md:flex-none px-6 py-2.5 rounded-lg bg-green-500 text-white font-bold shadow-lg text-xs flex items-center justify-center gap-2 hover:bg-green-600"><i class="fab fa-whatsapp text-lg"></i> Solicitar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- CONFIGURAÇÃO DE DADOS (CORRIGIDA) ---
+        // 'tech': Descrição técnica curta (para PDF/Lista)
+        // 'desc': Descrição comercial longa (para o Card Visual)
+        const productsData = [
+            // 1. Central
+            { id: 'avx-pro-server', cat: 'Central', container: 'grid-central', name: 'AVX-Pro-Server', desc: 'O Maestro do Ecossistema. Processamento local, IA e segurança de dados.', tech: 'Central de Processamento', icon: 'server', color: '#0f172a', price: 100 },
+            // 2. Iluminação
+            { id: 'avx-rgbw', cat: 'Iluminação', container: 'grid-iluminacao', name: 'AVX-RGBW', desc: 'Crie atmosferas imersivas. De cenas vibrantes ao relaxamento profundo.', tech: 'Controlador LED', icon: 'palette', color: '#fbbf24', price: 100 },
+            { id: 'avx-touchpad-1', cat: 'Iluminação', container: 'grid-iluminacao', name: 'AVX-Touchpad 1', desc: 'Design em Vidro de Cristal. Acabamento premium, 1 zona tátil.', tech: 'Interruptor 1 Tecla', icon: 'square', color: '#fbbf24', price: 100 },
+            { id: 'avx-touchpad-2', cat: 'Iluminação', container: 'grid-iluminacao', name: 'AVX-Touchpad 2', desc: 'Design em Vidro de Cristal. Acabamento premium, 2 zonas táteis.', tech: 'Interruptor 2 Teclas', icon: 'layout-grid', color: '#fbbf24', price: 100 },
+            { id: 'avx-touchpad-3', cat: 'Iluminação', container: 'grid-iluminacao', name: 'AVX-Touchpad 3', desc: 'Design em Vidro de Cristal. Acabamento premium, 3 zonas táteis.', tech: 'Interruptor 3 Teclas', icon: 'layout-grid', color: '#fbbf24', price: 100 },
+            { id: 'avx-touchpad-4', cat: 'Iluminação', container: 'grid-iluminacao', name: 'AVX-Touchpad 4', desc: 'Design em Vidro de Cristal. Acabamento premium, 4 zonas táteis.', tech: 'Interruptor 4 Teclas', icon: 'layout-grid', color: '#fbbf24', price: 100 },
+            { id: 'avx-dimmer', cat: 'Iluminação', container: 'grid-iluminacao', name: 'AVX-Dimmer', desc: 'Conforto visual. Ajuste preciso de intensidade para cenas perfeitas.', tech: 'Dimerizador de Luz', icon: 'sliders-horizontal', color: '#fbbf24', price: 100 },
+            { id: 'avx-plus-1', cat: 'Iluminação', container: 'grid-iluminacao', name: 'AVX-Plus-1', desc: 'Automação Invisível. Módulo micro de 1 canal para retrofit.', tech: 'Módulo 1 Canal', icon: 'zap', color: '#fbbf24', price: 100 },
+            { id: 'avx-plus-2', cat: 'Iluminação', container: 'grid-iluminacao', name: 'AVX-Plus-2', desc: 'Automação Invisível. Módulo micro de 2 canais para retrofit.', tech: 'Módulo 2 Canais', icon: 'zap', color: '#fbbf24', price: 100 },
+            { id: 'avx-pro-4', cat: 'Iluminação', container: 'grid-iluminacao', name: 'AVX-Pro-4', desc: 'Solução Profissional. Módulo robusto de 4 canais para trilho DIN.', tech: 'Módulo 4 Canais', icon: 'zap', color: '#fbbf24', price: 100 },
+            // 3. Tomadas
+            { id: 'avx-socket-touchpad-1', cat: 'Elétrica', container: 'grid-tomadas', name: 'AVX-Socket & Touch 1', desc: 'Design unificado. Tomada inteligente + 1 tecla touch.', tech: 'Tomada + 1 Tecla', icon: 'plug-zap', color: '#94a3b8', price: 100 },
+            { id: 'avx-socket-touchpad-2', cat: 'Elétrica', container: 'grid-tomadas', name: 'AVX-Socket & Touch 2', desc: 'Design unificado. Tomada inteligente + 2 teclas touch.', tech: 'Tomada + 2 Teclas', icon: 'plug-zap', color: '#94a3b8', price: 100 },
+            { id: 'avx-socket-1', cat: 'Elétrica', container: 'grid-tomadas', name: 'AVX-Socket 1', desc: 'Gestão de Energia. Tomada inteligente 10A/20A com monitoramento.', tech: 'Tomada Inteligente', icon: 'power', color: '#94a3b8', price: 100 },
+            { id: 'avx-socket-2', cat: 'Elétrica', container: 'grid-tomadas', name: 'AVX-Socket 2', desc: 'Acabamento em Cristal. Duas tomadas inteligentes 10A/20A.', tech: 'Tomada Dupla', icon: 'power', color: '#94a3b8', price: 100 },
+            { id: 'avx-socket-3', cat: 'Elétrica', container: 'grid-tomadas', name: 'AVX-Socket 3', desc: 'Acabamento em Cristal. Três tomadas inteligentes 10A/20A.', tech: 'Tomada Tripla', icon: 'power', color: '#94a3b8', price: 100 },
+            { id: 'avx-dual-usb-a', cat: 'Elétrica', container: 'grid-tomadas', name: 'AVX-Dual USB-A', desc: 'Carregamento Rápido. Duas portas USB-A de alta potência.', tech: 'Carregador USB Duplo', icon: 'usb', color: '#94a3b8', price: 100 },
+            { id: 'avx-usb-a-c', cat: 'Elétrica', container: 'grid-tomadas', name: 'AVX-USB-A & C', desc: 'Carregamento Híbrido. Portas USB-A e USB-C integradas.', tech: 'Carregador Híbrido', icon: 'cable', color: '#94a3b8', price: 100 },
+            { id: 'avx-ethernet', cat: 'Elétrica', container: 'grid-tomadas', name: 'AVX-Ethernet', desc: 'Conectividade Estável. Ponto de rede RJ45 gigabit.', tech: 'Ponto de Rede', icon: 'network', color: '#94a3b8', price: 100 },
+            { id: 'avx-tv-cabo', cat: 'Elétrica', container: 'grid-tomadas', name: 'AVX-TV a Cabo', desc: 'Mídia. Módulo coaxial de alta fidelidade para antena/TV.', tech: 'Ponto Coaxial', icon: 'tv-2', color: '#94a3b8', price: 100 },
+            { id: 'avx-painel-vidro', cat: 'Elétrica', container: 'grid-tomadas', name: 'AVX-Painel de Vidro', desc: 'Acabamento Premium. Espelho de vidro temperado sem funções smart.', tech: 'Acabamento em Vidro', icon: 'square', color: '#94a3b8', price: 100 },
+            { id: 'avx-empty-cover', cat: 'Elétrica', container: 'grid-tomadas', name: 'AVX-Empty Cover', desc: 'Estética Limpa. Módulo cego para pontos de reserva.', tech: 'Módulo Cego', icon: 'square-dashed', color: '#94a3b8', price: 100 },
+            // 4. Climatização
+            { id: 'avx-ht', cat: 'Climatização', container: 'grid-climatizacao', name: 'AVX-H&T', desc: 'Inteligência Ambiental. Monitoramento preciso para conforto térmico preditivo.', tech: 'Sensor Temp/Umidade', icon: 'droplets', color: '#38bdf8', price: 100 },
+            { id: 'avx-rm', cat: 'Climatização', container: 'grid-climatizacao', name: 'AVX-RM', desc: 'Controle Universal. Integração de Ar-Condicionado e TV via infravermelho.', tech: 'Controle IR Universal', icon: 'wifi', color: '#38bdf8', price: 100 },
+            // 5. Cortinas
+            { id: 'avx-2pm', cat: 'Cortinas', container: 'grid-cortinas', name: 'AVX-2PM', desc: 'Gestão de Sombra. Controle de motores de persiana existentes.', tech: 'Controlador de Persiana', icon: 'settings-2', color: '#a855f7', price: 100 },
+            { id: 'avx-curtain', cat: 'Cortinas', container: 'grid-cortinas', name: 'AVX-Curtain', desc: 'Gestão de Luz Natural. Integração silenciosa para trilhos motorizados.', tech: 'Motor de Cortina', icon: 'blinds', color: '#a855f7', price: 100 },
+            // 6. Multimídia
+            { id: 'avx-ip', cat: 'Multimídia', container: 'grid-multimidia', name: 'AVX-IP', desc: 'Entretenimento Imersivo. Módulo de integração para som e Home Theater.', tech: 'Módulo de Áudio IP', icon: 'music', color: '#f472b6', price: 100 },
+            // 7. Segurança
+            { id: 'avx-door', cat: 'Segurança', container: 'grid-seguranca', name: 'AVX-Door Window', desc: 'Perímetro Seguro. Sensor instantâneo de abertura de portas e janelas.', tech: 'Sensor de Abertura', icon: 'door-open', color: '#DA291C', price: 100 },
+            { id: 'avx-flood', cat: 'Segurança', container: 'grid-seguranca', name: 'AVX-Flood', desc: 'Proteção Ativa. Sensor de detecção de vazamentos e inundações.', tech: 'Sensor de Inundação', icon: 'waves', color: '#DA291C', price: 100 },
+            { id: 'avx-gas', cat: 'Segurança', container: 'grid-seguranca', name: 'AVX-GasGLP', desc: 'Proteção Crítica. Detecção avançada de vazamento de gás.', tech: 'Sensor de Gás', icon: 'flame', color: '#DA291C', price: 100 },
+            { id: 'avx-mmwave', cat: 'Segurança', container: 'grid-seguranca', name: 'AVX-MMWave', desc: 'AI Security. Radar de presença humana de alta precisão (ignora pets).', tech: 'Sensor de Presença', icon: 'radio', color: '#DA291C', price: 100 },
+            { id: 'avx-motion', cat: 'Segurança', container: 'grid-seguranca', name: 'AVX-Motion', desc: 'Segurança Essencial. Sensor de movimento infravermelho.', tech: 'Sensor de Movimento', icon: 'activity', color: '#DA291C', price: 100 },
+            { id: 'avx-siren', cat: 'Segurança', container: 'grid-seguranca', name: 'AVX-Siren', desc: 'Alerta Sonoro. Sirene inteligente integrada ao sistema de alarme.', tech: 'Sirene', icon: 'bell-ring', color: '#DA291C', price: 100 },
+            { id: 'avx-smoke', cat: 'Segurança', container: 'grid-seguranca', name: 'AVX-Smoke', desc: 'Prevenção. Detector de fumaça inteligente de alta sensibilidade.', tech: 'Detector de Fumaça', icon: 'cloud-fog', color: '#DA291C', price: 100 }
+        ];
+
+        const productMeta = productsData.reduce((acc, item) => { acc[item.id] = item; return acc; }, {});
+        
+        const smartTips = {
+            'Iluminação': { title: 'Iluminação Bespoke', icon: 'sun', text: 'A IA da AVX aprende seus hábitos e ajusta a iluminação.' },
+            'Climatização': { title: 'Conforto Térmico', icon: 'thermometer', text: 'Economia inteligente: O sistema climatiza antes de você chegar.' },
+            'Segurança': { title: 'Segurança com IA', icon: 'shield-check', text: 'Reconhecimento de padrões e notificações visuais.' },
+            'Cortinas': { title: 'Controle Solar', icon: 'blinds', text: 'Cortinas ajustam conforme a posição do sol.' },
+            'Central': { title: 'O Mordomo Invisível', icon: 'server', text: 'A Central AVX-Pro é o coração do sistema.' }
+        };
+        const shownTips = new Set();
+        let budgetData = {};
+        let currentRoom = null;
+        let isAdmin = false;
+
+        // --- RENDER ENGINE ---
+        function renderCatalog() {
+            productsData.forEach(item => {
+                const container = document.getElementById(item.container);
+                if (container) {
+                    const card = document.createElement('div');
+                    card.className = "bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-4 hover:shadow-lg hover:border-avx-red/30 transition-all flex flex-col group h-full";
+                    card.innerHTML = `
+                        <div class="h-32 bg-slate-50 dark:bg-slate-800 rounded-lg mb-3 flex items-center justify-center relative overflow-hidden">
+                            <i data-lucide="${item.icon}" class="w-8 h-8 text-slate-300 dark:text-slate-600 group-hover:text-avx-red transition-colors duration-300"></i>
+                        </div>
+                        <div class="flex justify-between items-start mb-1">
+                            <h3 class="font-bold text-sm text-slate-900 dark:text-white">${item.name}</h3>
+                            <span class="admin-price" data-price="${item.id}">R$ ${item.price}</span>
+                        </div>
+                        <p class="text-slate-500 dark:text-slate-400 text-[10px] mb-3 flex-grow leading-tight">${item.desc}</p>
+                        <div class="mt-auto pt-3 border-t border-slate-100 dark:border-slate-700 flex items-center justify-between">
+                            <span class="text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wide">Qtd.</span>
+                            <div class="qty-control">
+                                <button class="qty-btn" onclick="updateQty('${item.id}', -1)">-</button>
+                                <span class="qty-value" id="qty-${item.id}">0</span>
+                                <button class="qty-btn" onclick="updateQty('${item.id}', 1)">+</button>
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                }
+            });
+            lucide.createIcons();
+        }
+
+        // --- CORE LOGIC ---
+        function updateQty(productId, change) {
+            if (!currentRoom) { alert("Crie um ambiente primeiro!"); document.getElementById('new-room-input').focus(); return; }
+            if (!budgetData[currentRoom][productId]) budgetData[currentRoom][productId] = 0;
+            if (change > 0 && budgetData[currentRoom][productId] === 0) checkAndShowTip(productId);
+            budgetData[currentRoom][productId] += change;
+            if (budgetData[currentRoom][productId] < 0) budgetData[currentRoom][productId] = 0;
+            if (budgetData[currentRoom][productId] === 0) delete budgetData[currentRoom][productId];
+            const el = document.getElementById(`qty-${productId}`);
+            if(el) el.innerText = (budgetData[currentRoom][productId] || 0);
+            updateSummary(); updateSidebar(); saveProgress();
+        }
+
+        function createRoom() {
+            const input = document.getElementById('new-room-input');
+            const name = input.value.trim();
+            if (!name) { alert("Digite um nome para o ambiente."); input.focus(); return; }
+            if (budgetData[name]) { alert("Este ambiente já existe."); return; }
+            currentRoom = name; budgetData[currentRoom] = {};
+            const select = document.getElementById('room-select');
+            if(select.options[0].disabled) select.options[0].text = "Selecionar ambiente";
+            const option = document.createElement('option');
+            option.value = currentRoom; option.text = currentRoom; select.add(option); select.value = currentRoom;
+            input.value = ""; 
+            activateRoomUI();
+        }
+
+        function activateRoomUI() {
+            const content = document.getElementById('main-content');
+            content.style.opacity = "1"; content.style.pointerEvents = "auto";
+            document.getElementById('clone-btn').disabled = false;
+            document.getElementById('delete-btn').disabled = false;
+            document.getElementById('wizard-container').style.display = 'block';
+            refreshCounters(); updateSidebar(); saveProgress(); setTimeout(adjustLayout, 50);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function switchRoom(roomName) {
+            if (!roomName) return;
+            currentRoom = roomName; activateRoomUI();
+        }
+
+        function cloneRoom() {
+            if (!currentRoom) return;
+            const newName = prompt(`Clonar "${currentRoom}" para:`, `${currentRoom} (Cópia)`);
+            if (newName && newName.trim() !== "") {
+                const name = newName.trim();
+                if (budgetData[name]) { alert("Nome já existe."); return; }
+                budgetData[name] = JSON.parse(JSON.stringify(budgetData[currentRoom]));
+                const select = document.getElementById('room-select');
+                const option = document.createElement('option');
+                option.value = name; option.text = name; select.add(option); select.value = name;
+                currentRoom = name; refreshCounters(); updateSidebar(); saveProgress(); setTimeout(adjustLayout, 50);
+            }
+        }
+
+        function deleteRoom() {
+            if (!currentRoom) return;
+            if (confirm(`Tem certeza que deseja EXCLUIR "${currentRoom}"?`)) {
+                delete budgetData[currentRoom];
+                const select = document.getElementById('room-select');
+                for (let i = 0; i < select.options.length; i++) { if (select.options[i].value === currentRoom) { select.remove(i); break; } }
+                const remaining = Object.keys(budgetData);
+                if (remaining.length > 0) { switchRoom(remaining[0]); select.value = remaining[0]; }
+                else {
+                    currentRoom = null; select.innerHTML = '<option value="" disabled selected>Nenhum ambiente criado</option>';
+                    document.getElementById('main-content').style.opacity = "0.5"; document.getElementById('main-content').style.pointerEvents = "none";
+                    document.getElementById('clone-btn').disabled = true; document.getElementById('delete-btn').disabled = true;
+                    document.getElementById('wizard-container').style.display = 'none';
+                    updateSidebar(); updateSummary(); setTimeout(adjustLayout, 50);
+                }
+                saveProgress();
+            }
+        }
+
+        function resetProject() { if (confirm("Iniciar novo projeto?")) { localStorage.removeItem('avxBudgetData'); localStorage.removeItem('avxCurrentRoom'); location.reload(); } }
+
+        function refreshCounters() {
+            document.querySelectorAll('.qty-value').forEach(el => el.innerText = "0");
+            const items = budgetData[currentRoom];
+            if (items) { for (const [pid, qty] of Object.entries(items)) { const el = document.getElementById(`qty-${pid}`); if (el) el.innerText = qty; } }
+        }
+
+        function updateSidebar() {
+            const list = document.getElementById('sidebar-items-list');
+            const roomNameEl = document.getElementById('sidebar-room-name');
+            if (!currentRoom) { roomNameEl.innerText = "Nenhum"; list.innerHTML = `<div class="text-center py-8 text-slate-400 text-[10px]"><i data-lucide="package-open" class="w-6 h-6 mx-auto mb-2 opacity-50"></i>Selecione um ambiente</div>`; document.getElementById('sidebar-total-qty').innerText = "0"; lucide.createIcons(); return; }
+            roomNameEl.innerText = currentRoom;
+            const items = budgetData[currentRoom] || {};
+            let html = '', roomTotal = 0, roomCost = 0;
+            for (const [pid, qty] of Object.entries(items)) {
+                if (qty > 0) {
+                    const meta = productMeta[pid] || { name: pid, color: '#ccc', price: 0 };
+                    roomCost += (meta.price * qty);
+                    html += `<div class="flex items-center justify-between text-xs animate-slide-in-right"><div class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full" style="background-color: ${meta.color}"></span><span class="text-slate-600 dark:text-slate-300 truncate max-w-[100px]" title="${meta.name}">${meta.name}</span></div><div class="flex items-center gap-2"><span class="admin-price text-[10px] text-avx-gold">R$ ${meta.price * qty}</span><span class="font-bold text-slate-900 dark:text-white bg-slate-50 dark:bg-slate-800 px-1.5 py-0.5 rounded text-[10px]">x${qty}</span></div></div>`;
+                    roomTotal += qty;
+                }
+            }
+            if (html === '') html = `<div class="text-center py-6 text-slate-400 text-[10px] flex flex-col items-center"><i data-lucide="package-open" class="w-5 h-5 mb-1 opacity-50"></i>Vazio</div>`;
+            list.innerHTML = html; document.getElementById('sidebar-total-qty').innerText = roomTotal;
+            const subtotalEl = document.getElementById('sidebar-subtotal');
+            if(subtotalEl) subtotalEl.innerText = roomCost.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+            lucide.createIcons();
+        }
+
+        function updateSummary() {
+            let totalItems = 0, grandTotal = 0, totalRooms = Object.keys(budgetData).length;
+            for (const room in budgetData) {
+                for (const pid in budgetData[room]) {
+                    const qty = budgetData[room][pid]; totalItems += qty;
+                    grandTotal += ((productMeta[pid] || {price:0}).price * qty);
+                }
+            }
+            document.getElementById('total-items-badge').innerText = totalItems;
+            document.getElementById('total-rooms-badge').innerText = totalRooms;
+            document.getElementById('float-total-price').innerText = grandTotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 });
+            const floatBar = document.getElementById('budget-float');
+            if (totalItems > 0) floatBar.classList.add('visible'); else floatBar.classList.remove('visible');
+            calculateIntelligenceLevel();
+        }
+
+        function calculateIntelligenceLevel() {
+            let categories = new Set();
+            for (const room in budgetData) { for (const [pid, qty] of Object.entries(budgetData[room])) { if (qty > 0 && productMeta[pid]) categories.add(productMeta[pid].cat); } }
+            let score = 0;
+            if (categories.has('Central')) score += 10; if (categories.has('Iluminação')) score += 15; if (categories.has('Climatização')) score += 20;
+            if (categories.has('Segurança')) score += 25; if (categories.has('Cortinas')) score += 15; if (categories.has('Multimídia')) score += 15;
+            score = Math.min(100, score);
+            document.getElementById('intelligence-fill').style.width = score + '%';
+            document.getElementById('intelligence-value-desktop').innerText = score + '%';
+        }
+
+        // --- UTILS & FEATURES ---
+        function applyKit(kitType) {
+            if (!currentRoom) { alert("Crie um ambiente primeiro."); return; }
+            const kits = {
+                'cinema': { 'avx-rgbw': 1, 'avx-dimmer': 1, 'avx-ip': 1, 'avx-curtain': 1 },
+                'security': { 'avx-door': 2, 'avx-motion': 1, 'avx-siren': 1, 'avx-mmwave': 1 },
+                'climate': { 'avx-ht': 1, 'avx-rm': 1 },
+                'gourmet': { 'avx-rgbw': 2, 'avx-ip': 1, 'avx-socket-2': 2 },
+                'suite': { 'avx-touchpad-2': 1, 'avx-curtain': 1, 'avx-dimmer': 1, 'avx-socket-touchpad-1': 2 }
+            };
+            const items = kits[kitType];
+            if(items) Object.entries(items).forEach(([pid, qty]) => updateQty(pid, qty));
+            showToast({ title: 'Kit Aplicado!', icon: 'check', text: `Itens adicionados ao ${currentRoom}.` });
+        }
+
+        function showToast(data) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div'); toast.className = 'toast';
+            toast.innerHTML = `<div class="bg-red-50 dark:bg-red-900/30 p-2 rounded-full text-avx-red flex-shrink-0"><i data-lucide="${data.icon}" class="w-4 h-4"></i></div><div><h4 class="font-bold text-slate-900 dark:text-white text-xs mb-0.5">${data.title}</h4><p class="text-[10px] text-slate-500 dark:text-slate-400 leading-snug">${data.text}</p></div>`;
+            container.appendChild(toast); lucide.createIcons();
+            setTimeout(() => { toast.classList.add('hiding'); toast.addEventListener('animationend', () => { if(toast.parentNode) toast.parentNode.removeChild(toast); }); }, 5000);
+        }
+
+        function checkAndShowTip(pid) {
+            const meta = productMeta[pid]; if (!meta) return;
+            const cat = meta.cat;
+            if (smartTips[cat] && !shownTips.has(cat)) { showToast(smartTips[cat]); shownTips.add(cat); }
+        }
+
+        // --- ADMIN, THEME, STORAGE ---
+        function toggleTheme() {
+            const html = document.documentElement; const isDark = html.classList.toggle('dark');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            updateThemeIcons(isDark);
+        }
+        function updateThemeIcons(isDark) {
+            const icon = isDark ? 'sun' : 'moon';
+            ['theme-toggle-desktop', 'theme-toggle-mobile'].forEach(id => { const el = document.getElementById(id); if(el) { el.innerHTML = `<i data-lucide="${icon}" class="w-${id.includes('mobile')?5:4} h-${id.includes('mobile')?5:4}"></i>`; } });
+            lucide.createIcons();
+        }
+        function initTheme() { const saved = localStorage.getItem('theme'); if (saved === 'dark') { document.documentElement.classList.add('dark'); updateThemeIcons(true); } else updateThemeIcons(false); }
+
+        function toggleAdmin() {
+            if (isAdmin) { if (confirm("Sair do modo admin?")) { isAdmin = false; sessionStorage.removeItem('avxIsAdmin'); refreshAdminUI(); } }
+            else { if (prompt("Senha admin:") === "admin") { isAdmin = true; sessionStorage.setItem('avxIsAdmin', 'true'); refreshAdminUI(); alert("Modo Admin ativado."); } else alert("Senha incorreta."); }
+        }
+        function checkAdmin() { if (sessionStorage.getItem('avxIsAdmin') === 'true') { isAdmin = true; refreshAdminUI(); } }
+        function refreshAdminUI() {
+            const sub = document.getElementById('sidebar-subtotal-container');
+            if (isAdmin) { document.body.classList.add('is-admin'); if(sub) sub.classList.remove('hidden'); sub.classList.add('flex'); }
+            else { document.body.classList.remove('is-admin'); if(sub) sub.classList.add('hidden'); sub.classList.remove('flex'); }
+            ['btn-admin-lock-desktop', 'btn-admin-lock-mobile'].forEach(id => {
+                const el = document.getElementById(id);
+                if(el) {
+                    el.classList.toggle('text-avx-gold', isAdmin); el.classList.toggle('text-slate-400', !isAdmin);
+                    el.innerHTML = `<i data-lucide="${isAdmin ? 'unlock' : 'lock'}" class="w-${id.includes('mobile')?5:4} h-${id.includes('mobile')?5:4}"></i>`;
+                }
+            });
+            updateSummary(); updateSidebar(); lucide.createIcons();
+        }
+
+        function saveProgress() { localStorage.setItem('avxBudgetData', JSON.stringify(budgetData)); localStorage.setItem('avxCurrentRoom', currentRoom); calculateIntelligenceLevel(); }
+        function loadProgress() {
+            const d = localStorage.getItem('avxBudgetData'); const r = localStorage.getItem('avxCurrentRoom');
+            if (d) {
+                budgetData = JSON.parse(d);
+                const s = document.getElementById('room-select'); s.innerHTML = '<option value="" disabled selected>Selecionar ambiente</option>';
+                for (const k in budgetData) { const o = document.createElement('option'); o.value = k; o.text = k; s.add(o); }
+                if (r && budgetData[r]) switchRoom(r); else if (Object.keys(budgetData).length > 0) switchRoom(Object.keys(budgetData)[0]);
+            }
+        }
+
+        function adjustLayout() {
+            const n = document.getElementById('navbar'), r = document.getElementById('room-bar'), m = document.getElementById('main-content');
+            if (n && r && m) { r.style.top = n.offsetHeight + 'px'; m.style.paddingTop = (n.offsetHeight + r.offsetHeight + 32) + 'px'; }
+        }
+
+        // --- MODAL & EXPORT ---
+        function openBudgetModal() {
+            const modal = document.getElementById('budget-modal'), list = document.getElementById('budget-list'), legend = document.getElementById('chart-legend'), pie = document.getElementById('pie-chart');
+            list.innerHTML = ""; legend.innerHTML = "";
+            let qtyTotal = 0, priceTotal = 0, catMap = {};
+            for (const room in budgetData) {
+                const items = budgetData[room]; if (Object.keys(items).length === 0) continue;
+                const div = document.createElement('div');
+                div.className = "bg-slate-50 dark:bg-slate-800 rounded-xl p-4 border border-slate-100 dark:border-slate-700";
+                let html = `<div class="flex items-center gap-2 mb-3 pb-2 border-b border-slate-200 dark:border-slate-700"><i data-lucide="map-pin" class="w-4 h-4 text-avx-red"></i><h3 class="font-bold text-sm text-slate-900 dark:text-white">${room}</h3></div><div class="grid grid-cols-1 sm:grid-cols-2 gap-3">`;
+                for (const [pid, q] of Object.entries(items)) {
+                    const m = productMeta[pid]; qtyTotal += q; priceTotal += (m.price * q);
+                    if (!catMap[m.cat]) catMap[m.cat] = { c: 0, color: m.color }; catMap[m.cat].c += q;
+                    html += `<div class="flex items-center justify-between bg-white dark:bg-slate-900 p-2 rounded border border-slate-100 dark:border-slate-700 shadow-sm"><div class="flex flex-col"><span class="text-xs font-bold text-slate-900 dark:text-white">${m.name}</span><span class="text-[9px] text-slate-500 dark:text-slate-400">${m.tech}</span></div><div class="flex items-center gap-2"><span class="admin-price text-[10px] text-slate-500 dark:text-slate-400">R$ ${(m.price * q).toLocaleString('pt-BR')}</span><span class="text-xs font-bold bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded text-slate-900 dark:text-white">x${q}</span></div></div>`;
+                }
+                div.innerHTML = html + '</div>'; list.appendChild(div);
+            }
+            if (qtyTotal > 0) {
+                let ang = 0, segs = [];
+                for (const [cat, d] of Object.entries(catMap)) {
+                    const p = (d.c / qtyTotal) * 100;
+                    legend.innerHTML += `<div class="flex items-center justify-between p-1.5 rounded hover:bg-slate-50 dark:hover:bg-slate-800 text-xs"><div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full" style="background-color: ${d.color}"></span><span class="font-medium text-slate-700 dark:text-slate-300">${cat}</span></div><span class="font-bold text-slate-900 dark:text-white">${Math.round(p)}%</span></div>`;
+                    segs.push(`${d.color} ${ang}deg ${ang + (p * 3.6)}deg`); ang += (p * 3.6);
+                }
+                pie.style.background = `conic-gradient(${segs.join(', ')})`;
+            }
+            document.getElementById('total-items-pie').innerText = qtyTotal; document.getElementById('modal-total-items').innerText = qtyTotal;
+            document.getElementById('modal-total-price').innerText = priceTotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+            modal.classList.add('open'); lucide.createIcons();
+        }
+        function closeBudgetModal() { document.getElementById('budget-modal').classList.remove('open'); }
+
+        function sendToWhatsApp() {
+            let t = "*Orçamento AVX Bespoke*\n\n", tp = 0;
+            for (const r in budgetData) {
+                const i = budgetData[r]; if (Object.keys(i).length === 0) continue;
+                t += `📍 *${r.toUpperCase()}*\n`;
+                for (const [pid, q] of Object.entries(i)) { const m = productMeta[pid]; let l = `   ▪ ${q}x ${m.name}`; if(isAdmin) { const s = m.price * q; tp += s; l += ` (R$ ${s})`; } t += l + "\n"; }
+                t += "\n";
+            }
+            if(isAdmin) t += `*TOTAL: R$ ${tp.toLocaleString('pt-BR')}*\n`;
+            t += "--------------------------\nAguardo contato.";
+            window.open(`https://wa.me/554731705449?text=${encodeURIComponent(t)}`, '_blank');
+        }
+
+        function generatePDF() {
+            const { jsPDF } = window.jspdf; const doc = new jsPDF();
+            doc.setFillColor(15, 23, 42); doc.rect(0, 0, 210, 30, 'F');
+            doc.setTextColor(255, 255, 255); doc.setFontSize(20); doc.setFont("helvetica", "bold"); doc.text("AVX.", 15, 20);
+            doc.setFontSize(10); doc.setFont("helvetica", "normal"); doc.text("Automação Bespoke", 195, 20, { align: "right" });
+            doc.setTextColor(15, 23, 42); doc.setFontSize(14); doc.setFont("helvetica", "bold"); doc.text("Resumo do Projeto", 15, 45);
+            let y = 55, gt = 0;
+            for (const r in budgetData) {
+                const items = budgetData[r]; if (Object.keys(items).length === 0) continue;
+                if (y > 270) { doc.addPage(); y = 20; }
+                doc.setFillColor(241, 245, 249); doc.rect(15, y - 5, 180, 8, 'F');
+                doc.setTextColor(15, 23, 42); doc.setFontSize(11); doc.setFont("helvetica", "bold"); doc.text(r.toUpperCase(), 18, y); y += 10;
+                doc.setFontSize(10);
+                for (const [pid, q] of Object.entries(items)) {
+                    if (y > 280) { doc.addPage(); y = 20; }
+                    const m = productMeta[pid];
+                    doc.setFont("helvetica", "bold"); doc.text(`• ${q}x ${m.name}`, 22, y);
+                    doc.setFont("helvetica", "normal"); doc.setFontSize(8); doc.setTextColor(100, 116, 139); doc.text(`(${m.tech})`, 80, y);
+                    doc.setFontSize(10); doc.setTextColor(15, 23, 42);
+                    if (isAdmin) { const s = m.price * q; gt += s; doc.text(`R$ ${s.toLocaleString('pt-BR')}`, 190, y, { align: "right" }); }
+                    y += 6;
+                }
+                y += 4;
+            }
+            if (isAdmin) { y += 5; doc.setFontSize(12); doc.setFont("helvetica", "bold"); doc.text(`TOTAL: R$ ${gt.toLocaleString('pt-BR')}`, 190, y, { align: "right" }); }
+            doc.save("AVX_Orcamento.pdf");
+        }
+
+        // --- INIT ---
+        document.addEventListener('DOMContentLoaded', () => {
+            renderCatalog(); initTheme(); checkAdmin(); loadProgress(); adjustLayout();
+            window.addEventListener('resize', adjustLayout);
+            const mb = document.getElementById('mobile-btn'), mm = document.getElementById('mobile-menu');
+            if (mb && mm) mb.addEventListener('click', () => mm.classList.toggle('hidden'));
+        });
+    </script>
+</body>
+</html>
