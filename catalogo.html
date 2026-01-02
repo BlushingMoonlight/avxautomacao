@@ -704,6 +704,12 @@
         function closeBudgetModal() { document.getElementById('budget-modal').classList.remove('open'); }
 
         function sendToWhatsApp() {
+            // Adicione esta linha abaixo para rastrear o pedido de orçamento
+            gtag('event', 'generate_quote_whatsapp', {
+                'event_category': 'ecommerce',
+                'event_label': currentRoom || 'Geral'
+            });
+
             let t = "*Orçamento AVX Bespoke*\n\n", tp = 0;
             for (const r in budgetData) {
                 const i = budgetData[r]; if (Object.keys(i).length === 0) continue;
