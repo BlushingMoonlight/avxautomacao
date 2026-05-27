@@ -15,7 +15,7 @@
     </script>
 
     <!-- --- SEO & METADATA START --- -->
-    <title>Orçamento Bespoke AVX | Monte sua Casa</title>
+    <title>AVX | Simule seu Projeto de Automação Bespoke</title>
     <meta name="description" content="Ferramenta de orçamentação inteligente AVX. Defina ambientes, escolha dispositivos e receba um projeto de automação completo via IA.">
     <meta name="robots" content="noindex, nofollow">
 
@@ -143,6 +143,8 @@
         
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .hidden-when-active { display: block; }
+        body.has-rooms .hidden-when-active { display: none; }
     </style>
 </head>
 <body class="antialiased selection:bg-avx-red selection:text-white dark:bg-slate-950 dark:text-slate-100 transition-colors duration-300">
@@ -160,7 +162,7 @@
                     <a href="index.html#solucoes" class="nav-link text-sm font-medium text-slate-600 hover:text-avx-red dark:text-slate-300 dark:hover:text-avx-red transition-colors">Soluções</a>
                     <a href="#" class="text-sm font-bold text-avx-red hover:text-red-700 transition-colors">Catálogo</a>
                     <a href="index.html#processo" class="nav-link text-sm font-medium text-slate-600 hover:text-avx-red dark:text-slate-300 dark:hover:text-avx-red transition-colors">Processo</a>
-                    <a href="index.html#compliance" class="nav-link text-sm font-medium text-slate-600 hover:text-avx-red dark:text-slate-300 dark:hover:text-avx-red transition-colors">Compliance</a>
+                    <a href="index.html#arquitetos" class="nav-link text-sm font-medium text-slate-600 hover:text-avx-red dark:text-slate-300 dark:hover:text-avx-red transition-colors">Arquitetos</a>
                     <div class="h-4 w-px bg-slate-300 dark:bg-slate-700"></div>
                     <button onclick="toggleTheme()" id="theme-toggle-desktop" class="text-slate-400 hover:text-avx-red dark:text-slate-400 dark:hover:text-avx-red transition-colors p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800" title="Alternar Modo Escuro">
                         <i data-lucide="moon" class="w-4 h-4"></i>
@@ -198,7 +200,7 @@
             <div class="flex items-center gap-2 w-full lg:w-auto flex-grow">
                 <div class="custom-select-wrapper flex-grow">
                     <select id="room-select" onchange="switchRoom(this.value)" class="custom-select w-full px-3 py-1.5 rounded-md border border-slate-300 bg-white text-slate-900 font-semibold focus:outline-none focus:border-avx-red focus:ring-1 focus:ring-avx-red shadow-sm cursor-pointer disabled:bg-slate-100 disabled:text-slate-400 text-xs h-9 dark:bg-slate-800 dark:border-slate-700 dark:text-white dark:disabled:bg-slate-900 dark:disabled:text-slate-600 transition-colors">
-                        <option value="" disabled selected>Nenhum ambiente criado</option>
+                        <option value="" disabled selected>Crie seu primeiro ambiente para começar</option>
                     </select>
                 </div>
                 <button id="clone-btn" onclick="cloneRoom()" disabled class="bg-white border border-slate-300 text-slate-600 hover:text-avx-red hover:border-avx-red px-3 py-1.5 rounded-md transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed group flex items-center gap-2 font-bold text-xs h-9 whitespace-nowrap dark:bg-slate-800 dark:border-slate-700 dark:text-slate-400 dark:hover:text-avx-red dark:hover:border-avx-red" title="Duplicar Ambiente">
@@ -223,6 +225,9 @@
                 <span>Nível IA: <span id="intelligence-value-desktop" class="text-slate-900 dark:text-white">0%</span></span>
             </div>
         </div>
+        <div id="start-hint" class="w-full text-center pb-1.5 hidden-when-active">
+            <p class="text-[10px] text-slate-400 dark:text-slate-500 animate-pulse">Digite o nome de um ambiente (ex: Sala, Suíte, Escritório) e clique em Criar para começar</p>
+        </div>
         <div id="wizard-container" class="w-full border-t border-slate-100 dark:border-slate-800 hidden">
             <div class="max-w-7xl mx-auto w-full flex items-center gap-2 py-2">
                 <span class="text-[9px] font-bold text-slate-400 uppercase tracking-wide whitespace-nowrap flex-shrink-0">Kits Rápidos:</span>
@@ -241,6 +246,10 @@
     <!-- Toast Notifications -->
     <div id="toast-container" class="toast-container"></div>
 
+    <!-- Onboarding Banner -->
+    <div id="onboarding-banner" class="fixed top-0 left-0 right-0 bottom-0 z-30 flex items-center justify-center bg-slate-50/80 dark:bg-slate-950/80 backdrop-blur-sm transition-all duration-500 pointer-events-none" style="opacity:0;" aria-hidden="true">
+    </div>
+
     <!-- Main Content -->
     <div id="main-content" class="pt-[180px] pb-32 min-h-screen opacity-50 pointer-events-none transition-opacity duration-500">
         <div class="max-w-7xl mx-auto px-4 lg:px-8">
@@ -254,7 +263,7 @@
                             <div class="w-1 h-6 bg-avx-red rounded-full"></div>
                             <div>
                                 <h2 class="text-lg font-bold text-slate-900 dark:text-white">1. Central de Controle</h2>
-                                <p class="text-[10px] text-slate-500 dark:text-slate-400">O Coração do Organismo Vivo (Obrigatório).</p>
+                                <p class="text-[10px] text-slate-500 dark:text-slate-400">O cérebro do sistema. Necessário em todo projeto AVX.</p>
                             </div>
                         </div>
                         <div id="grid-central" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
@@ -262,37 +271,37 @@
 
                     <!-- 2. Iluminação -->
                     <section class="mb-10">
-                        <div class="flex items-center gap-3 mb-4"><div class="w-1 h-6 bg-avx-red rounded-full"></div><h2 class="text-lg font-bold text-slate-900 dark:text-white">2. Iluminação</h2></div>
+<div class="flex items-center gap-3 mb-4"><div class="w-1 h-6 bg-avx-red rounded-full"></div><div><h2 class="text-lg font-bold text-slate-900 dark:text-white">2. Iluminação</h2><p class="text-[10px] text-slate-500 dark:text-slate-400">Keypads de cristal, dimmers e módulos para automação invisível.</p></div></div>
                         <div id="grid-iluminacao" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
                     </section>
 
                     <!-- 3. Tomadas -->
                     <section class="mb-10">
-                        <div class="flex items-center gap-3 mb-4"><div class="w-1 h-6 bg-avx-red rounded-full"></div><h2 class="text-lg font-bold text-slate-900 dark:text-white">3. Tomadas & Acabamentos</h2></div>
+<div class="flex items-center gap-3 mb-4"><div class="w-1 h-6 bg-avx-red rounded-full"></div><div><h2 class="text-lg font-bold text-slate-900 dark:text-white">3. Tomadas & Acabamentos</h2><p class="text-[10px] text-slate-500 dark:text-slate-400">Tomadas inteligentes, carregadores e conectividade em vidro de cristal.</p></div></div>
                         <div id="grid-tomadas" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
                     </section>
 
                     <!-- 4. Climatização -->
                     <section class="mb-10">
-                        <div class="flex items-center gap-3 mb-4"><div class="w-1 h-6 bg-avx-red rounded-full"></div><h2 class="text-lg font-bold text-slate-900 dark:text-white">4. Climatização</h2></div>
+<div class="flex items-center gap-3 mb-4"><div class="w-1 h-6 bg-avx-red rounded-full"></div><div><h2 class="text-lg font-bold text-slate-900 dark:text-white">4. Climatização</h2><p class="text-[10px] text-slate-500 dark:text-slate-400">Sensores e controles para conforto térmico preditivo.</p></div></div>
                         <div id="grid-climatizacao" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
                     </section>
 
                     <!-- 5. Cortinas -->
                     <section class="mb-10">
-                        <div class="flex items-center gap-3 mb-4"><div class="w-1 h-6 bg-avx-red rounded-full"></div><h2 class="text-lg font-bold text-slate-900 dark:text-white">5. Cortinas e Persianas</h2></div>
+<div class="flex items-center gap-3 mb-4"><div class="w-1 h-6 bg-avx-red rounded-full"></div><div><h2 class="text-lg font-bold text-slate-900 dark:text-white">5. Cortinas e Persianas</h2><p class="text-[10px] text-slate-500 dark:text-slate-400">Motorização silenciosa para trilhos e persianas existentes.</p></div></div>
                         <div id="grid-cortinas" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
                     </section>
 
                     <!-- 6. Multimídia -->
                     <section class="mb-10">
-                        <div class="flex items-center gap-3 mb-4"><div class="w-1 h-6 bg-avx-red rounded-full"></div><h2 class="text-lg font-bold text-slate-900 dark:text-white">6. Multimídia</h2></div>
+<div class="flex items-center gap-3 mb-4"><div class="w-1 h-6 bg-avx-red rounded-full"></div><div><h2 class="text-lg font-bold text-slate-900 dark:text-white">6. Multimídia</h2><p class="text-[10px] text-slate-500 dark:text-slate-400">Integração com sistemas de áudio e Home Theater de alta fidelidade.</p></div></div>
                         <div id="grid-multimidia" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
                     </section>
 
                     <!-- 7. Segurança -->
                     <section class="mb-10">
-                        <div class="flex items-center gap-3 mb-4"><div class="w-1 h-6 bg-avx-red rounded-full"></div><h2 class="text-lg font-bold text-slate-900 dark:text-white">7. AI Security</h2></div>
+<div class="flex items-center gap-3 mb-4"><div class="w-1 h-6 bg-avx-red rounded-full"></div><div><h2 class="text-lg font-bold text-slate-900 dark:text-white">7. AI Security</h2><p class="text-[10px] text-slate-500 dark:text-slate-400">Radar MMWave, sensores de perímetro e detecção de emergências.</p></div></div>
                         <div id="grid-seguranca" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
                     </section>
                 </div>
@@ -438,9 +447,11 @@
                 if (container) {
                     const card = document.createElement('div');
                     card.className = "bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-4 hover:shadow-lg hover:border-avx-red/30 transition-all flex flex-col group h-full";
+                    const hexToRgb = (hex) => { const r = parseInt(hex.slice(1,3),16); const g = parseInt(hex.slice(3,5),16); const b = parseInt(hex.slice(5,7),16); return `${r},${g},${b}`; };
                     card.innerHTML = `
-                        <div class="h-32 bg-slate-50 dark:bg-slate-800 rounded-lg mb-3 flex items-center justify-center relative overflow-hidden">
-                            <i data-lucide="${item.icon}" class="w-8 h-8 text-slate-300 dark:text-slate-600 group-hover:text-avx-red transition-colors duration-300"></i>
+                        <div class="h-28 rounded-lg mb-3 flex items-center justify-center relative overflow-hidden transition-all duration-300" style="background: linear-gradient(135deg, rgba(${hexToRgb(item.color)},0.08) 0%, rgba(${hexToRgb(item.color)},0.03) 100%); border: 1px solid rgba(${hexToRgb(item.color)},0.12);">
+                            <i data-lucide="${item.icon}" class="w-9 h-9 transition-all duration-300 group-hover:scale-110" style="color: rgba(${hexToRgb(item.color)},0.5);"></i>
+                            <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" style="background: linear-gradient(135deg, rgba(${hexToRgb(item.color)},0.12) 0%, rgba(${hexToRgb(item.color)},0.05) 100%);"></div>
                         </div>
                         <div class="flex justify-between items-start mb-1">
                             <h3 class="font-bold text-sm text-slate-900 dark:text-white">${item.name}</h3>
@@ -464,7 +475,13 @@
 
         // --- CORE LOGIC ---
         function updateQty(productId, change) {
-            if (!currentRoom) { alert("Crie um ambiente primeiro!"); document.getElementById('new-room-input').focus(); return; }
+            if (!currentRoom) {
+                showToast({ title: 'Crie um ambiente primeiro', icon: 'layout-panel-left', text: 'Digite um nome no campo acima e clique em Criar.' });
+                document.getElementById('new-room-input').focus();
+                document.getElementById('new-room-input').classList.add('ring-2', 'ring-avx-red', 'border-avx-red');
+                setTimeout(() => document.getElementById('new-room-input').classList.remove('ring-2', 'ring-avx-red', 'border-avx-red'), 2000);
+                return;
+            }
             if (!budgetData[currentRoom][productId]) budgetData[currentRoom][productId] = 0;
             if (change > 0 && budgetData[currentRoom][productId] === 0) checkAndShowTip(productId);
             budgetData[currentRoom][productId] += change;
@@ -478,14 +495,20 @@
         function createRoom() {
             const input = document.getElementById('new-room-input');
             const name = input.value.trim();
-            if (!name) { alert("Digite um nome para o ambiente."); input.focus(); return; }
-            if (budgetData[name]) { alert("Este ambiente já existe."); return; }
+            if (!name) {
+                showToast({ title: 'Nome obrigatório', icon: 'type', text: 'Digite um nome para o ambiente antes de criar.' });
+                input.focus(); return;
+            }
+            if (budgetData[name]) {
+                showToast({ title: 'Ambiente já existe', icon: 'alert-circle', text: 'Escolha um nome diferente para este ambiente.' });
+                return;
+            }
             currentRoom = name; budgetData[currentRoom] = {};
             const select = document.getElementById('room-select');
             if(select.options[0].disabled) select.options[0].text = "Selecionar ambiente";
             const option = document.createElement('option');
             option.value = currentRoom; option.text = currentRoom; select.add(option); select.value = currentRoom;
-            input.value = ""; 
+            input.value = ""; document.body.classList.add("has-rooms");
             activateRoomUI();
         }
 
@@ -509,7 +532,10 @@
             const newName = prompt(`Clonar "${currentRoom}" para:`, `${currentRoom} (Cópia)`);
             if (newName && newName.trim() !== "") {
                 const name = newName.trim();
-                if (budgetData[name]) { alert("Nome já existe."); return; }
+                if (budgetData[name]) {
+                showToast({ title: 'Nome já existe', icon: 'alert-circle', text: 'Escolha um nome diferente para o ambiente clonado.' });
+                return;
+            }
                 budgetData[name] = JSON.parse(JSON.stringify(budgetData[currentRoom]));
                 const select = document.getElementById('room-select');
                 const option = document.createElement('option');
@@ -520,24 +546,47 @@
 
         function deleteRoom() {
             if (!currentRoom) return;
-            if (confirm(`Tem certeza que deseja EXCLUIR "${currentRoom}"?`)) {
-                delete budgetData[currentRoom];
+            const roomToDelete = currentRoom;
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.style.borderColor = '#fca5a5';
+            toast.innerHTML = '<div class="flex flex-col gap-2 w-full"><p class="text-xs font-bold text-slate-900 dark:text-white">Excluir \"' + roomToDelete + '\"?</p><p class="text-[10px] text-slate-500 dark:text-slate-400">Todos os itens deste ambiente serão removidos.</p><div class="flex gap-2 mt-1"><button id="confirm-delete-btn" class="flex-1 bg-avx-red text-white text-[10px] font-bold py-1.5 rounded-lg hover:bg-red-700 transition-colors">Excluir</button><button class="cancel-toast flex-1 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 text-[10px] font-bold py-1.5 rounded-lg">Cancelar</button></div></div>';
+            container.appendChild(toast);
+            toast.querySelector('.cancel-toast').addEventListener('click', () => { toast.classList.add('hiding'); });
+            toast.querySelector('#confirm-delete-btn').addEventListener('click', () => {
+                toast.classList.add('hiding');
+                delete budgetData[roomToDelete];
                 const select = document.getElementById('room-select');
-                for (let i = 0; i < select.options.length; i++) { if (select.options[i].value === currentRoom) { select.remove(i); break; } }
+                for (let i = 0; i < select.options.length; i++) { if (select.options[i].value === roomToDelete) { select.remove(i); break; } }
                 const remaining = Object.keys(budgetData);
                 if (remaining.length > 0) { switchRoom(remaining[0]); select.value = remaining[0]; }
                 else {
                     currentRoom = null; select.innerHTML = '<option value="" disabled selected>Nenhum ambiente criado</option>';
-                    document.getElementById('main-content').style.opacity = "0.5"; document.getElementById('main-content').style.pointerEvents = "none";
+                    document.getElementById('main-content').style.opacity = '0.5'; document.getElementById('main-content').style.pointerEvents = 'none';
                     document.getElementById('clone-btn').disabled = true; document.getElementById('delete-btn').disabled = true;
                     document.getElementById('wizard-container').style.display = 'none';
                     updateSidebar(); updateSummary(); setTimeout(adjustLayout, 50);
                 }
                 saveProgress();
-            }
+            });
+            setTimeout(() => { if(toast.parentNode) toast.classList.add('hiding'); }, 8000);
         }
 
-        function resetProject() { if (confirm("Iniciar novo projeto?")) { localStorage.removeItem('avxBudgetData'); localStorage.removeItem('avxCurrentRoom'); location.reload(); } }
+        function resetProject() {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.style.borderColor = '#fca5a5';
+            toast.innerHTML = '<div class="flex flex-col gap-2 w-full"><p class="text-xs font-bold text-slate-900 dark:text-white">Reiniciar projeto?</p><p class="text-[10px] text-slate-500 dark:text-slate-400">Todos os ambientes e itens serão apagados.</p><div class="flex gap-2 mt-1"><button id="confirm-reset-btn" class="flex-1 bg-avx-red text-white text-[10px] font-bold py-1.5 rounded-lg hover:bg-red-700 transition-colors">Reiniciar</button><button class="cancel-toast flex-1 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 text-[10px] font-bold py-1.5 rounded-lg">Cancelar</button></div></div>';
+            container.appendChild(toast);
+            toast.querySelector('.cancel-toast').addEventListener('click', () => { toast.classList.add('hiding'); });
+            toast.querySelector('#confirm-reset-btn').addEventListener('click', () => {
+                localStorage.removeItem('avxBudgetData'); localStorage.removeItem('avxCurrentRoom'); location.reload();
+            });
+            setTimeout(() => { if(toast.parentNode) toast.classList.add('hiding'); }, 8000);
+        }
+
 
         function refreshCounters() {
             document.querySelectorAll('.qty-value').forEach(el => el.innerText = "0");
@@ -596,7 +645,11 @@
 
         // --- UTILS & FEATURES ---
         function applyKit(kitType) {
-            if (!currentRoom) { alert("Crie um ambiente primeiro."); return; }
+            if (!currentRoom) {
+                showToast({ title: 'Crie um ambiente primeiro', icon: 'layout-panel-left', text: 'Digite um nome no campo acima e clique em Criar.' });
+                document.getElementById('new-room-input').focus();
+                return;
+            }
             const kits = {
                 'cinema': { 'avx-rgbw': 1, 'avx-dimmer': 1, 'avx-ip': 1, 'avx-curtain': 1 },
                 'security': { 'avx-door': 2, 'avx-motion': 1, 'avx-siren': 1, 'avx-mmwave': 1 },
@@ -638,7 +691,7 @@
 
         function toggleAdmin() {
             if (isAdmin) { if (confirm("Sair do modo admin?")) { isAdmin = false; sessionStorage.removeItem('avxIsAdmin'); refreshAdminUI(); } }
-            else { if (prompt("Senha admin:") === "admin") { isAdmin = true; sessionStorage.setItem('avxIsAdmin', 'true'); refreshAdminUI(); alert("Modo Admin ativado."); } else alert("Senha incorreta."); }
+            else { if (prompt("Senha admin:") === "admin") { isAdmin = true; sessionStorage.setItem('avxIsAdmin', 'true'); refreshAdminUI(); showToast({ title: 'Modo Admin Ativo', icon: 'unlock', text: 'Preços e totais agora visíveis.' }); } else showToast({ title: 'Senha incorreta', icon: 'lock', text: 'Tente novamente.' }); }
         }
         function checkAdmin() { if (sessionStorage.getItem('avxIsAdmin') === 'true') { isAdmin = true; refreshAdminUI(); } }
         function refreshAdminUI() {
@@ -659,7 +712,7 @@
         function loadProgress() {
             const d = localStorage.getItem('avxBudgetData'); const r = localStorage.getItem('avxCurrentRoom');
             if (d) {
-                budgetData = JSON.parse(d);
+                budgetData = JSON.parse(d); if (Object.keys(budgetData).length > 0) document.body.classList.add('has-rooms');
                 const s = document.getElementById('room-select'); s.innerHTML = '<option value="" disabled selected>Selecionar ambiente</option>';
                 for (const k in budgetData) { const o = document.createElement('option'); o.value = k; o.text = k; s.add(o); }
                 if (r && budgetData[r]) switchRoom(r); else if (Object.keys(budgetData).length > 0) switchRoom(Object.keys(budgetData)[0]);
@@ -673,6 +726,12 @@
 
         // --- MODAL & EXPORT ---
         function openBudgetModal() {
+            let totalCheck = 0;
+            for (const r in budgetData) { for (const pid in budgetData[r]) { totalCheck += budgetData[r][pid]; } }
+            if (totalCheck === 0) {
+                showToast({ title: 'Projeto vazio', icon: 'package-open', text: 'Adicione ao menos um item ao projeto antes de finalizar.' });
+                return;
+            }
             const modal = document.getElementById('budget-modal'), list = document.getElementById('budget-list'), legend = document.getElementById('chart-legend'), pie = document.getElementById('pie-chart');
             list.innerHTML = ""; legend.innerHTML = "";
             let qtyTotal = 0, priceTotal = 0, catMap = {};
