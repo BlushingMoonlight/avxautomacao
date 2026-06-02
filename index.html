@@ -103,6 +103,8 @@
         }
         .btn-pulse { animation: pulse-red 2s infinite; }
         .cursor-blink { display: inline-block; width: 3px; background-color: #DA291C; animation: blink 1s step-end infinite; margin-left: 5px; vertical-align: middle; height: 1em; }
+        #typing-line { min-height: 2.2em; }
+        @media (min-width: 1024px) { #typing-line { min-height: 1.1em; } }
 
         /* --- INTERACTIVE DEMO (PHONE) --- */
         input[type=range] { -webkit-appearance: none; background: transparent; }
@@ -219,7 +221,7 @@
                     </div>
                     <h1 class="text-5xl lg:text-7xl font-bold tracking-tight text-slate-900 dark:text-white leading-[1.1] mb-8">
                         A casa que age<br>
-                        <span class="block" style="min-height:1.1em;"><span id="typing-container" class="text-transparent bg-clip-text bg-gradient-to-r from-avx-red via-red-600 to-red-400"></span><span class="cursor-blink"></span></span>
+                        <span id="typing-line" class="block" style="min-height:2.2em;"><span id="typing-container" class="text-transparent bg-clip-text bg-gradient-to-r from-avx-red via-red-600 to-red-400"></span><span class="cursor-blink"></span></span>
                     </h1>
                     <p class="text-xl text-slate-500 dark:text-slate-400 max-w-2xl leading-relaxed mb-10">
                         Hardware de alto padrão, inteligência local e instalação sem obras em até 7 dias. A AVX transforma sua residência em um sistema que age por conta própria.
