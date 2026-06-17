@@ -750,7 +750,7 @@
             <div class="grid md:grid-cols-4 gap-12 mb-16">
                 <div class="col-span-1 md:col-span-2"><span class="text-2xl font-bold text-slate-900 dark:text-white">AVX<span class="text-avx-red">.</span></span><p class="mt-4 text-slate-500 max-w-sm dark:text-slate-400">Sediada em Florianópolis, presente na maioria das cidades do Sul do Brasil. Automação residencial de alto padrão com hardware proprietário e inteligência local.</p><div class="flex gap-4 mt-6"><a href="#" class="text-slate-400 hover:text-avx-red transition-colors"><i data-lucide="instagram" class="w-5 h-5"></i></a><a href="#" class="text-slate-400 hover:text-avx-red transition-colors"><i data-lucide="linkedin" class="w-5 h-5"></i></a></div></div>
                 <div><h4 class="font-bold text-slate-900 mb-4 dark:text-white">Empresa</h4><ul class="space-y-2 text-slate-500 text-sm dark:text-slate-400"><li><a href="#" class="hover:text-avx-red transition-colors">Sobre Nós</a></li><li><a href="#" class="hover:text-avx-red transition-colors">Para Arquitetos</a></li><li><a href="#" class="hover:text-avx-red transition-colors">Carreiras</a></li><li><a href="#" class="hover:text-avx-red transition-colors">Imprensa</a></li></ul></div>
-                <div><h4 class="font-bold text-slate-900 mb-4 dark:text-white">Legal</h4><ul class="space-y-2 text-slate-500 text-sm dark:text-slate-400"><li><a href="#" class="hover:text-avx-red transition-colors">Privacidade (LGPD)</a></li><li><a href="#" class="hover:text-avx-red transition-colors">Termos de Uso</a></li><li><a href="#compliance" class="hover:text-avx-red transition-colors">Certificações</a></li></ul></div>
+                <div><h4 class="font-bold text-slate-900 mb-4 dark:text-white">Legal</h4><ul class="space-y-2 text-slate-500 text-sm dark:text-slate-400"><li><a href="#" class="hover:text-avx-red transition-colors">Privacidade (LGPD)</a></li><li><a href="#" class="hover:text-avx-red transition-colors">Termos de Uso</a></li><li><a href="#compliance" class="hover:text-avx-red transition-colors">Certificações</a></li><li><a href="#" onclick="openWhitepaper(event)" class="hover:text-avx-red transition-colors flex items-center gap-1.5 group"><i data-lucide="lock" class="w-3 h-3 opacity-50 group-hover:opacity-100 transition-opacity"></i>Whitepaper AVX</a></li></ul></div>
             </div>
             <div class="border-t border-slate-200 pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-slate-400 dark:border-slate-800"><p>&copy; 2026 AVX Technology. Todos os direitos reservados.</p><p class="mt-2 md:mt-0">Made in Floripa 🇧🇷</p></div>
         </div>
@@ -759,6 +759,24 @@
 
 
     <script>
+        // --- WHITEPAPER ACCESS ---
+        function openWhitepaper(e) {
+            if (e) e.preventDefault();
+            if (sessionStorage.getItem('avxIsAdmin') === 'true') {
+                window.location.href = 'whitepaper.html';
+                return;
+            }
+            const password = prompt("Digite a senha de acesso para visualizar o Whitepaper AVX:");
+            if (password === null) return; // cancelou
+            if (password === "admin") {
+                sessionStorage.setItem('avxIsAdmin', 'true');
+                updateLockIcon(true);
+                window.location.href = 'whitepaper.html';
+            } else {
+                alert("Senha incorreta. Acesso negado.");
+            }
+        }
+
         // --- ADMIN & THEME (EXACTLY AS ORIGINAL) ---
         function toggleAdmin() {
             const isAdmin = sessionStorage.getItem('avxIsAdmin') === 'true';
