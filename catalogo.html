@@ -690,8 +690,8 @@
         function initTheme() { const saved = localStorage.getItem('theme'); if (saved === 'dark') { document.documentElement.classList.add('dark'); updateThemeIcons(true); } else updateThemeIcons(false); }
 
         function toggleAdmin() {
-            if (isAdmin) { if (confirm("Sair do modo admin?")) { isAdmin = false; sessionStorage.removeItem('avxIsAdmin'); refreshAdminUI(); } }
-            else { if (prompt("Senha admin:") === "admin") { isAdmin = true; sessionStorage.setItem('avxIsAdmin', 'true'); refreshAdminUI(); showToast({ title: 'Modo Admin Ativo', icon: 'unlock', text: 'Preços e totais agora visíveis.' }); } else showToast({ title: 'Senha incorreta', icon: 'lock', text: 'Tente novamente.' }); }
+            if (isAdmin) { if (confirm("Você já é um administrador. Deseja sair do modo admin?")) { isAdmin = false; sessionStorage.removeItem('avxIsAdmin'); refreshAdminUI(); } }
+            else { const password = prompt("Digite a senha de administrador para liberar preços:"); if (password === null) return; if (password === "admin") { isAdmin = true; sessionStorage.setItem('avxIsAdmin', 'true'); refreshAdminUI(); showToast({ title: 'Modo Admin Ativo', icon: 'unlock', text: 'Preços e totais agora visíveis.' }); } else showToast({ title: 'Senha incorreta', icon: 'lock', text: 'Tente novamente.' }); }
         }
         function checkAdmin() { if (sessionStorage.getItem('avxIsAdmin') === 'true') { isAdmin = true; refreshAdminUI(); } }
         function refreshAdminUI() {
