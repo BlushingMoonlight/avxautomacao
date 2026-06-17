@@ -146,6 +146,7 @@
                     <a href="#conceito" class="nav-link text-sm font-medium text-slate-600 hover:text-avx-red dark:text-slate-300 dark:hover:text-avx-red transition-colors">Conceito</a>
                     <a href="#solucoes" class="nav-link text-sm font-medium text-slate-600 hover:text-avx-red dark:text-slate-300 dark:hover:text-avx-red transition-colors">Soluções</a>
                     <a href="catalogo.html" class="text-sm font-bold text-avx-red hover:text-red-700 transition-colors">Catálogo</a>
+                    <a href="#projetos" class="nav-link text-sm font-medium text-slate-600 hover:text-avx-red dark:text-slate-300 dark:hover:text-avx-red transition-colors">Projetos</a>
                     <a href="#processo" class="nav-link text-sm font-medium text-slate-600 hover:text-avx-red dark:text-slate-300 dark:hover:text-avx-red transition-colors">Processo</a>
                     <a href="#arquitetos" class="nav-link text-sm font-medium text-slate-600 hover:text-avx-red dark:text-slate-300 dark:hover:text-avx-red transition-colors">Arquitetos</a>
                     
@@ -181,6 +182,7 @@
                 <a href="#conceito" class="text-lg font-medium text-slate-800 dark:text-slate-200">Conceito</a>
                 <a href="#solucoes" class="text-lg font-medium text-slate-800 dark:text-slate-200">Soluções</a>
                 <a href="catalogo.html" class="text-lg font-bold text-avx-red">Catálogo de Produtos</a>
+                <a href="#projetos" class="text-lg font-medium text-slate-800 dark:text-slate-200">Projetos</a>
                 <a href="#processo" class="text-lg font-medium text-slate-800 dark:text-slate-200">Processo</a>
                 <a href="#arquitetos" class="text-lg font-medium text-slate-800 dark:text-slate-200">Arquitetos</a>
                 <a href="#contato" class="text-avx-red font-semibold">Iniciar Projeto</a>
@@ -460,6 +462,213 @@
             </div>
         </section>
 
+        <!-- PROJETOS SECTION -->
+        <section id="projetos" class="py-24 bg-white dark:bg-slate-950 border-t border-slate-100 dark:border-slate-800 overflow-hidden">
+            <div class="max-w-7xl mx-auto px-6 lg:px-8">
+                <div class="flex flex-col md:flex-row md:items-end md:justify-between mb-12 reveal">
+                    <div>
+                        <h2 class="text-sm font-bold text-avx-red uppercase tracking-widest mb-3">Portfólio</h2>
+                        <h3 class="text-3xl lg:text-4xl font-bold text-slate-900 dark:text-white">Projetos Entregues.</h3>
+                        <p class="text-slate-500 dark:text-slate-400 mt-3 max-w-lg">Cada residência é uma obra única. Explore alguns dos ambientes que já transformamos.</p>
+                    </div>
+                    <div class="flex items-center gap-3 mt-6 md:mt-0">
+                        <button id="proj-prev" aria-label="Anterior" class="w-11 h-11 rounded-full border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-500 hover:border-avx-red hover:text-avx-red transition-all">
+                            <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                        </button>
+                        <button id="proj-next" aria-label="Próximo" class="w-11 h-11 rounded-full bg-slate-900 dark:bg-white flex items-center justify-center text-white dark:text-slate-900 hover:bg-avx-red dark:hover:bg-avx-red dark:hover:text-white transition-all">
+                            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CARDS CAROUSEL -->
+            <div class="relative">
+                <div id="proj-track" class="flex gap-6 cursor-grab active:cursor-grabbing select-none px-6 lg:px-8" style="max-width:100%; padding-left: max(1.5rem, calc((100vw - 80rem) / 2 + 1.5rem));">
+
+                    <!-- PROJETO 1 — Residência Ilhas do Sul -->
+                    <div class="proj-card flex-shrink-0 w-80 lg:w-96 bg-white dark:bg-slate-900 rounded-2xl overflow-hidden shadow-sm border border-slate-100 dark:border-slate-800 hover:shadow-lg transition-all duration-300 group">
+                        <div class="relative overflow-hidden" style="height:240px;">
+                            <div class="proj-photos flex h-full transition-transform duration-500 ease-out" style="width:400%;">
+                                <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2070&auto=format&fit=crop" alt="Sala principal" class="w-1/4 h-full object-cover flex-shrink-0 pointer-events-none">
+                                <img src="https://images.unsplash.com/photo-1556909211-36987daf7b4d?q=80&w=2070&auto=format&fit=crop" alt="Cozinha integrada" class="w-1/4 h-full object-cover flex-shrink-0 pointer-events-none">
+                                <img src="https://images.unsplash.com/photo-1616594039964-ae9021a400a0?q=80&w=2070&auto=format&fit=crop" alt="Suíte master" class="w-1/4 h-full object-cover flex-shrink-0 pointer-events-none">
+                                <img src="https://images.unsplash.com/photo-1554995207-c18c203602cb?q=80&w=2070&auto=format&fit=crop" alt="Área externa" class="w-1/4 h-full object-cover flex-shrink-0 pointer-events-none">
+                            </div>
+                            <!-- Photo nav dots -->
+                            <div class="proj-photo-dots absolute bottom-3 left-0 right-0 flex justify-center gap-1.5 z-10">
+                                <button class="photo-dot w-1.5 h-1.5 rounded-full bg-white opacity-100 transition-opacity"></button>
+                                <button class="photo-dot w-1.5 h-1.5 rounded-full bg-white opacity-40 transition-opacity"></button>
+                                <button class="photo-dot w-1.5 h-1.5 rounded-full bg-white opacity-40 transition-opacity"></button>
+                                <button class="photo-dot w-1.5 h-1.5 rounded-full bg-white opacity-40 transition-opacity"></button>
+                            </div>
+                            <!-- Photo arrows -->
+                            <button class="photo-prev absolute left-2 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-black/40 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10 hover:bg-black/60"><i data-lucide="chevron-left" class="w-4 h-4"></i></button>
+                            <button class="photo-next absolute right-2 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-black/40 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10 hover:bg-black/60"><i data-lucide="chevron-right" class="w-4 h-4"></i></button>
+                            <!-- Tag -->
+                            <div class="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-sm text-white text-xs font-semibold">Florianópolis · SC</div>
+                        </div>
+                        <div class="p-5">
+                            <div class="flex items-start justify-between mb-2">
+                                <h4 class="font-bold text-slate-900 dark:text-white text-base leading-tight">Residência Ilhas do Sul</h4>
+                                <span class="text-xs font-semibold text-avx-red bg-red-50 dark:bg-red-900/20 px-2 py-0.5 rounded-full ml-2 flex-shrink-0">11 Ambientes</span>
+                            </div>
+                            <p class="text-slate-500 dark:text-slate-400 text-xs mb-4 leading-relaxed">Casa de veraneio de alto padrão com automação completa, integração Alexa e cenas de chegada e saída automatizadas.</p>
+                            <div class="flex flex-wrap gap-1.5">
+                                <span class="text-xs px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-medium">Iluminação RGBW</span>
+                                <span class="text-xs px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-medium">Climatização</span>
+                                <span class="text-xs px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-medium">Cortinas motorizadas</span>
+                                <span class="text-xs px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-medium">AI Security</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- PROJETO 2 — Cobertura Duplex -->
+                    <div class="proj-card flex-shrink-0 w-80 lg:w-96 bg-white dark:bg-slate-900 rounded-2xl overflow-hidden shadow-sm border border-slate-100 dark:border-slate-800 hover:shadow-lg transition-all duration-300 group">
+                        <div class="relative overflow-hidden" style="height:240px;">
+                            <div class="proj-photos flex h-full transition-transform duration-500 ease-out" style="width:300%;">
+                                <img src="https://images.unsplash.com/photo-1560185007-cde436f6a4d0?q=80&w=2070&auto=format&fit=crop" alt="Living duplex" class="w-1/3 h-full object-cover flex-shrink-0 pointer-events-none">
+                                <img src="https://images.unsplash.com/photo-1613545325278-f24b0cae1224?q=80&w=2070&auto=format&fit=crop" alt="Varanda gourmet" class="w-1/3 h-full object-cover flex-shrink-0 pointer-events-none">
+                                <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?q=80&w=2070&auto=format&fit=crop" alt="Home office" class="w-1/3 h-full object-cover flex-shrink-0 pointer-events-none">
+                            </div>
+                            <div class="proj-photo-dots absolute bottom-3 left-0 right-0 flex justify-center gap-1.5 z-10">
+                                <button class="photo-dot w-1.5 h-1.5 rounded-full bg-white opacity-100 transition-opacity"></button>
+                                <button class="photo-dot w-1.5 h-1.5 rounded-full bg-white opacity-40 transition-opacity"></button>
+                                <button class="photo-dot w-1.5 h-1.5 rounded-full bg-white opacity-40 transition-opacity"></button>
+                            </div>
+                            <button class="photo-prev absolute left-2 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-black/40 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10 hover:bg-black/60"><i data-lucide="chevron-left" class="w-4 h-4"></i></button>
+                            <button class="photo-next absolute right-2 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-black/40 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10 hover:bg-black/60"><i data-lucide="chevron-right" class="w-4 h-4"></i></button>
+                            <div class="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-sm text-white text-xs font-semibold">Balneário Camboriú · SC</div>
+                        </div>
+                        <div class="p-5">
+                            <div class="flex items-start justify-between mb-2">
+                                <h4 class="font-bold text-slate-900 dark:text-white text-base leading-tight">Cobertura Duplex Beira-Mar</h4>
+                                <span class="text-xs font-semibold text-avx-red bg-red-50 dark:bg-red-900/20 px-2 py-0.5 rounded-full ml-2 flex-shrink-0">8 Ambientes</span>
+                            </div>
+                            <p class="text-slate-500 dark:text-slate-400 text-xs mb-4 leading-relaxed">Retrofit completo em cobertura de luxo sem nenhuma quebra de parede. Keypads de cristal e cenas de entretenimento em 7 dias úteis.</p>
+                            <div class="flex flex-wrap gap-1.5">
+                                <span class="text-xs px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-medium">Keypads Cristal</span>
+                                <span class="text-xs px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-medium">Sonos Audio</span>
+                                <span class="text-xs px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-medium">Retrofit</span>
+                                <span class="text-xs px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-medium">Varanda Smart</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- PROJETO 3 — Casa Contemporânea Curitiba -->
+                    <div class="proj-card flex-shrink-0 w-80 lg:w-96 bg-white dark:bg-slate-900 rounded-2xl overflow-hidden shadow-sm border border-slate-100 dark:border-slate-800 hover:shadow-lg transition-all duration-300 group">
+                        <div class="relative overflow-hidden" style="height:240px;">
+                            <div class="proj-photos flex h-full transition-transform duration-500 ease-out" style="width:400%;">
+                                <img src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?q=80&w=2070&auto=format&fit=crop" alt="Fachada" class="w-1/4 h-full object-cover flex-shrink-0 pointer-events-none">
+                                <img src="https://images.unsplash.com/photo-1600573472592-401b489a3cdc?q=80&w=2070&auto=format&fit=crop" alt="Sala de estar" class="w-1/4 h-full object-cover flex-shrink-0 pointer-events-none">
+                                <img src="https://images.unsplash.com/photo-1615876063860-d971f6dca5dc?q=80&w=2070&auto=format&fit=crop" alt="Quarto principal" class="w-1/4 h-full object-cover flex-shrink-0 pointer-events-none">
+                                <img src="https://images.unsplash.com/photo-1507089947368-19c1da9775ae?q=80&w=2070&auto=format&fit=crop" alt="Piscina e área gourmet" class="w-1/4 h-full object-cover flex-shrink-0 pointer-events-none">
+                            </div>
+                            <div class="proj-photo-dots absolute bottom-3 left-0 right-0 flex justify-center gap-1.5 z-10">
+                                <button class="photo-dot w-1.5 h-1.5 rounded-full bg-white opacity-100 transition-opacity"></button>
+                                <button class="photo-dot w-1.5 h-1.5 rounded-full bg-white opacity-40 transition-opacity"></button>
+                                <button class="photo-dot w-1.5 h-1.5 rounded-full bg-white opacity-40 transition-opacity"></button>
+                                <button class="photo-dot w-1.5 h-1.5 rounded-full bg-white opacity-40 transition-opacity"></button>
+                            </div>
+                            <button class="photo-prev absolute left-2 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-black/40 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10 hover:bg-black/60"><i data-lucide="chevron-left" class="w-4 h-4"></i></button>
+                            <button class="photo-next absolute right-2 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-black/40 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10 hover:bg-black/60"><i data-lucide="chevron-right" class="w-4 h-4"></i></button>
+                            <div class="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-sm text-white text-xs font-semibold">Curitiba · PR</div>
+                        </div>
+                        <div class="p-5">
+                            <div class="flex items-start justify-between mb-2">
+                                <h4 class="font-bold text-slate-900 dark:text-white text-base leading-tight">Casa Contemporânea Alto da XV</h4>
+                                <span class="text-xs font-semibold text-avx-red bg-red-50 dark:bg-red-900/20 px-2 py-0.5 rounded-full ml-2 flex-shrink-0">14 Ambientes</span>
+                            </div>
+                            <p class="text-slate-500 dark:text-slate-400 text-xs mb-4 leading-relaxed">Projeto completo com sensor MMWave em todos os dormitórios, controle de persianas automatizadas e central de segurança preditiva.</p>
+                            <div class="flex flex-wrap gap-1.5">
+                                <span class="text-xs px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-medium">MMWave Militar</span>
+                                <span class="text-xs px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-medium">Persianas AVX</span>
+                                <span class="text-xs px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-medium">Central AVX-Pro</span>
+                                <span class="text-xs px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-medium">Segurança</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- PROJETO 4 — Apartamento Garden Porto Alegre -->
+                    <div class="proj-card flex-shrink-0 w-80 lg:w-96 bg-white dark:bg-slate-900 rounded-2xl overflow-hidden shadow-sm border border-slate-100 dark:border-slate-800 hover:shadow-lg transition-all duration-300 group">
+                        <div class="relative overflow-hidden" style="height:240px;">
+                            <div class="proj-photos flex h-full transition-transform duration-500 ease-out" style="width:300%;">
+                                <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=2053&auto=format&fit=crop" alt="Living garden" class="w-1/3 h-full object-cover flex-shrink-0 pointer-events-none">
+                                <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?q=80&w=2158&auto=format&fit=crop" alt="Sala de jantar" class="w-1/3 h-full object-cover flex-shrink-0 pointer-events-none">
+                                <img src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=2070&auto=format&fit=crop" alt="Banheiro master" class="w-1/3 h-full object-cover flex-shrink-0 pointer-events-none">
+                            </div>
+                            <div class="proj-photo-dots absolute bottom-3 left-0 right-0 flex justify-center gap-1.5 z-10">
+                                <button class="photo-dot w-1.5 h-1.5 rounded-full bg-white opacity-100 transition-opacity"></button>
+                                <button class="photo-dot w-1.5 h-1.5 rounded-full bg-white opacity-40 transition-opacity"></button>
+                                <button class="photo-dot w-1.5 h-1.5 rounded-full bg-white opacity-40 transition-opacity"></button>
+                            </div>
+                            <button class="photo-prev absolute left-2 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-black/40 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10 hover:bg-black/60"><i data-lucide="chevron-left" class="w-4 h-4"></i></button>
+                            <button class="photo-next absolute right-2 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-black/40 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10 hover:bg-black/60"><i data-lucide="chevron-right" class="w-4 h-4"></i></button>
+                            <div class="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-sm text-white text-xs font-semibold">Porto Alegre · RS</div>
+                        </div>
+                        <div class="p-5">
+                            <div class="flex items-start justify-between mb-2">
+                                <h4 class="font-bold text-slate-900 dark:text-white text-base leading-tight">Apartamento Garden Moinhos</h4>
+                                <span class="text-xs font-semibold text-avx-red bg-red-50 dark:bg-red-900/20 px-2 py-0.5 rounded-full ml-2 flex-shrink-0">6 Ambientes</span>
+                            </div>
+                            <p class="text-slate-500 dark:text-slate-400 text-xs mb-4 leading-relaxed">Integração total com sistema de áudio Sonos e iluminação circadiana programada para acompanhar o ciclo biológico dos moradores.</p>
+                            <div class="flex flex-wrap gap-1.5">
+                                <span class="text-xs px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-medium">Ritmo Circadiano</span>
+                                <span class="text-xs px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-medium">Sonos</span>
+                                <span class="text-xs px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-medium">Dimmer Preciso</span>
+                                <span class="text-xs px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-medium">Apple HomeKit</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- PROJETO 5 — Chácara Executiva -->
+                    <div class="proj-card flex-shrink-0 w-80 lg:w-96 bg-white dark:bg-slate-900 rounded-2xl overflow-hidden shadow-sm border border-slate-100 dark:border-slate-800 hover:shadow-lg transition-all duration-300 group">
+                        <div class="relative overflow-hidden" style="height:240px;">
+                            <div class="proj-photos flex h-full transition-transform duration-500 ease-out" style="width:400%;">
+                                <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=2070&auto=format&fit=crop" alt="Fachada chácara" class="w-1/4 h-full object-cover flex-shrink-0 pointer-events-none">
+                                <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?q=80&w=2070&auto=format&fit=crop" alt="Sala de estar" class="w-1/4 h-full object-cover flex-shrink-0 pointer-events-none">
+                                <img src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?q=80&w=2068&auto=format&fit=crop" alt="Piscina" class="w-1/4 h-full object-cover flex-shrink-0 pointer-events-none">
+                                <img src="https://images.unsplash.com/photo-1588854337236-6889d631faa8?q=80&w=2070&auto=format&fit=crop" alt="Escritório" class="w-1/4 h-full object-cover flex-shrink-0 pointer-events-none">
+                            </div>
+                            <div class="proj-photo-dots absolute bottom-3 left-0 right-0 flex justify-center gap-1.5 z-10">
+                                <button class="photo-dot w-1.5 h-1.5 rounded-full bg-white opacity-100 transition-opacity"></button>
+                                <button class="photo-dot w-1.5 h-1.5 rounded-full bg-white opacity-40 transition-opacity"></button>
+                                <button class="photo-dot w-1.5 h-1.5 rounded-full bg-white opacity-40 transition-opacity"></button>
+                                <button class="photo-dot w-1.5 h-1.5 rounded-full bg-white opacity-40 transition-opacity"></button>
+                            </div>
+                            <button class="photo-prev absolute left-2 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-black/40 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10 hover:bg-black/60"><i data-lucide="chevron-left" class="w-4 h-4"></i></button>
+                            <button class="photo-next absolute right-2 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-black/40 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10 hover:bg-black/60"><i data-lucide="chevron-right" class="w-4 h-4"></i></button>
+                            <div class="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-sm text-white text-xs font-semibold">Joinville · SC</div>
+                        </div>
+                        <div class="p-5">
+                            <div class="flex items-start justify-between mb-2">
+                                <h4 class="font-bold text-slate-900 dark:text-white text-base leading-tight">Chácara Executiva Vale Verde</h4>
+                                <span class="text-xs font-semibold text-avx-red bg-red-50 dark:bg-red-900/20 px-2 py-0.5 rounded-full ml-2 flex-shrink-0">18 Ambientes</span>
+                            </div>
+                            <p class="text-slate-500 dark:text-slate-400 text-xs mb-4 leading-relaxed">Maior projeto do portfólio AVX. Automação de ambientes internos e externos, irrigação inteligente e monitoramento de energia em tempo real.</p>
+                            <div class="flex flex-wrap gap-1.5">
+                                <span class="text-xs px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-medium">Irrigação Smart</span>
+                                <span class="text-xs px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-medium">Gestão de Energia</span>
+                                <span class="text-xs px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-medium">Área Externa</span>
+                                <span class="text-xs px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-medium">Multimídia</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Spacer final -->
+                    <div class="flex-shrink-0 w-6 lg:w-8"></div>
+                </div>
+            </div>
+
+            <!-- Progress indicator -->
+            <div class="max-w-7xl mx-auto px-6 lg:px-8 mt-8">
+                <div class="flex gap-1.5">
+                    <div id="proj-bar" class="h-0.5 bg-avx-red rounded-full transition-all duration-300" style="width:20%"></div>
+                    <div class="h-0.5 bg-slate-200 dark:bg-slate-800 rounded-full flex-1"></div>
+                </div>
+            </div>
+        </section>
+
         <!-- COMPLIANCE GRID -->
         <section id="compliance" class="py-14 bg-slate-50 border-t border-slate-100 dark:bg-slate-900 dark:border-slate-800">
             <div class="max-w-7xl mx-auto px-6 lg:px-8">
@@ -665,7 +874,83 @@
             loop();
         }
 
-        // --- INIT ---
+        // --- PROJECTS CAROUSEL ---
+        (function() {
+            const track = document.getElementById('proj-track');
+            const prevBtn = document.getElementById('proj-prev');
+            const nextBtn = document.getElementById('proj-next');
+            const bar = document.getElementById('proj-bar');
+            if (!track) return;
+
+            const cards = track.querySelectorAll('.proj-card');
+            const total = cards.length;
+            let currentIndex = 0;
+
+            // --- CARD DRAG (horizontal scroll) ---
+            let isDragging = false, startX = 0, scrollLeft = 0;
+            track.addEventListener('mousedown', e => { isDragging = true; startX = e.pageX - track.offsetLeft; scrollLeft = track.scrollLeft; track.style.userSelect = 'none'; });
+            track.addEventListener('mousemove', e => { if (!isDragging) return; e.preventDefault(); const x = e.pageX - track.offsetLeft; track.scrollLeft = scrollLeft - (x - startX); });
+            ['mouseup','mouseleave'].forEach(ev => track.addEventListener(ev, () => { isDragging = false; track.style.userSelect = ''; }));
+            // Touch
+            let touchStartX = 0;
+            track.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; scrollLeft = track.scrollLeft; }, { passive: true });
+            track.addEventListener('touchmove', e => { const dx = touchStartX - e.touches[0].clientX; track.scrollLeft = scrollLeft + dx; }, { passive: true });
+
+            function scrollToCard(idx) {
+                if (idx < 0) idx = 0;
+                if (idx >= total) idx = total - 1;
+                currentIndex = idx;
+                const card = cards[idx];
+                const trackRect = track.getBoundingClientRect();
+                const cardRect = card.getBoundingClientRect();
+                const offset = cardRect.left - trackRect.left + track.scrollLeft - 32;
+                track.scrollTo({ left: offset, behavior: 'smooth' });
+                if (bar) bar.style.width = `${((idx + 1) / total) * 100}%`;
+            }
+
+            prevBtn?.addEventListener('click', () => scrollToCard(currentIndex - 1));
+            nextBtn?.addEventListener('click', () => scrollToCard(currentIndex + 1));
+
+            // Update bar on scroll
+            track.addEventListener('scroll', () => {
+                const scrollRatio = track.scrollLeft / (track.scrollWidth - track.clientWidth);
+                if (bar) bar.style.width = `${Math.max(20, scrollRatio * 100)}%`;
+            });
+
+            // --- PHOTO SWIPE inside each card ---
+            cards.forEach(card => {
+                const photos = card.querySelector('.proj-photos');
+                const dots = card.querySelectorAll('.photo-dot');
+                const photoPrev = card.querySelector('.photo-prev');
+                const photoNext = card.querySelector('.photo-next');
+                if (!photos) return;
+
+                const count = Math.round(100 / parseFloat(photos.style.width) * 100) || dots.length;
+                let photoIdx = 0;
+
+                function goTo(idx) {
+                    if (idx < 0) idx = count - 1;
+                    if (idx >= count) idx = 0;
+                    photoIdx = idx;
+                    photos.style.transform = `translateX(-${(100 / count) * photoIdx}%)`;
+                    dots.forEach((d, i) => d.style.opacity = i === photoIdx ? '1' : '0.4');
+                }
+
+                dots.forEach((d, i) => d.addEventListener('click', e => { e.stopPropagation(); goTo(i); }));
+                photoPrev?.addEventListener('click', e => { e.stopPropagation(); goTo(photoIdx - 1); });
+                photoNext?.addEventListener('click', e => { e.stopPropagation(); goTo(photoIdx + 1); });
+
+                // Touch swipe inside photo
+                let pTouchX = 0;
+                photos.addEventListener('touchstart', e => { pTouchX = e.touches[0].clientX; }, { passive: true });
+                photos.addEventListener('touchend', e => {
+                    const dx = pTouchX - e.changedTouches[0].clientX;
+                    if (Math.abs(dx) > 40) goTo(dx > 0 ? photoIdx + 1 : photoIdx - 1);
+                });
+            });
+        })();
+
+
         document.addEventListener('DOMContentLoaded', () => {
             lucide.createIcons(); initTheme(); type(); initAppDemo();
             
