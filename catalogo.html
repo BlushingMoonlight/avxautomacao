@@ -47,10 +47,10 @@
 <style>
 :root{
   --ink:#0b0b0c; --ink-soft:#141416; --panel:#111113;
-  --bone:#ece8e1; --bone-dim:#bcb8b0; --ash:#8d8980;
-  --avx:#da291c; --line:rgba(236,232,225,.13); --line-soft:rgba(236,232,225,.07);
+  --bone:#ece8e1; --bone-dim:#b6b2aa; --ash:#8d8980;
+  --avx:#da291c; --line:rgba(236,232,225,.12); --line-soft:rgba(236,232,225,.07);
   --ease:cubic-bezier(.4,0,0,1);
-  --shell:clamp(1.1rem,4vw,4rem); --max:1400px; --navh:64px;
+  --shell:clamp(1.25rem,5vw,6.5rem); --max:1320px; --navh:64px;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
@@ -66,10 +66,10 @@ button{font-family:inherit;cursor:pointer}
 /* NAV — mesmo DNA do index.html */
 .nav{position:sticky;top:0;z-index:80;height:var(--navh);padding:0 var(--shell);
   display:flex;align-items:center;justify-content:space-between;
-  background:rgba(11,11,12,.82);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  background:rgba(11,11,12,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
   border-bottom:1px solid var(--line)}
 .brand{font-family:'Inter',sans-serif;font-weight:600;font-size:1.5rem;letter-spacing:.02em}
-.nav-links{display:flex;align-items:center;gap:2.2rem}
+.nav-links{display:flex;align-items:center;gap:2.4rem}
 .nav-links a{font-size:.74rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--bone-dim);transition:color .3s var(--ease)}
 .nav-links a:hover{color:var(--bone)}
 .nav-links a.cat{color:var(--avx)}
