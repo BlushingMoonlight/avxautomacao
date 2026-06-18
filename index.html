@@ -684,7 +684,21 @@ sheet.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>document.b
   });
 })();
 
-/* ---------- scroll reveal ---------- */
+/* ---------- prefill from catalog "Solicitar proposta" ---------- */
+(function(){
+  try{
+    const summary=sessionStorage.getItem('avxProjectSummary');
+    if(summary){
+      const msg=document.getElementById('cf-message');
+      const subj=document.getElementById('cf-subject');
+      if(msg) msg.value=summary;
+      if(subj) subj.value='projeto-residencial';
+      sessionStorage.removeItem('avxProjectSummary');
+      const c=document.getElementById('contato');
+      if(c && location.hash==='#contato') setTimeout(()=>c.scrollIntoView({behavior:'smooth'}),200);
+    }
+  }catch(e){}
+})();
 const io=new IntersectionObserver((entries,obs)=>{
   entries.forEach(en=>{if(en.isIntersecting){en.target.classList.add('in');obs.unobserve(en.target);}});
 },{threshold:.18});
