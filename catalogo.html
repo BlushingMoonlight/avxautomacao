@@ -4,18 +4,38 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- Google Analytics (GA4) -->
+<!-- Google Analytics (GA4) com Consent Mode v2 -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-M8H3T8K2LM"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
+  gtag('consent','default',{
+    ad_storage:'denied', ad_user_data:'denied', ad_personalization:'denied',
+    analytics_storage:'denied', wait_for_update:500
+  });
+  try{ if(localStorage.getItem('avxConsent')==='granted'){
+    gtag('consent','update',{ad_storage:'granted',ad_user_data:'granted',ad_personalization:'granted',analytics_storage:'granted'});
+  }}catch(e){}
   gtag('js', new Date());
   gtag('config', 'G-M8H3T8K2LM');
 </script>
 
-<title>AVX — Configure seu projeto</title>
-<meta name="description" content="Simulador de projeto AVX. Defina ambientes, escolha os dispositivos e gere seu projeto de automação bespoke.">
-<meta name="robots" content="noindex, nofollow">
+<title>AVX | Configure seu Projeto de Automação Bespoke</title>
+<meta name="description" content="Simulador de projeto AVX: defina os ambientes, escolha os dispositivos de automação e gere um resumo do seu projeto em PDF ou envie para nossa equipe.">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="theme-color" content="#0b0b0c">
+<link rel="canonical" href="https://avxautomacao.com.br/catalogo.html">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230b0b0c'/%3E%3Ctext x='5' y='23' font-family='Arial,Helvetica,sans-serif' font-size='17' font-weight='700' fill='%23ece8e1'%3EA%3C/text%3E%3Ccircle cx='24' cy='21' r='2.4' fill='%23da291c'/%3E%3C/svg%3E">
+
+<!-- Open Graph / Social -->
+<meta property="og:type" content="website">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:site_name" content="AVX">
+<meta property="og:url" content="https://avxautomacao.com.br/catalogo.html">
+<meta property="og:title" content="AVX | Configure seu Projeto de Automação Bespoke">
+<meta property="og:description" content="Monte seu projeto de automação por ambiente e receba uma proposta sob medida.">
+<meta property="og:image" content="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&amp;w=1200&amp;h=630&amp;fit=crop">
+<meta name="twitter:card" content="summary_large_image">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -236,6 +256,23 @@ body.is-admin .admin-price{display:inline-block}
 .footer-base .compliance{display:flex;gap:1.4rem;flex-wrap:wrap}
 .footer-base .compliance span{color:var(--bone-dim)}
 
+/* COOKIE CONSENT (LGPD) — mesmo DNA do index */
+.cookie{position:fixed;left:1rem;right:1rem;bottom:1rem;z-index:400;max-width:580px;margin:0 auto;
+  background:var(--ink-soft);border:1px solid var(--line);border-radius:14px;padding:1.1rem 1.2rem;
+  box-shadow:0 24px 60px -20px rgba(0,0,0,.7);transform:translateY(170%);opacity:0;visibility:hidden;
+  transition:transform .55s var(--ease),opacity .55s var(--ease),visibility .55s}
+.cookie.show{transform:none;opacity:1;visibility:visible}
+.cookie-in{display:flex;align-items:center;gap:1.3rem;flex-wrap:wrap}
+.cookie p{flex:1;min-width:230px;font-size:.82rem;font-weight:300;line-height:1.55;color:var(--bone-dim)}
+.cookie p a{color:var(--bone);text-decoration:underline;text-underline-offset:2px}
+.cookie-btns{display:flex;gap:.6rem;flex-shrink:0}
+.cookie-btns button{font-size:.68rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
+  padding:.7rem 1.25rem;border-radius:100px;border:1px solid var(--line);cursor:pointer;transition:.3s var(--ease)}
+.ck-decline{background:transparent;color:var(--bone-dim)}
+.ck-decline:hover{border-color:var(--bone);color:var(--bone)}
+.ck-accept{background:var(--avx);color:#fff;border-color:var(--avx)}
+.ck-accept:hover{background:#c1241a}
+
 :focus-visible{outline:2px solid var(--avx);outline-offset:2px}
 
 @media(max-width:1024px){
@@ -352,11 +389,11 @@ body.is-admin .admin-price{display:inline-block}
     </div>
     <div>
       <h4>Empresa</h4>
-      <ul><li><a href="index.html#contato">Contato</a></li><li><a href="#">Instagram</a></li><li><a href="#">LinkedIn</a></li></ul>
+      <ul><li><a href="index.html#contato">Contato</a></li><li><span style="color:var(--ash)">Instagram</span></li><li><span style="color:var(--ash)">LinkedIn</span></li></ul>
     </div>
     <div>
       <h4>Legal</h4>
-      <ul><li><a href="#">Privacidade</a></li><li><a href="#">Termos de Uso</a></li><li><a href="#">Certificações</a></li></ul>
+      <ul><li><a href="#">Privacidade</a></li><li><a href="#">Termos de Uso</a></li><li><a href="#" onclick="avxOpenConsent();return false;">Cookies</a></li><li><a href="#">Certificações</a></li></ul>
     </div>
   </div>
   <div class="footer-base">
@@ -817,6 +854,16 @@ function generatePDF(){
   doc.save('AVX_Projeto.pdf');
 }
 
+/* ============ COOKIE CONSENT (LGPD · Consent Mode v2) ============ */
+function avxConsent(grant){
+  try{ localStorage.setItem('avxConsent', grant?'granted':'denied'); }catch(e){}
+  if(grant && typeof gtag==='function'){
+    gtag('consent','update',{ad_storage:'granted',ad_user_data:'granted',ad_personalization:'granted',analytics_storage:'granted'});
+  }
+  const b=document.getElementById('cookie-banner'); if(b) b.classList.remove('show');
+}
+function avxOpenConsent(){ const b=document.getElementById('cookie-banner'); if(b) b.classList.add('show'); }
+
 /* ============ INIT ============ */
 document.addEventListener('DOMContentLoaded',()=>{
   renderCatalog();
@@ -825,7 +872,20 @@ document.addEventListener('DOMContentLoaded',()=>{
   const burger=document.getElementById('burger'), sheet=document.getElementById('sheet');
   if(burger) burger.addEventListener('click',()=>document.body.classList.toggle('menu-open'));
   if(sheet) sheet.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>document.body.classList.remove('menu-open')));
+  let c=null; try{ c=localStorage.getItem('avxConsent'); }catch(e){}
+  if(c!=='granted' && c!=='denied'){ const b=document.getElementById('cookie-banner'); if(b) setTimeout(()=>b.classList.add('show'),700); }
 });
 </script>
+
+<!-- COOKIE CONSENT -->
+<div class="cookie" id="cookie-banner" role="dialog" aria-label="Aviso de cookies" aria-live="polite">
+  <div class="cookie-in">
+    <p>Usamos cookies para medir o tráfego e melhorar sua experiência. Os cookies de análise só são ativados com o seu consentimento. <a href="#">Saiba mais</a>.</p>
+    <div class="cookie-btns">
+      <button class="ck-decline" onclick="avxConsent(false)">Recusar</button>
+      <button class="ck-accept" onclick="avxConsent(true)">Aceitar</button>
+    </div>
+  </div>
+</div>
 </body>
 </html>
