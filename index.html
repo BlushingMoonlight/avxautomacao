@@ -4,22 +4,60 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- Google Analytics (GA4) -->
+<!-- Google Analytics (GA4) com Consent Mode v2 -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-M8H3T8K2LM"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
+  // Por padrão, nada é armazenado até o consentimento (LGPD)
+  gtag('consent','default',{
+    ad_storage:'denied', ad_user_data:'denied', ad_personalization:'denied',
+    analytics_storage:'denied', wait_for_update:500
+  });
+  // Aplica consentimento previamente salvo (compartilhado entre as páginas)
+  try{ if(localStorage.getItem('avxConsent')==='granted'){
+    gtag('consent','update',{ad_storage:'granted',ad_user_data:'granted',ad_personalization:'granted',analytics_storage:'granted'});
+  }}catch(e){}
   gtag('js', new Date());
   gtag('config', 'G-M8H3T8K2LM');
 </script>
 
-<title>AVX — A casa que age por você</title>
-<meta name="description" content="Automação residencial bespoke para o Sul do Brasil. Inteligência local, hardware de alto padrão e instalação sem obras. Você apenas vive.">
+<title>AVX | Automação Residencial Bespoke e Inteligência Local no Sul do Brasil</title>
+<meta name="description" content="Automação residencial de alto padrão para o Sul do Brasil. Keypads de cristal, inteligência 100% local, segurança com IA e instalação sem obras em 7 dias.">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="theme-color" content="#0b0b0c">
+<meta name="author" content="AVX Technology">
+<link rel="canonical" href="https://avxautomacao.com.br/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230b0b0c'/%3E%3Ctext x='5' y='23' font-family='Arial,Helvetica,sans-serif' font-size='17' font-weight='700' fill='%23ece8e1'%3EA%3C/text%3E%3Ccircle cx='24' cy='21' r='2.4' fill='%23da291c'/%3E%3C/svg%3E">
 
-<!-- Open Graph -->
+<!-- Open Graph / Social -->
 <meta property="og:type" content="website">
-<meta property="og:title" content="AVX — A casa que age por você">
-<meta property="og:description" content="Automação residencial bespoke. Luxo é o silêncio da tecnologia que age sem ser solicitada.">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:site_name" content="AVX">
+<meta property="og:url" content="https://avxautomacao.com.br/">
+<meta property="og:title" content="AVX | Automação Residencial Bespoke — Sul do Brasil">
+<meta property="og:description" content="Keypads de cristal, inteligência 100% local e segurança com IA. A tecnologia desaparece — você apenas vive.">
+<meta property="og:image" content="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&amp;w=1200&amp;h=630&amp;fit=crop">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="AVX | Automação Residencial Bespoke — Sul do Brasil">
+<meta name="twitter:description" content="Keypads de cristal, inteligência 100% local e segurança com IA. Você apenas vive.">
+<meta name="twitter:image" content="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&amp;w=1200&amp;h=630&amp;fit=crop">
+
+<!-- Dados estruturados (SEO) -->
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"Organization",
+  "name":"AVX",
+  "legalName":"AVX Technology",
+  "url":"https://avxautomacao.com.br/",
+  "logo":"https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&amp;w=1200&amp;h=630&amp;fit=crop",
+  "description":"Automação residencial de alto padrão com hardware proprietário e inteligência local.",
+  "email":"contato@avxautomacao.com.br",
+  "areaServed":"Região Sul do Brasil",
+  "address":{"@type":"PostalAddress","addressLocality":"Florianópolis","addressRegion":"SC","addressCountry":"BR"}
+}
+</script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -171,10 +209,10 @@ body.menu-open .sheet{opacity:1;visibility:visible}
   radial-gradient(120% 80% at 20% 100%,rgba(11,11,12,.7),transparent 62%);}
 .slide-inner{position:relative;z-index:3;max-width:var(--max);width:100%;margin:0 auto}
 .slide .eyebrow{opacity:0;transform:translateY(16px);transition:.7s var(--ease) .15s}
-.slide h1{font-size:clamp(2.4rem,7vw,5.6rem);font-weight:300;margin:1.1rem 0 1.4rem;max-width:18ch;opacity:0;transform:translateY(22px);transition:.7s var(--ease) .28s}
-.slide h1 em{font-style:normal;font-weight:500;color:var(--bone)}
+.slide h1,.slide h2{font-size:clamp(2.4rem,7vw,5.6rem);font-weight:300;margin:1.1rem 0 1.4rem;max-width:18ch;opacity:0;transform:translateY(22px);transition:.7s var(--ease) .28s}
+.slide h1 em,.slide h2 em{font-style:normal;font-weight:500;color:var(--bone)}
 .slide .lead{opacity:0;transform:translateY(22px);transition:.7s var(--ease) .4s}
-.slide.active .eyebrow,.slide.active h1,.slide.active .lead,.slide.active .hero-actions{opacity:1;transform:none}
+.slide.active .eyebrow,.slide.active h1,.slide.active h2,.slide.active .lead,.slide.active .hero-actions{opacity:1;transform:none}
 .hero-actions{display:flex;flex-wrap:wrap;gap:1.4rem 2.2rem;align-items:center;margin-top:1.9rem;opacity:0;transform:translateY(22px);transition:.7s var(--ease) .52s}
 
 /* hero controls */
@@ -327,6 +365,30 @@ body.menu-open .sheet{opacity:1;visibility:visible}
    ACCESSIBILITY
    ============================================================ */
 :focus-visible{outline:2px solid var(--avx);outline-offset:3px}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+/* ============================================================
+   COOKIE CONSENT (LGPD)
+   ============================================================ */
+.cookie{position:fixed;left:1rem;right:1rem;bottom:1rem;z-index:400;max-width:580px;margin:0 auto;
+  background:var(--ink-soft);border:1px solid var(--line);border-radius:14px;padding:1.1rem 1.2rem;
+  box-shadow:0 24px 60px -20px rgba(0,0,0,.7);transform:translateY(170%);opacity:0;visibility:hidden;
+  transition:transform .55s var(--ease),opacity .55s var(--ease),visibility .55s}
+.cookie.show{transform:none;opacity:1;visibility:visible}
+.cookie-in{display:flex;align-items:center;gap:1.3rem;flex-wrap:wrap}
+.cookie p{flex:1;min-width:230px;font-size:.82rem;font-weight:300;line-height:1.55;color:var(--bone-dim)}
+.cookie p a{color:var(--bone);text-decoration:underline;text-underline-offset:2px}
+.cookie-btns{display:flex;gap:.6rem;flex-shrink:0}
+.cookie-btns button{font-size:.68rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
+  padding:.7rem 1.25rem;border-radius:100px;border:1px solid var(--line);cursor:pointer;transition:.3s var(--ease)}
+.ck-decline{background:transparent;color:var(--bone-dim)}
+.ck-decline:hover{border-color:var(--bone);color:var(--bone)}
+.ck-accept{background:var(--avx);color:#fff;border-color:var(--avx)}
+.ck-accept:hover{background:#c1241a}
+
+/* ============================================================
+   ACCESSIBILITY
+   ============================================================ */
 @media(prefers-reduced-motion:reduce){
   *{animation:none!important;transition-duration:.01ms!important}
   .reveal{opacity:1;transform:none}
@@ -335,6 +397,8 @@ body.menu-open .sheet{opacity:1;visibility:visible}
 </style>
 </head>
 <body>
+
+<h1 class="sr-only">AVX — Automação residencial bespoke, inteligência local e segurança com IA no Sul do Brasil</h1>
 
 <!-- ===================== NAV ===================== -->
 <nav class="nav" id="nav">
@@ -366,7 +430,7 @@ body.menu-open .sheet{opacity:1;visibility:visible}
       <div class="slide-veil"></div>
       <div class="slide-inner">
         <p class="eyebrow">Iluminação <span class="dot">·</span> AVX-Touchpad</p>
-        <h1 class="display">A luz que <em>segue o sol.</em></h1>
+        <h2 class="display">A luz que <em>segue o sol.</em></h2>
         <p class="lead">Keypads de vidro de cristal e cenas circadianas que afinam sono, foco e humor — sem você tocar em nada.</p>
         <div class="hero-actions">
           <a href="#contato" class="btn">Iniciar Projeto <span class="arw">→</span></a>
@@ -381,7 +445,7 @@ body.menu-open .sheet{opacity:1;visibility:visible}
       <div class="slide-veil"></div>
       <div class="slide-inner">
         <p class="eyebrow">Climatização <span class="dot">·</span> AVX-H&amp;T</p>
-        <h1 class="display">O conforto que <em>antecipa.</em></h1>
+        <h2 class="display">O conforto que <em>antecipa.</em></h2>
         <p class="lead">Sensores de temperatura e umidade ajustam o ambiente antes do desconforto existir. A casa age em silêncio.</p>
         <div class="hero-actions">
           <a href="#contato" class="btn">Iniciar Projeto <span class="arw">→</span></a>
@@ -396,7 +460,7 @@ body.menu-open .sheet{opacity:1;visibility:visible}
       <div class="slide-veil"></div>
       <div class="slide-inner">
         <p class="eyebrow">AI Security <span class="dot">·</span> AVX-MMWave</p>
-        <h1 class="display">Sente sua presença. <em>Ignora seus pets.</em></h1>
+        <h2 class="display">Sente sua presença. <em>Ignora seus pets.</em></h2>
         <p class="lead">Radar de grau militar que detecta respiração e micro-movimentos. Sem câmeras, sem invasão.</p>
         <div class="hero-actions">
           <a href="#contato" class="btn">Iniciar Projeto <span class="arw">→</span></a>
@@ -411,7 +475,7 @@ body.menu-open .sheet{opacity:1;visibility:visible}
       <div class="slide-veil"></div>
       <div class="slide-inner">
         <p class="eyebrow">Multimídia <span class="dot">·</span> AVX-IP</p>
-        <h1 class="display">Cinema e som <em>em cada ambiente.</em></h1>
+        <h2 class="display">Cinema e som <em>em cada ambiente.</em></h2>
         <p class="lead">Integração nativa com Sonos, Bowers &amp; Wilkins, Bang &amp; Olufsen e os maiores nomes do áudio mundial.</p>
         <div class="hero-actions">
           <a href="#contato" class="btn">Iniciar Projeto <span class="arw">→</span></a>
@@ -426,7 +490,7 @@ body.menu-open .sheet{opacity:1;visibility:visible}
       <div class="slide-veil"></div>
       <div class="slide-inner">
         <p class="eyebrow">Cortinas &amp; Persianas <span class="dot">·</span> AVX-Curtain</p>
-        <h1 class="display">Sombra e luz, <em>no horário certo.</em></h1>
+        <h2 class="display">Sombra e luz, <em>no horário certo.</em></h2>
         <p class="lead">Motorização silenciosa que protege seu mobiliário e sua privacidade conforme o movimento do sol.</p>
         <div class="hero-actions">
           <a href="#contato" class="btn">Iniciar Projeto <span class="arw">→</span></a>
@@ -441,7 +505,7 @@ body.menu-open .sheet{opacity:1;visibility:visible}
       <div class="slide-veil"></div>
       <div class="slide-inner">
         <p class="eyebrow">Elétrica <span class="dot">·</span> AVX-Socket</p>
-        <h1 class="display">Tomadas em cristal <em>que medem energia.</em></h1>
+        <h2 class="display">Tomadas em cristal <em>que medem energia.</em></h2>
         <p class="lead">Acabamento de joalheria, monitoramento de consumo em tempo real e gestão de energia invisível.</p>
         <div class="hero-actions">
           <a href="#contato" class="btn">Iniciar Projeto <span class="arw">→</span></a>
@@ -589,11 +653,11 @@ body.menu-open .sheet{opacity:1;visibility:visible}
     </div>
     <div>
       <h4>Empresa</h4>
-      <ul><li><a href="#contato">Contato</a></li><li><a href="#">Instagram</a></li><li><a href="#">LinkedIn</a></li></ul>
+      <ul><li><a href="#contato">Contato</a></li><li><span style="color:var(--ash)">Instagram</span></li><li><span style="color:var(--ash)">LinkedIn</span></li></ul>
     </div>
     <div>
       <h4>Legal</h4>
-      <ul><li><a href="#">Privacidade</a></li><li><a href="#">Termos de Uso</a></li><li><a href="#">Certificações</a></li></ul>
+      <ul><li><a href="#">Privacidade</a></li><li><a href="#">Termos de Uso</a></li><li><a href="#" onclick="avxOpenConsent();return false;">Cookies</a></li><li><a href="#">Certificações</a></li></ul>
     </div>
   </div>
 
@@ -703,6 +767,31 @@ const io=new IntersectionObserver((entries,obs)=>{
   entries.forEach(en=>{if(en.isIntersecting){en.target.classList.add('in');obs.unobserve(en.target);}});
 },{threshold:.18});
 document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+/* ---------- cookie consent (LGPD · Consent Mode v2) ---------- */
+function avxConsent(grant){
+  try{ localStorage.setItem('avxConsent', grant?'granted':'denied'); }catch(e){}
+  if(grant && typeof gtag==='function'){
+    gtag('consent','update',{ad_storage:'granted',ad_user_data:'granted',ad_personalization:'granted',analytics_storage:'granted'});
+  }
+  const b=document.getElementById('cookie-banner'); if(b) b.classList.remove('show');
+}
+function avxOpenConsent(){ const b=document.getElementById('cookie-banner'); if(b) b.classList.add('show'); }
+(function(){
+  let c=null; try{ c=localStorage.getItem('avxConsent'); }catch(e){}
+  if(c!=='granted' && c!=='denied'){ const b=document.getElementById('cookie-banner'); if(b) setTimeout(()=>b.classList.add('show'),700); }
+})();
 </script>
+
+<!-- ===================== COOKIE CONSENT ===================== -->
+<div class="cookie" id="cookie-banner" role="dialog" aria-label="Aviso de cookies" aria-live="polite">
+  <div class="cookie-in">
+    <p>Usamos cookies para medir o tráfego e melhorar sua experiência. Os cookies de análise só são ativados com o seu consentimento. <a href="#">Saiba mais</a>.</p>
+    <div class="cookie-btns">
+      <button class="ck-decline" onclick="avxConsent(false)">Recusar</button>
+      <button class="ck-accept" onclick="avxConsent(true)">Aceitar</button>
+    </div>
+  </div>
+</div>
 </body>
 </html>
