@@ -387,7 +387,7 @@ body.is-admin .admin-price{display:inline-block}
   <div class="footer-grid">
     <div>
       <span class="brand">AVX<span class="dot">.</span></span>
-      <p>Automação residencial de alto padrão com hardware proprietário e inteligência local.</p>
+      <p>Automação residencial de alto padrão, sob medida. A tecnologia desaparece na arquitetura e a casa passa a agir por você.</p>
     </div>
     <div>
       <h4>Produtos</h4>
@@ -457,7 +457,7 @@ body.is-admin .admin-price{display:inline-block}
 <script>
 /* ============ PRODUCT DATA (37 itens · 7 categorias) ============ */
 const productsData = [
-  { id:'avx-pro-server', cat:'Central', name:'AVX-Pro-Server', desc:'O maestro do ecossistema. Processamento local, IA e segurança de dados.', tech:'Central de Processamento', icon:'server', color:'#b8b4ab', price:100 },
+  { id:'avx-pro-server', cat:'Central', name:'AVX-Pro-Server', desc:'O maestro do ecossistema. Processamento dedicado, IA e segurança de dados.', tech:'Central de Processamento', icon:'server', color:'#b8b4ab', price:100 },
 
   { id:'avx-rgbw', cat:'Iluminação', name:'AVX-RGBW', desc:'Crie atmosferas imersivas, de cenas vibrantes ao relaxamento profundo.', tech:'Controlador LED', icon:'palette', color:'#c9a35e', price:100 },
   { id:'avx-touchpad-1', cat:'Iluminação', name:'AVX-Touchpad 1', desc:'Design em vidro de cristal. Acabamento premium, 1 zona tátil.', tech:'Interruptor 1 Tecla', icon:'square', color:'#c9a35e', price:100 },
@@ -481,7 +481,7 @@ const productsData = [
   { id:'avx-painel-vidro', cat:'Elétrica', name:'AVX-Painel de Vidro', desc:'Acabamento premium. Espelho de vidro temperado, sem funções smart.', tech:'Acabamento em Vidro', icon:'square', color:'#8d8980', price:100 },
   { id:'avx-empty-cover', cat:'Elétrica', name:'AVX-Empty Cover', desc:'Estética limpa. Módulo cego para pontos de reserva.', tech:'Módulo Cego', icon:'square-dashed', color:'#8d8980', price:100 },
 
-  { id:'avx-ht', cat:'Climatização', name:'AVX-H&T', desc:'Inteligência ambiental. Monitoramento preciso para conforto térmico preditivo.', tech:'Sensor Temp/Umidade', icon:'droplets', color:'#7fa6b8', price:100 },
+  { id:'avx-ht', cat:'Climatização', name:'AVX-H&T', desc:'Monitoramento preciso de temperatura e umidade para conforto térmico.', tech:'Sensor Temp/Umidade', icon:'droplets', color:'#7fa6b8', price:100 },
   { id:'avx-rm', cat:'Climatização', name:'AVX-RM', desc:'Controle universal. Integração de ar-condicionado e TV via infravermelho.', tech:'Controle IR Universal', icon:'wifi', color:'#7fa6b8', price:100 },
 
   { id:'avx-2pm', cat:'Cortinas', name:'AVX-2PM', desc:'Gestão de sombra. Controle de motores de persiana existentes.', tech:'Controlador de Persiana', icon:'settings-2', color:'#9a8fae', price:100 },
@@ -512,10 +512,10 @@ const productMeta = productsData.reduce((a,p)=>{a[p.id]=p;return a;},{});
 
 const smartTips = {
   'Iluminação':   { icon:'sun',           title:'Iluminação bespoke', text:'O sistema aprende seus hábitos e ajusta cenas de luz ao longo do dia.' },
-  'Climatização': { icon:'thermometer',   title:'Conforto térmico',   text:'Economia inteligente: o ambiente é climatizado antes da sua chegada.' },
-  'Segurança':    { icon:'shield-check',  title:'Segurança preditiva',text:'Reconhecimento de padrões e notificações em tempo real.' },
+  'Climatização': { icon:'thermometer',   title:'Conforto térmico',   text:'Climatização programada: o ambiente é climatizado antes da sua chegada.' },
+  'Segurança':    { icon:'shield-check',  title:'Segurança com IA',text:'Reconhecimento de padrões e notificações em tempo real.' },
   'Cortinas':     { icon:'blinds',        title:'Controle solar',     text:'As cortinas acompanham a posição do sol automaticamente.' },
-  'Central':      { icon:'server',        title:'O mordomo invisível',text:'A central AVX-Pro é o coração local do sistema.' }
+  'Central':      { icon:'server',        title:'O mordomo invisível',text:'A central AVX-Pro é o coração do sistema.' }
 };
 
 const kits = {
