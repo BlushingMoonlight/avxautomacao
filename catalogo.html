@@ -255,8 +255,6 @@ body.is-admin .admin-price{display:inline-block}
 .footer ul a:hover{color:var(--bone)}
 .footer-base{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;
   max-width:var(--max);margin:0 auto;padding-top:1.9rem;border-top:1px solid var(--line);font-size:.78rem;color:var(--ash);letter-spacing:.02em}
-.footer-base .compliance{display:flex;gap:1.4rem;flex-wrap:wrap}
-.footer-base .compliance span{color:var(--bone-dim)}
 .certs{max-width:var(--max);margin:0 auto 1.9rem;padding-top:1.9rem;border-top:1px solid var(--line);
   display:flex;flex-wrap:wrap;align-items:center;gap:.6rem .8rem}
 .certs .certs-lbl{font-size:.66rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--bone);margin-right:.5rem}
@@ -387,7 +385,7 @@ body.is-admin .admin-price{display:inline-block}
   <div class="footer-grid">
     <div>
       <span class="brand">AVX<span class="dot">.</span></span>
-      <p>Automação residencial de alto padrão, sob medida. A tecnologia desaparece na arquitetura e a casa passa a agir por você.</p>
+      <p>Tecnologia com identidade de luxo. Cor-assinatura <span style="color:var(--avx)">Vermelho AVX</span> (#DA291C), White Glove Service e suporte onde os outros não chegam. Sediada em Florianópolis (SC) e presente na maioria das cidades do Sul do Brasil.</p>
     </div>
     <div>
       <h4>Produtos</h4>
@@ -456,6 +454,7 @@ body.is-admin .admin-price{display:inline-block}
 
 <script>
 /* ============ PRODUCT DATA (37 itens · 7 categorias) ============ */
+function avxIcons(){ try{ if(window.lucide && lucide.createIcons) avxIcons(); }catch(e){} }
 const productsData = [
   { id:'avx-pro-server', cat:'Central', name:'AVX-Pro-Server', desc:'O maestro do ecossistema. Processamento dedicado, IA e segurança de dados.', tech:'Central de Processamento', icon:'server', color:'#b8b4ab', price:100 },
 
@@ -575,7 +574,7 @@ function renderCatalog(){
       <div class="grid">${cards}</div>`;
     root.appendChild(block);
   });
-  lucide.createIcons();
+  avxIcons();
 }
 
 /* ============ ROOMS ============ */
@@ -731,14 +730,14 @@ function showToast(d){
   const c=document.getElementById('toast-container');
   const t=document.createElement('div'); t.className='toast';
   t.innerHTML=`<div class="ti"><i data-lucide="${d.icon}"></i></div><div><h4>${d.title}</h4><p>${d.text}</p></div>`;
-  c.appendChild(t); lucide.createIcons();
+  c.appendChild(t); avxIcons();
   setTimeout(()=>{ t.classList.add('hiding'); t.addEventListener('animationend',()=>t.remove()); },4800);
 }
 function confirmToast(title,text,onYes){
   const c=document.getElementById('toast-container');
   const t=document.createElement('div'); t.className='toast';
   t.innerHTML=`<div class="ti"><i data-lucide="alert-triangle"></i></div><div style="flex:1"><h4>${title}</h4><p>${text}</p><div class="tbtns"><button class="yes">Confirmar</button><button class="no">Cancelar</button></div></div>`;
-  c.appendChild(t); lucide.createIcons();
+  c.appendChild(t); avxIcons();
   const close=()=>{ t.classList.add('hiding'); t.addEventListener('animationend',()=>t.remove()); };
   t.querySelector('.no').onclick=close;
   t.querySelector('.yes').onclick=()=>{ close(); onYes(); };
@@ -764,7 +763,7 @@ function refreshAdminUI(){
   const b=document.getElementById('btn-admin');
   b.classList.toggle('on', isAdmin);
   b.innerHTML=`<i data-lucide="${isAdmin?'unlock':'lock'}"></i>`;
-  updateSidebar(); updateSummary(); lucide.createIcons();
+  updateSidebar(); updateSummary(); avxIcons();
 }
 
 /* ============ PERSISTENCE ============ */
@@ -814,7 +813,7 @@ function openBudgetModal(){
   document.getElementById('modal-total-items').innerText=qty;
   document.getElementById('modal-total-price').innerText=brl(price);
   document.getElementById('budget-modal').classList.add('open');
-  lucide.createIcons();
+  avxIcons();
 }
 function closeBudgetModal(){ document.getElementById('budget-modal').classList.remove('open'); }
 
