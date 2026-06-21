@@ -68,7 +68,7 @@
    AVX — Design tokens
    ============================================================ */
 :root{
-  --ink:#000000;          /* Anduril-grade black */
+  --ink:#0b0b0c;          /* near-black, warm */
   --ink-soft:#0d0d0d;
   --paper:#f0ede7;         /* off-white inversion sections */
   --bone:#ece8e1;         /* primary text on dark */
@@ -107,9 +107,9 @@ a{color:inherit;text-decoration:none}
 .eyebrow .dot{color:var(--avx)}
 .display{
   font-family:'Inter',sans-serif;
-  font-weight:700;
-  line-height:1.06;
-  letter-spacing:-.035em;
+  font-weight:400;
+  line-height:1.1;
+  letter-spacing:-.02em;
 }
 .lead{
   color:var(--bone-dim);
@@ -162,11 +162,11 @@ a{color:inherit;text-decoration:none}
 .nav-links a:hover{color:var(--bone)}
 .nav-links a.cat{color:var(--avx)}
 .nav-cta{
-  border:1px solid var(--line);border-radius:2px;
+  border:1px solid var(--line);border-radius:100px;
   padding:.62rem 1.3rem;color:var(--bone)!important;
   transition:border-color .4s var(--ease),background .4s var(--ease);
 }
-.nav-cta:hover{border-color:var(--avx);background:var(--avx);color:#fff!important}
+.nav-cta:hover{border-color:var(--bone);background:var(--bone);color:var(--ink)!important}
 .burger{display:none;background:none;border:0;color:var(--bone);cursor:pointer;width:30px;height:20px;position:relative}
 .burger span{position:absolute;left:0;height:1.5px;width:100%;background:currentColor;transition:.35s var(--ease)}
 .burger span:nth-child(1){top:2px}
@@ -202,13 +202,13 @@ body.menu-open .sheet{opacity:1;visibility:visible}
 .slide.active .slide-bg{animation:kenburns 8s linear forwards}
 @keyframes kenburns{from{transform:scale(1.08)}to{transform:scale(1.17)}}
 .slide-veil{position:absolute;inset:0;z-index:1;
-  background:linear-gradient(180deg,rgba(0,0,0,.65),rgba(0,0,0,.1) 28%,rgba(0,0,0,.55) 65%,rgba(0,0,0,.92));}
+  background:linear-gradient(180deg,rgba(11,11,12,.5),rgba(11,11,12,.08) 32%,rgba(11,11,12,.6) 74%,var(--ink)),
+  radial-gradient(120% 80% at 18% 100%,rgba(218,41,28,.12),transparent 55%),
+  radial-gradient(120% 80% at 20% 100%,rgba(11,11,12,.7),transparent 62%);}
 .slide-inner{position:relative;z-index:3;max-width:var(--max);width:100%;margin:0 auto}
-.slide .eyebrow{color:var(--bone-dim);letter-spacing:.22em;text-shadow:0 1px 14px rgba(0,0,0,.55);opacity:0;transform:translateY(16px);transition:.7s var(--ease) .15s}
-.slide .eyebrow::before{content:"[ ";color:var(--avx);letter-spacing:0}
-.slide .eyebrow::after{content:" ]";color:var(--avx);letter-spacing:0}
-.slide h1,.slide h2{font-size:clamp(2.6rem,8vw,7rem);font-weight:700;margin:1rem 0 1.3rem;max-width:16ch;opacity:0;transform:translateY(22px);transition:.7s var(--ease) .28s;letter-spacing:-.04em}
-.slide h1 em,.slide h2 em{font-style:normal;font-weight:700;color:var(--avx)}
+.slide .eyebrow{color:var(--bone);text-shadow:0 1px 14px rgba(0,0,0,.55);opacity:0;transform:translateY(16px);transition:.7s var(--ease) .15s}
+.slide h1,.slide h2{font-size:clamp(2.4rem,7vw,5.6rem);font-weight:300;margin:1.1rem 0 1.4rem;max-width:18ch;opacity:0;transform:translateY(22px);transition:.7s var(--ease) .28s}
+.slide h1 em,.slide h2 em{font-style:normal;font-weight:500;color:var(--bone)}
 .slide .lead{opacity:0;transform:translateY(22px);transition:.7s var(--ease) .4s}
 .slide.active .eyebrow,.slide.active h1,.slide.active h2,.slide.active .lead,.slide.active .hero-actions{opacity:1;transform:none}
 .hero-actions{display:flex;flex-wrap:wrap;gap:1.4rem 2.2rem;align-items:center;margin-top:1.9rem;opacity:0;transform:translateY(22px);transition:.7s var(--ease) .52s}
@@ -229,7 +229,7 @@ body.menu-open .sheet{opacity:1;visibility:visible}
   display:inline-flex;align-items:center;gap:.7em;
   background:var(--avx);color:#fff;
   font-size:.74rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;
-  padding:1.05rem 2.2rem;border-radius:2px;
+  padding:1.05rem 2rem;border-radius:100px;
   transition:transform .4s var(--ease),box-shadow .4s var(--ease),background .4s var(--ease);
 }
 .btn:hover{transform:translateY(-2px);box-shadow:0 14px 40px -12px rgba(218,41,28,.6);background:#c1241a}
@@ -301,7 +301,7 @@ body.menu-open .sheet{opacity:1;visibility:visible}
 .field label .opt{text-transform:none;letter-spacing:0;color:var(--ash);opacity:.7}
 .field input,.field select,.field textarea{
   font-family:'Inter',sans-serif;font-size:.95rem;color:var(--bone);
-  background:rgba(236,232,225,.04);border:1px solid var(--line);border-radius:2px;
+  background:rgba(236,232,225,.04);border:1px solid var(--line);border-radius:12px;
   padding:.95rem 1.1rem;transition:border-color .3s var(--ease),background .3s var(--ease);width:100%}
 .field textarea{resize:vertical;min-height:130px}
 .field input::placeholder,.field textarea::placeholder{color:var(--ash);opacity:.6}
@@ -348,13 +348,16 @@ body.menu-open .sheet{opacity:1;visibility:visible}
    ============================================================ */
 .manifesto{padding:clamp(5rem,12vh,9rem) var(--shell);border-top:1px solid var(--line)}
 .manifesto-inner{max-width:var(--max);margin:0 auto;display:grid;grid-template-columns:1fr 2fr;gap:4rem;align-items:start}
-.manifesto-tag{font-size:.66rem;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--avx);padding-top:.3rem}
-.manifesto-body{}
-.manifesto-line{display:block;font-size:clamp(1rem,1.6vw,1.22rem);font-weight:600;letter-spacing:.08em;text-transform:uppercase;line-height:1.7;color:var(--bone)}
+.manifesto-tag{font-size:.7rem;font-weight:500;letter-spacing:.28em;text-transform:uppercase;color:var(--ash);padding-top:.6rem}
+.manifesto-tag .dot{color:var(--avx)}
+.manifesto-line{display:block;font-family:'Inter',sans-serif;font-weight:300;font-size:clamp(1.5rem,3vw,2.3rem);letter-spacing:-.02em;line-height:1.25;color:var(--bone)}
+.manifesto-line em{font-style:normal;font-weight:500;color:var(--bone)}
 .manifesto-line.dim{color:var(--ash)}
-.manifesto-line.break{margin-top:1.6rem}
-.manifesto-rule{width:40px;height:2px;background:var(--avx);margin:2.4rem 0}
-@media(max-width:760px){.manifesto-inner{grid-template-columns:1fr;gap:1.8rem}}
+.manifesto-line.break{margin-top:1.3rem}
+.manifesto-spec{display:block;font-size:1rem;font-weight:300;line-height:1.9;color:var(--bone-dim)}
+.manifesto-spec b{font-weight:500;color:var(--bone)}
+.manifesto-rule{width:48px;height:2px;background:var(--avx);margin:2.2rem 0}
+@media(max-width:760px){.manifesto-inner{grid-template-columns:1fr;gap:1.6rem}}
 
 /* ============================================================
    REVEAL animation
@@ -454,7 +457,7 @@ body.menu-open .sheet{opacity:1;visibility:visible}
         <h2 class="display">A luz que <em>segue o sol.</em></h2>
         <p class="lead">Keypads de vidro de cristal e cenas circadianas que afinam sono, foco e humor — sem você tocar em nada.</p>
         <div class="hero-actions">
-          <a href="#contato" class="btn">Iniciar Projeto <span class="arw">↗</span></a>
+          <a href="#contato" class="btn">Iniciar Projeto <span class="arw">→</span></a>
           <a href="catalogo.html" class="qlink">Ver no Catálogo <span class="arw">→</span></a>
         </div>
       </div>
@@ -469,7 +472,7 @@ body.menu-open .sheet{opacity:1;visibility:visible}
         <h2 class="display">O conforto que <em>antecipa.</em></h2>
         <p class="lead">Sensores de temperatura e umidade ajustam o ambiente antes do desconforto existir. A casa age em silêncio.</p>
         <div class="hero-actions">
-          <a href="#contato" class="btn">Iniciar Projeto <span class="arw">↗</span></a>
+          <a href="#contato" class="btn">Iniciar Projeto <span class="arw">→</span></a>
           <a href="catalogo.html" class="qlink">Ver no Catálogo <span class="arw">→</span></a>
         </div>
       </div>
@@ -484,7 +487,7 @@ body.menu-open .sheet{opacity:1;visibility:visible}
         <h2 class="display">Sente sua presença. <em>Ignora seus pets.</em></h2>
         <p class="lead">Radar de grau militar que detecta respiração e micro-movimentos. Sem câmeras, sem invasão.</p>
         <div class="hero-actions">
-          <a href="#contato" class="btn">Iniciar Projeto <span class="arw">↗</span></a>
+          <a href="#contato" class="btn">Iniciar Projeto <span class="arw">→</span></a>
           <a href="catalogo.html" class="qlink">Ver no Catálogo <span class="arw">→</span></a>
         </div>
       </div>
@@ -499,7 +502,7 @@ body.menu-open .sheet{opacity:1;visibility:visible}
         <h2 class="display">Cinema e som <em>em cada ambiente.</em></h2>
         <p class="lead">Integração nativa com Sonos, Bowers &amp; Wilkins, Bang &amp; Olufsen e os maiores nomes do áudio mundial.</p>
         <div class="hero-actions">
-          <a href="#contato" class="btn">Iniciar Projeto <span class="arw">↗</span></a>
+          <a href="#contato" class="btn">Iniciar Projeto <span class="arw">→</span></a>
           <a href="catalogo.html" class="qlink">Ver no Catálogo <span class="arw">→</span></a>
         </div>
       </div>
@@ -514,7 +517,7 @@ body.menu-open .sheet{opacity:1;visibility:visible}
         <h2 class="display">Sombra e luz, <em>no horário certo.</em></h2>
         <p class="lead">Motorização silenciosa que protege seu mobiliário e sua privacidade conforme o movimento do sol.</p>
         <div class="hero-actions">
-          <a href="#contato" class="btn">Iniciar Projeto <span class="arw">↗</span></a>
+          <a href="#contato" class="btn">Iniciar Projeto <span class="arw">→</span></a>
           <a href="catalogo.html" class="qlink">Ver no Catálogo <span class="arw">→</span></a>
         </div>
       </div>
@@ -529,7 +532,7 @@ body.menu-open .sheet{opacity:1;visibility:visible}
         <h2 class="display">Tomadas em cristal <em>que medem energia.</em></h2>
         <p class="lead">Acabamento de joalheria, monitoramento de consumo em tempo real e gestão de energia invisível.</p>
         <div class="hero-actions">
-          <a href="#contato" class="btn">Iniciar Projeto <span class="arw">↗</span></a>
+          <a href="#contato" class="btn">Iniciar Projeto <span class="arw">→</span></a>
           <a href="catalogo.html" class="qlink">Ver no Catálogo <span class="arw">→</span></a>
         </div>
       </div>
@@ -544,7 +547,7 @@ body.menu-open .sheet{opacity:1;visibility:visible}
         <h2 class="display">Funciona com ou <em>sem internet.</em></h2>
         <p class="lead">Todo o processamento acontece no seu servidor privado. Seus dados nunca saem da sua rede.</p>
         <div class="hero-actions">
-          <a href="#contato" class="btn">Iniciar Projeto <span class="arw">↗</span></a>
+          <a href="#contato" class="btn">Iniciar Projeto <span class="arw">→</span></a>
           <a href="catalogo.html" class="qlink">Ver no Catálogo <span class="arw">→</span></a>
         </div>
       </div>
@@ -559,7 +562,7 @@ body.menu-open .sheet{opacity:1;visibility:visible}
         <h2 class="display">Uma frase liga <em>a casa inteira.</em></h2>
         <p class="lead">"Modo cinema", "boa noite", "cheguei" — comande tudo pela voz, pelo app ou por um toque no cristal.</p>
         <div class="hero-actions">
-          <a href="#contato" class="btn">Iniciar Projeto <span class="arw">↗</span></a>
+          <a href="#contato" class="btn">Iniciar Projeto <span class="arw">→</span></a>
           <a href="catalogo.html" class="qlink">Ver no Catálogo <span class="arw">→</span></a>
         </div>
       </div>
@@ -590,8 +593,8 @@ body.menu-open .sheet{opacity:1;visibility:visible}
 <!-- ===================== INTEGRATIONS ===================== -->
 <section class="integrations">
   <div class="cap reveal">
-    <span class="t">[ Integração nativa ]</span>
-    <span class="s">2.500+ dispositivos compatíveis</span>
+    <span class="t">Integração nativa</span>
+    <span class="s">· 2.500+ dispositivos</span>
   </div>
   <div class="mq-wrap reveal d1">
     <div class="marquee">
@@ -605,17 +608,16 @@ body.menu-open .sheet{opacity:1;visibility:visible}
 <!-- ===================== MANIFESTO ===================== -->
 <section class="manifesto">
   <div class="manifesto-inner reveal">
-    <span class="manifesto-tag">[ Princípio ]</span>
+    <span class="manifesto-tag">Princípio <span class="dot">·</span> 01</span>
     <div class="manifesto-body">
       <span class="manifesto-line dim">Automação convencional conecta dispositivos.</span>
-      <span class="manifesto-line break">A AVX constrói sistemas.</span>
+      <span class="manifesto-line break">A AVX constrói <em>sistemas.</em></span>
       <div class="manifesto-rule"></div>
-      <span class="manifesto-line">Hardware proprietário.</span>
-      <span class="manifesto-line">Servidor privado.</span>
-      <span class="manifesto-line">Instalação em 7 dias.</span>
-      <span class="manifesto-line">Garantia de 5 anos.</span>
+      <span class="manifesto-spec"><b>Hardware proprietário.</b> Servidor privado, com ou sem internet.</span>
+      <span class="manifesto-spec"><b>Instalação em 7 dias.</b> Sem quebrar paredes.</span>
+      <span class="manifesto-spec"><b>Garantia de 5 anos.</b> Com revisões preventivas inclusas.</span>
       <div class="manifesto-rule"></div>
-      <span class="manifesto-line break">Engenharia Bespoke.</span>
+      <span class="manifesto-line break">Engenharia <em>Bespoke.</em></span>
     </div>
   </div>
 </section>
@@ -643,7 +645,7 @@ body.menu-open .sheet{opacity:1;visibility:visible}
 <section class="projects" id="projetos">
   <div class="head">
     <div>
-      <p class="eyebrow reveal">[ Portfólio ]</p>
+      <p class="eyebrow reveal">Portfólio</p>
       <h2 class="display reveal d1">Residências entregues.</h2>
     </div>
     <p class="lead reveal d2" style="max-width:38ch">Cada projeto é único. Uma seleção de ambientes que já transformamos.</p>
@@ -667,7 +669,7 @@ body.menu-open .sheet{opacity:1;visibility:visible}
 <!-- ===================== CONTACT ===================== -->
 <section class="contact" id="contato">
   <div class="head">
-    <p class="eyebrow reveal">[ Contato ]</p>
+    <p class="eyebrow reveal">Sem compromisso</p>
     <h2 class="display reveal d1">Inicie seu projeto.</h2>
     <p class="lead reveal d2">Conte um pouco sobre sua casa e seu projeto. Retornamos para agendar a consultoria.</p>
   </div>
