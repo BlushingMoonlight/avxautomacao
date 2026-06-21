@@ -360,6 +360,87 @@ body.menu-open .sheet{opacity:1;visibility:visible}
 @media(max-width:760px){.manifesto-inner{grid-template-columns:1fr;gap:1.6rem}}
 
 /* ============================================================
+   COLLAB — Sovereign Edition (AVX × Palantir)
+   ============================================================ */
+.collab{
+  background:#000;
+  padding:clamp(5.5rem,13vh,10rem) var(--shell);
+  border-top:1px solid rgba(255,255,255,.07);
+  border-bottom:1px solid rgba(255,255,255,.07);
+}
+.collab-inner{
+  max-width:var(--max);margin:0 auto;
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:clamp(3.5rem,7vw,8rem);align-items:start;
+}
+.collab-eyebrow{
+  display:flex;align-items:center;gap:1.4rem;flex-wrap:wrap;margin-bottom:2.2rem;
+}
+.collab-tag{
+  font-size:.64rem;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:var(--avx);
+}
+.collab-partner{
+  color:inherit;text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px;
+  transition:opacity .3s var(--ease);
+}
+.collab-partner:hover{opacity:.7}
+.collab-badge{
+  font-size:.6rem;font-weight:500;letter-spacing:.18em;text-transform:uppercase;
+  color:rgba(255,255,255,.22);border:1px solid rgba(255,255,255,.1);padding:.22rem .7rem;
+}
+.collab-headline{
+  font-family:'Inter',sans-serif;
+  font-size:clamp(2.4rem,5vw,4.2rem);
+  font-weight:300;line-height:1.07;letter-spacing:-.025em;
+  color:#f0ede7;max-width:22ch;margin-bottom:1.8rem;
+}
+.collab-headline em{font-style:normal;font-weight:500;color:#f0ede7}
+.collab-body{
+  font-size:.95rem;font-weight:300;
+  color:rgba(236,232,225,.42);
+  line-height:1.8;max-width:44ch;margin-bottom:3rem;
+}
+.collab-cta{
+  display:inline-flex;align-items:center;gap:.65em;
+  font-size:.7rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;
+  color:#f0ede7;padding-bottom:.4em;position:relative;transition:color .4s var(--ease);
+}
+.collab-cta span{transition:transform .4s var(--ease)}
+.collab-cta:hover span{transform:translateX(4px)}
+.collab-cta::after{content:"";position:absolute;left:0;bottom:0;height:1px;width:100%;background:rgba(255,255,255,.12)}
+.collab-cta::before{content:"";position:absolute;left:0;bottom:0;height:1px;width:0;background:var(--avx);transition:width .5s var(--ease);z-index:1}
+.collab-cta:hover::before{width:100%}
+/* Right: number + Anduril spec sheet */
+.collab-right{}
+.collab-num{
+  font-size:clamp(5rem,11vw,9.5rem);font-weight:700;
+  letter-spacing:-.04em;color:#f0ede7;line-height:1;
+}
+.collab-num-sub{
+  font-size:.6rem;font-weight:500;letter-spacing:.2em;text-transform:uppercase;
+  color:rgba(236,232,225,.24);margin-top:.7rem;margin-bottom:2.8rem;
+}
+.collab-specs{border-top:1px solid rgba(255,255,255,.1)}
+.collab-row{
+  display:grid;grid-template-columns:110px 1fr;gap:.8rem;
+  padding:1.15rem 0;border-bottom:1px solid rgba(255,255,255,.07);
+  align-items:baseline;
+}
+.c-lbl{
+  font-size:.56rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;
+  color:rgba(255,255,255,.25);padding-top:.15rem;
+}
+.c-val{
+  font-size:.84rem;font-weight:300;color:rgba(236,232,225,.72);line-height:1.55;
+}
+.c-val b{font-weight:500;color:#f0ede7}
+@media(max-width:880px){
+  .collab-inner{grid-template-columns:1fr}
+  .collab-headline{max-width:100%}
+  .collab-num{font-size:clamp(4.5rem,18vw,7rem)}
+}
+
+/* ============================================================
    REVEAL animation
    ============================================================ */
 .reveal{opacity:0;transform:translateY(28px);transition:opacity 1s var(--ease),transform 1s var(--ease)}
@@ -663,6 +744,57 @@ body.menu-open .sheet{opacity:1;visibility:visible}
       <img src="https://images.unsplash.com/photo-1588854337236-6889d631faa8?q=80&w=1400&auto=format&fit=crop" alt="Residência Ilhas do Sul">
       <div class="meta"><span class="city">Florianópolis · SC</span><span class="name">Ilhas do Sul</span><span class="tags">AI Security · Multimídia · Cortinas</span></div>
     </a>
+  </div>
+</section>
+
+<!-- ===================== SOVEREIGN EDITION (AVX × PALANTIR) ===================== -->
+<section class="collab" id="sovereign">
+  <div class="collab-inner">
+
+    <!-- Esquerda: copy editorial -->
+    <div class="collab-left">
+      <div class="collab-eyebrow reveal">
+        <span class="collab-tag">AVX × <a href="https://www.palantir.com" target="_blank" rel="noopener" class="collab-partner">Palantir</a></span>
+        <span class="collab-badge">Edição Limitada</span>
+      </div>
+      <h2 class="collab-headline reveal d1">A única casa com <em>soberania de dados.</em></h2>
+      <p class="collab-body reveal d2">Governos confiam com dados que não podem vazar. A Palantir nunca enviou um byte para a nuvem. O AVX-Pro-Server também nunca enviou. A Sovereign Edition formaliza esse princípio — com documentação técnica auditável que nenhum outro sistema residencial oferece.</p>
+      <a href="#contato" class="collab-cta reveal d3">Solicitar Consulta <span>→</span></a>
+    </div>
+
+    <!-- Direita: spec sheet estilo Anduril -->
+    <div class="collab-right reveal d1">
+      <div class="collab-num">30</div>
+      <div class="collab-num-sub">Residências · Numeradas · Série Encerrada ao Esgotar</div>
+
+      <div class="collab-specs">
+        <div class="collab-row">
+          <span class="c-lbl">Padrão</span>
+          <span class="c-val"><b>Data Sovereignty Standard</b></span>
+        </div>
+        <div class="collab-row">
+          <span class="c-lbl">Arquitetura</span>
+          <span class="c-val">Servidor proprietário · VLAN dedicada · Zero telemetria externa</span>
+        </div>
+        <div class="collab-row">
+          <span class="c-lbl">Documento</span>
+          <span class="c-val"><b>Sovereign Audit Document</b> · Auditável · Encadernado</span>
+        </div>
+        <div class="collab-row">
+          <span class="c-lbl">Acabamento</span>
+          <span class="c-val">Grafite Fosco · Placa numerada gravada a laser</span>
+        </div>
+        <div class="collab-row">
+          <span class="c-lbl">Certificado</span>
+          <span class="c-val">No Cloud Certificate · Alumínio preto · Ativo do imóvel</span>
+        </div>
+        <div class="collab-row">
+          <span class="c-lbl">Entrega</span>
+          <span class="c-val">Instalação dedicada · Auditoria ao vivo · Relatório técnico</span>
+        </div>
+      </div>
+    </div>
+
   </div>
 </section>
 
