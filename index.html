@@ -59,6 +59,7 @@
 }
 </script>
 
+<link rel="preconnect" href="https://images.unsplash.com" crossorigin>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -335,8 +336,6 @@ body.menu-open .sheet{opacity:1;visibility:visible}
   max-width:var(--max);margin:0 auto;padding-top:1.9rem;border-top:1px solid var(--line);
   font-size:.78rem;color:var(--ash);letter-spacing:.02em;
 }
-.footer-base .compliance{display:flex;gap:1.4rem;flex-wrap:wrap}
-.footer-base .compliance span{color:var(--bone-dim)}
 .certs{max-width:var(--max);margin:0 auto 1.9rem;padding-top:1.9rem;border-top:1px solid var(--line);
   display:flex;flex-wrap:wrap;align-items:center;gap:.6rem .8rem}
 .certs .certs-lbl{font-size:.66rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--bone);margin-right:.5rem}
@@ -386,7 +385,7 @@ body.menu-open .sheet{opacity:1;visibility:visible}
 .collab-partner:hover{opacity:.7}
 .collab-badge{
   font-size:.6rem;font-weight:500;letter-spacing:.18em;text-transform:uppercase;
-  color:rgba(255,255,255,.22);border:1px solid rgba(255,255,255,.1);padding:.22rem .7rem;
+  color:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.18);padding:.22rem .7rem;
 }
 .collab-headline{
   font-family:'Inter',sans-serif;
@@ -397,7 +396,7 @@ body.menu-open .sheet{opacity:1;visibility:visible}
 .collab-headline em{font-style:normal;font-weight:500;color:#f0ede7}
 .collab-body{
   font-size:.95rem;font-weight:300;
-  color:rgba(236,232,225,.42);
+  color:rgba(236,232,225,.62);
   line-height:1.8;max-width:44ch;margin-bottom:3rem;
 }
 .collab-cta{
@@ -411,14 +410,13 @@ body.menu-open .sheet{opacity:1;visibility:visible}
 .collab-cta::before{content:"";position:absolute;left:0;bottom:0;height:1px;width:0;background:var(--avx);transition:width .5s var(--ease);z-index:1}
 .collab-cta:hover::before{width:100%}
 /* Right: number + Anduril spec sheet */
-.collab-right{}
 .collab-num{
   font-size:clamp(5rem,11vw,9.5rem);font-weight:700;
   letter-spacing:-.04em;color:#f0ede7;line-height:1;
 }
 .collab-num-sub{
   font-size:.6rem;font-weight:500;letter-spacing:.2em;text-transform:uppercase;
-  color:rgba(236,232,225,.24);margin-top:.7rem;margin-bottom:2.8rem;
+  color:rgba(236,232,225,.58);margin-top:.7rem;margin-bottom:2.8rem;
 }
 .collab-specs{border-top:1px solid rgba(255,255,255,.1)}
 .collab-row{
@@ -428,7 +426,7 @@ body.menu-open .sheet{opacity:1;visibility:visible}
 }
 .c-lbl{
   font-size:.56rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;
-  color:rgba(255,255,255,.25);padding-top:.15rem;
+  color:rgba(255,255,255,.55);padding-top:.15rem;
 }
 .c-val{
   font-size:.84rem;font-weight:300;color:rgba(236,232,225,.72);line-height:1.55;
@@ -492,7 +490,7 @@ body.menu-open .sheet{opacity:1;visibility:visible}
 .ck-accept:hover{background:#c1241a}
 
 /* ============================================================
-   ACCESSIBILITY
+   MOTION PREFERENCES
    ============================================================ */
 @media(prefers-reduced-motion:reduce){
   *{animation:none!important;transition-duration:.01ms!important}
@@ -733,15 +731,15 @@ body.menu-open .sheet{opacity:1;visibility:visible}
   </div>
   <div class="grid3">
     <a class="pcard reveal" href="#contato">
-      <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1400&auto=format&fit=crop" alt="Apartamento Garden Moinhos">
+      <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1400&auto=format&fit=crop" alt="Apartamento Garden Moinhos" loading="lazy" decoding="async">
       <div class="meta"><span class="city">Porto Alegre · RS</span><span class="name">Garden Moinhos</span><span class="tags">Ritmo circadiano · Sonos · HomeKit</span></div>
     </a>
     <a class="pcard reveal d1" href="#contato">
-      <img src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?q=80&w=1400&auto=format&fit=crop" alt="Chácara Executiva Vale Verde">
+      <img src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?q=80&w=1400&auto=format&fit=crop" alt="Chácara Executiva Vale Verde" loading="lazy" decoding="async">
       <div class="meta"><span class="city">Joinville · SC</span><span class="name">Vale Verde</span><span class="tags">18 ambientes · Irrigação · Energia</span></div>
     </a>
     <a class="pcard reveal d2" href="#contato">
-      <img src="https://images.unsplash.com/photo-1588854337236-6889d631faa8?q=80&w=1400&auto=format&fit=crop" alt="Residência Ilhas do Sul">
+      <img src="https://images.unsplash.com/photo-1588854337236-6889d631faa8?q=80&w=1400&auto=format&fit=crop" alt="Residência Ilhas do Sul" loading="lazy" decoding="async">
       <div class="meta"><span class="city">Florianópolis · SC</span><span class="name">Ilhas do Sul</span><span class="tags">AI Security · Multimídia · Cortinas</span></div>
     </a>
   </div>
@@ -851,7 +849,7 @@ body.menu-open .sheet{opacity:1;visibility:visible}
   <div class="footer-grid">
     <div>
       <span class="brand">AVX<span class="dot">.</span></span>
-      <p>Automação residencial de alto padrão, sob medida. A tecnologia desaparece na arquitetura e a casa passa a agir por você.</p>
+      <p>Tecnologia com identidade de luxo. Cor-assinatura <span style="color:var(--avx)">Vermelho AVX</span> (#DA291C), White Glove Service e suporte onde os outros não chegam. Sediada em Florianópolis (SC) e presente na maioria das cidades do Sul do Brasil.</p>
     </div>
     <div>
       <h4>Produtos</h4>
@@ -1008,8 +1006,12 @@ function avxConsent(grant){
 }
 function avxOpenConsent(){ const b=document.getElementById('cookie-banner'); if(b) b.classList.add('show'); }
 (function(){
-  let c=null; try{ c=localStorage.getItem('avxConsent'); }catch(e){}
-  if(c!=='granted' && c!=='denied'){ const b=document.getElementById('cookie-banner'); if(b) setTimeout(()=>b.classList.add('show'),700); }
+  function initCookie(){
+    let c=null; try{ c=localStorage.getItem('avxConsent'); }catch(e){}
+    if(c!=='granted' && c!=='denied'){ const b=document.getElementById('cookie-banner'); if(b) setTimeout(()=>b.classList.add('show'),700); }
+  }
+  if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded',initCookie); }
+  else { initCookie(); }
 })();
 </script>
 
