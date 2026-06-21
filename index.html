@@ -69,7 +69,8 @@
    ============================================================ */
 :root{
   --ink:#0b0b0c;          /* near-black, warm */
-  --ink-soft:#141416;
+  --ink-soft:#0d0d0d;
+  --paper:#f0ede7;         /* off-white inversion sections */
   --bone:#ece8e1;         /* primary text on dark */
   --bone-dim:#b6b2aa;
   --ash:#8d8980;          /* muted / secondary */
@@ -255,9 +256,14 @@ body.menu-open .sheet{opacity:1;visibility:visible}
 /* ============================================================
    STATS — technical spec strip
    ============================================================ */
-.specs{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line)}
-.spec{position:relative;padding:clamp(2.6rem,5vw,4rem) clamp(1.5rem,3.5vw,3rem);border-left:1px solid var(--line)}
+.specs{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line);background:var(--paper)}
+.spec{position:relative;padding:clamp(2.6rem,5vw,4rem) clamp(1.5rem,3.5vw,3rem);border-left:1px solid rgba(0,0,0,.12)}
 .spec:first-child{border-left:0}
+.spec-top{color:#555!important}
+.spec-top .ix{color:#999!important}
+.spec-val .num{color:#111!important}
+.spec-val .unit{color:#555!important}
+.spec-key{color:#555!important}
 .spec-top{display:flex;align-items:center;justify-content:space-between;font-size:.66rem;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--ash);margin-bottom:1.6rem}
 .spec-top .ix{color:var(--ash)}
 .spec-val{display:flex;align-items:baseline;gap:.5rem;font-family:'Inter',sans-serif;font-weight:300;line-height:1}
@@ -272,7 +278,7 @@ body.menu-open .sheet{opacity:1;visibility:visible}
 .projects .head{display:flex;justify-content:space-between;align-items:flex-end;gap:2rem;margin-bottom:3.5rem;flex-wrap:wrap}
 .projects h2{font-size:clamp(2.2rem,4.5vw,3.6rem)}
 .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem}
-.pcard{position:relative;aspect-ratio:3/4;overflow:hidden;border-radius:2px}
+.pcard{position:relative;aspect-ratio:3/4;overflow:hidden;border-radius:0;clip-path:polygon(0 0,calc(100% - 28px) 0,100% 28px,100% 100%,0 100%)}
 .pcard img{width:100%;height:100%;object-fit:cover;transform:scale(1.03);transition:transform 1.2s var(--ease)}
 .pcard:hover img{transform:scale(1.1)}
 .pcard::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(11,11,12,.85))}
@@ -336,6 +342,23 @@ body.menu-open .sheet{opacity:1;visibility:visible}
 .certs .certs-lbl{font-size:.66rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--bone);margin-right:.5rem}
 .certs span:not(.certs-lbl){font-size:.7rem;letter-spacing:.03em;color:var(--bone-dim);border:1px solid var(--line);border-radius:999px;padding:.34rem .8rem}
 
+
+/* ============================================================
+   MANIFESTO — Anduril-style statement section
+   ============================================================ */
+.manifesto{padding:clamp(5rem,12vh,9rem) var(--shell);border-top:1px solid var(--line)}
+.manifesto-inner{max-width:var(--max);margin:0 auto;display:grid;grid-template-columns:1fr 2fr;gap:4rem;align-items:start}
+.manifesto-tag{font-size:.7rem;font-weight:500;letter-spacing:.28em;text-transform:uppercase;color:var(--ash);padding-top:.6rem}
+.manifesto-tag .dot{color:var(--avx)}
+.manifesto-line{display:block;font-family:'Inter',sans-serif;font-weight:300;font-size:clamp(1.5rem,3vw,2.3rem);letter-spacing:-.02em;line-height:1.25;color:var(--bone)}
+.manifesto-line em{font-style:normal;font-weight:500;color:var(--bone)}
+.manifesto-line.dim{color:var(--ash)}
+.manifesto-line.break{margin-top:1.3rem}
+.manifesto-spec{display:block;font-size:1rem;font-weight:300;line-height:1.9;color:var(--bone-dim)}
+.manifesto-spec b{font-weight:500;color:var(--bone)}
+.manifesto-rule{width:48px;height:2px;background:var(--avx);margin:2.2rem 0}
+@media(max-width:760px){.manifesto-inner{grid-template-columns:1fr;gap:1.6rem}}
+
 /* ============================================================
    REVEAL animation
    ============================================================ */
@@ -351,7 +374,7 @@ body.menu-open .sheet{opacity:1;visibility:visible}
   .burger{display:block}
   .hero-arrow{display:none}
   .specs{grid-template-columns:1fr}
-  .spec{border-left:0;border-top:1px solid var(--line)}
+  .spec{border-left:0;border-top:1px solid rgba(0,0,0,.12)}
   .spec:first-child{border-top:0}
   .grid3{grid-template-columns:1fr}
   .cform{grid-template-columns:1fr}
@@ -577,6 +600,24 @@ body.menu-open .sheet{opacity:1;visibility:visible}
     <div class="marquee">
       <span>Lutron</span><span>Crestron</span><span>Savant</span><span>Control4</span><span>KNX</span><span>Josh.ai</span><span>Sonos</span><span>Bang &amp; Olufsen</span><span>Bowers &amp; Wilkins</span><span>McIntosh</span><span>Harman Kardon</span><span>Bose</span><span>JBL</span><span>Denon</span><span>Marantz</span><span>Apple HomeKit</span><span>Google Home</span><span>Alexa</span><span>Philips Hue</span><span>WEG</span><span>Somfy</span><span>Hunter Douglas</span><span>Intelbras</span><span>Yale</span><span>Ring</span><span>Arlo</span><span>Ubiquiti</span><span>Starlink</span><span>Samsung SmartThings</span><span>LG ThinQ</span>
       <span>Lutron</span><span>Crestron</span><span>Savant</span><span>Control4</span><span>KNX</span><span>Josh.ai</span><span>Sonos</span><span>Bang &amp; Olufsen</span><span>Bowers &amp; Wilkins</span><span>McIntosh</span><span>Harman Kardon</span><span>Bose</span><span>JBL</span><span>Denon</span><span>Marantz</span><span>Apple HomeKit</span><span>Google Home</span><span>Alexa</span><span>Philips Hue</span><span>WEG</span><span>Somfy</span><span>Hunter Douglas</span><span>Intelbras</span><span>Yale</span><span>Ring</span><span>Arlo</span><span>Ubiquiti</span><span>Starlink</span><span>Samsung SmartThings</span><span>LG ThinQ</span>
+    </div>
+  </div>
+</section>
+
+
+<!-- ===================== MANIFESTO ===================== -->
+<section class="manifesto">
+  <div class="manifesto-inner reveal">
+    <span class="manifesto-tag">Princípio <span class="dot">·</span> 01</span>
+    <div class="manifesto-body">
+      <span class="manifesto-line dim">Automação convencional conecta dispositivos.</span>
+      <span class="manifesto-line break">A AVX constrói <em>sistemas.</em></span>
+      <div class="manifesto-rule"></div>
+      <span class="manifesto-spec"><b>Hardware proprietário.</b> Servidor privado, com ou sem internet.</span>
+      <span class="manifesto-spec"><b>Instalação em 7 dias.</b> Sem quebrar paredes.</span>
+      <span class="manifesto-spec"><b>Garantia de 5 anos.</b> Com revisões preventivas inclusas.</span>
+      <div class="manifesto-rule"></div>
+      <span class="manifesto-line break">Engenharia <em>Bespoke.</em></span>
     </div>
   </div>
 </section>
