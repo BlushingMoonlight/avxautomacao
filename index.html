@@ -418,23 +418,20 @@ body.menu-open .sheet{opacity:1;visibility:visible}
 .collab-cta::before{content:"";position:absolute;left:0;bottom:0;height:1px;width:0;background:var(--avx);transition:width .5s var(--ease);z-index:1}
 .collab-cta:hover::before{width:100%}
 /* Sticker da collab (edição limitada) — gira como um disco de vinil. Trocável por collab. */
-.collab-num-row{display:flex;align-items:center;gap:clamp(1.4rem,3vw,2.6rem)}
+.collab-head{display:flex;align-items:center;justify-content:space-between;gap:clamp(1.4rem,3vw,2.6rem);margin-bottom:2.6rem}
 .collab-sticker-spin{width:clamp(96px,12vw,140px);height:clamp(96px,12vw,140px);flex-shrink:0;object-fit:contain;
   filter:drop-shadow(0 10px 28px rgba(0,0,0,.55));animation:avx-spin 7s linear infinite;will-change:transform}
 @keyframes avx-spin{to{transform:rotate(360deg)}}
-/* Right: number + Anduril spec sheet */
-.collab-numbox{display:flex;flex-direction:column}
-.collab-num{
-  font-size:clamp(5rem,11vw,9.5rem);font-weight:700;
-  letter-spacing:-.04em;color:#f0ede7;line-height:.92;
+/* Right: designation header (Anduril) + spec sheet */
+.collab-desig{display:flex;flex-direction:column;gap:.75rem;min-width:0}
+.collab-desig-tag{font-size:.56rem;font-weight:600;letter-spacing:.28em;text-transform:uppercase;color:var(--avx)}
+.collab-desig-name{
+  font-family:'Inter',sans-serif;font-weight:700;
+  font-size:clamp(2.6rem,6vw,4.6rem);letter-spacing:-.025em;line-height:.92;color:#f0ede7;
 }
-.collab-num-unit{
-  font-size:.82rem;font-weight:600;letter-spacing:.22em;text-transform:uppercase;
-  color:rgba(236,232,225,.78);margin-top:.5rem;
-}
-.collab-num-sub{
-  font-size:.6rem;font-weight:500;letter-spacing:.2em;text-transform:uppercase;
-  color:rgba(236,232,225,.58);margin-top:1rem;margin-bottom:2.8rem;
+.collab-desig-code{
+  font-size:.58rem;font-weight:500;letter-spacing:.2em;text-transform:uppercase;
+  color:rgba(236,232,225,.52);
 }
 .collab-specs{border-top:1px solid rgba(255,255,255,.1)}
 .collab-row{
@@ -453,7 +450,7 @@ body.menu-open .sheet{opacity:1;visibility:visible}
 @media(max-width:880px){
   .collab-inner{grid-template-columns:1fr}
   .collab-headline{max-width:100%}
-  .collab-num{font-size:clamp(4.5rem,18vw,7rem)}
+  .collab-desig-name{font-size:clamp(2.4rem,12vw,4rem)}
 }
 
 /* ============================================================
@@ -834,14 +831,14 @@ body.menu-open .sheet{opacity:1;visibility:visible}
 
     <!-- Direita: spec sheet estilo Anduril -->
     <div class="collab-right reveal d1">
-      <div class="collab-num-row">
-        <div class="collab-numbox">
-          <span class="collab-num">10</span>
-          <span class="collab-num-unit">Residências</span>
+      <div class="collab-head">
+        <div class="collab-desig">
+          <span class="collab-desig-tag">[ Série ]</span>
+          <span class="collab-desig-name">Sovereign</span>
+          <span class="collab-desig-code">Edição numerada · encerrada ao esgotar</span>
         </div>
         <img class="collab-sticker-spin" src="/assets/palantir-sticker.png" alt="Sticker da edição limitada AVX × Palantir" width="140" height="140" loading="lazy" decoding="async">
       </div>
-      <div class="collab-num-sub">Numeradas · série encerrada ao esgotar</div>
 
       <div class="collab-specs">
         <div class="collab-row">
