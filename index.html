@@ -278,10 +278,12 @@ body.menu-open .sheet{opacity:1;visibility:visible}
 .projects{padding:clamp(5rem,10vh,8rem) var(--shell);border-top:1px solid var(--line)}
 .projects .head{display:flex;justify-content:space-between;align-items:flex-end;gap:2rem;margin-bottom:3.5rem;flex-wrap:wrap}
 .projects h2{font-size:clamp(2.2rem,4.5vw,3.6rem)}
-.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem}
-.pcard{position:relative;aspect-ratio:3/4;overflow:hidden;border-radius:0;clip-path:polygon(0 0,calc(100% - 28px) 0,100% 28px,100% 100%,0 100%)}
+.grid3{display:grid;grid-template-columns:repeat(4,1fr);gap:1.4rem}
+@media(max-width:1080px){.grid3{grid-template-columns:repeat(2,1fr)}}
+.pcard{position:relative;aspect-ratio:3/4;overflow:hidden;background:var(--ink-soft);border-radius:0;clip-path:polygon(0 0,calc(100% - 28px) 0,100% 28px,100% 100%,0 100%);transition:background .4s var(--ease)}
 .pcard img{width:100%;height:100%;object-fit:cover;transform:scale(1.03);transition:transform 1.2s var(--ease)}
 .pcard:hover img{transform:scale(1.1)}
+.pcard:hover{background:#1b1b1e}
 .pcard::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(11,11,12,.85))}
 .pcard .meta{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:1.6rem;display:flex;flex-direction:column;gap:.35rem}
 .pcard .city{font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--avx)}
@@ -455,13 +457,13 @@ body.menu-open .sheet{opacity:1;visibility:visible}
   .specs{grid-template-columns:1fr}
   .spec{border-left:0;border-top:1px solid rgba(0,0,0,.12)}
   .spec:first-child{border-top:0}
-  .grid3{grid-template-columns:1fr}
   .cform{grid-template-columns:1fr}
   .footer-grid{grid-template-columns:1fr 1fr}
   .footer-base{justify-content:flex-start}
 }
 @media(max-width:560px){
   .footer-grid{grid-template-columns:1fr}
+  .grid3{grid-template-columns:1fr}
 }
 
 /* ============================================================
@@ -731,16 +733,16 @@ body.menu-open .sheet{opacity:1;visibility:visible}
   </div>
   <div class="grid3">
     <a class="pcard reveal" href="#contato">
-      <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1400&auto=format&fit=crop" alt="Apartamento Garden Moinhos" loading="lazy" decoding="async">
       <div class="meta"><span class="city">Porto Alegre · RS</span><span class="name">Garden Moinhos</span><span class="tags">Ritmo circadiano · Sonos · HomeKit</span></div>
     </a>
     <a class="pcard reveal d1" href="#contato">
-      <img src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?q=80&w=1400&auto=format&fit=crop" alt="Chácara Executiva Vale Verde" loading="lazy" decoding="async">
       <div class="meta"><span class="city">Joinville · SC</span><span class="name">Vale Verde</span><span class="tags">18 ambientes · Irrigação · Energia</span></div>
     </a>
     <a class="pcard reveal d2" href="#contato">
-      <img src="https://images.unsplash.com/photo-1588854337236-6889d631faa8?q=80&w=1400&auto=format&fit=crop" alt="Residência Ilhas do Sul" loading="lazy" decoding="async">
       <div class="meta"><span class="city">Florianópolis · SC</span><span class="name">Ilhas do Sul</span><span class="tags">AI Security · Multimídia · Cortinas</span></div>
+    </a>
+    <a class="pcard reveal d3" href="#contato">
+      <div class="meta"><span class="city">Balneário Camboriú · SC</span><span class="name">FG Sky Tower</span><span class="tags">Cobertura Duplex · Cinema · Climatização</span></div>
     </a>
   </div>
 </section>
