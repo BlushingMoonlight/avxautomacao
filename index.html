@@ -297,7 +297,7 @@ body.menu-open .sheet{opacity:1;visibility:visible}
 /* ============================================================
    CONTACT FORM
    ============================================================ */
-.contact{border-top:1px solid var(--line);padding:clamp(5rem,11vh,8rem) var(--shell)}
+.contact{border-top:1px solid var(--line);padding:clamp(5rem,11vh,8rem) var(--shell);background-color:var(--ink);background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27620%27%20height%3D%27620%27%3E%3Cfilter%20id%3D%27camo%27%3E%3CfeTurbulence%20type%3D%27fractalNoise%27%20baseFrequency%3D%270.008%27%20numOctaves%3D%273%27%20seed%3D%278%27%20stitchTiles%3D%27stitch%27%20result%3D%27t%27%2F%3E%3CfeColorMatrix%20in%3D%27t%27%20type%3D%27matrix%27%20values%3D%270.33%200.33%200.33%200%200%20%200.33%200.33%200.33%200%200%20%200.33%200.33%200.33%200%200%20%200%200%200%200%201%27%20result%3D%27g%27%2F%3E%3CfeComponentTransfer%20in%3D%27g%27%3E%3CfeFuncR%20type%3D%27discrete%27%20tableValues%3D%270.039%200.049%200.043%200.052%27%2F%3E%3CfeFuncG%20type%3D%27discrete%27%20tableValues%3D%270.039%200.049%200.043%200.052%27%2F%3E%3CfeFuncB%20type%3D%27discrete%27%20tableValues%3D%270.043%200.053%200.047%200.056%27%2F%3E%3C%2FfeComponentTransfer%3E%3C%2Ffilter%3E%3Crect%20width%3D%27100%25%27%20height%3D%27100%25%27%20filter%3D%27url%28%23camo%29%27%2F%3E%3C%2Fsvg%3E");background-size:720px;background-repeat:repeat}
 .contact .head{text-align:center;max-width:46ch;margin:0 auto clamp(2.5rem,5vh,3.5rem)}
 .contact h2{font-size:clamp(2.4rem,6vw,4.4rem);margin:1rem 0 1.2rem}
 .contact .head .lead{margin:0 auto}
@@ -423,13 +423,18 @@ body.menu-open .sheet{opacity:1;visibility:visible}
   filter:drop-shadow(0 10px 28px rgba(0,0,0,.55));animation:avx-spin 7s linear infinite;will-change:transform}
 @keyframes avx-spin{to{transform:rotate(360deg)}}
 /* Right: number + Anduril spec sheet */
+.collab-numbox{display:flex;flex-direction:column}
 .collab-num{
   font-size:clamp(5rem,11vw,9.5rem);font-weight:700;
-  letter-spacing:-.04em;color:#f0ede7;line-height:1;
+  letter-spacing:-.04em;color:#f0ede7;line-height:.92;
+}
+.collab-num-unit{
+  font-size:.82rem;font-weight:600;letter-spacing:.22em;text-transform:uppercase;
+  color:rgba(236,232,225,.78);margin-top:.5rem;
 }
 .collab-num-sub{
   font-size:.6rem;font-weight:500;letter-spacing:.2em;text-transform:uppercase;
-  color:rgba(236,232,225,.58);margin-top:.7rem;margin-bottom:2.8rem;
+  color:rgba(236,232,225,.58);margin-top:1rem;margin-bottom:2.8rem;
 }
 .collab-specs{border-top:1px solid rgba(255,255,255,.1)}
 .collab-row{
@@ -750,7 +755,7 @@ body.menu-open .sheet{opacity:1;visibility:visible}
         <div class="pspecs">
           <div class="r"><span class="k">Local</span><span class="v">Itapema · SC</span></div>
           <div class="r"><span class="k">Tipologia</span><span class="v">Apartamento</span></div>
-          <div class="r"><span class="k">Sistema</span><span class="v">Iluminação · Clima · Áudio</span></div>
+          <div class="r"><span class="k">Sistema</span><span class="v">Iluminação · Clima · Multimídia · Cortinas · Segurança</span></div>
         </div>
       </div>
     </a>
@@ -761,7 +766,7 @@ body.menu-open .sheet{opacity:1;visibility:visible}
         <div class="pspecs">
           <div class="r"><span class="k">Local</span><span class="v">Itapema · SC</span></div>
           <div class="r"><span class="k">Tipologia</span><span class="v">Cobertura</span></div>
-          <div class="r"><span class="k">Sistema</span><span class="v">Cinema · Persianas · Segurança</span></div>
+          <div class="r"><span class="k">Sistema</span><span class="v">Iluminação · Clima · Multimídia · Cortinas · Segurança</span></div>
         </div>
       </div>
     </a>
@@ -772,7 +777,7 @@ body.menu-open .sheet{opacity:1;visibility:visible}
         <div class="pspecs">
           <div class="r"><span class="k">Local</span><span class="v">Batel · Curitiba · PR</span></div>
           <div class="r"><span class="k">Tipologia</span><span class="v">Apartamento</span></div>
-          <div class="r"><span class="k">Sistema</span><span class="v">Iluminação · Clima · Multimídia</span></div>
+          <div class="r"><span class="k">Sistema</span><span class="v">Iluminação · Clima · Multimídia · Cortinas · Segurança</span></div>
         </div>
       </div>
     </a>
@@ -783,7 +788,7 @@ body.menu-open .sheet{opacity:1;visibility:visible}
         <div class="pspecs">
           <div class="r"><span class="k">Local</span><span class="v">Balneário Camboriú · SC</span></div>
           <div class="r"><span class="k">Tipologia</span><span class="v">Apartamento</span></div>
-          <div class="r"><span class="k">Sistema</span><span class="v">Cortinas · Clima · Cenas</span></div>
+          <div class="r"><span class="k">Sistema</span><span class="v">Iluminação · Clima · Multimídia · Cortinas · Segurança</span></div>
         </div>
       </div>
     </a>
@@ -794,7 +799,7 @@ body.menu-open .sheet{opacity:1;visibility:visible}
         <div class="pspecs">
           <div class="r"><span class="k">Local</span><span class="v">Balneário Camboriú · SC</span></div>
           <div class="r"><span class="k">Tipologia</span><span class="v">Apartamento</span></div>
-          <div class="r"><span class="k">Sistema</span><span class="v">Cinema · Climatização · AI Security</span></div>
+          <div class="r"><span class="k">Sistema</span><span class="v">Iluminação · Clima · Multimídia · Cortinas · Segurança</span></div>
         </div>
       </div>
     </a>
@@ -805,7 +810,7 @@ body.menu-open .sheet{opacity:1;visibility:visible}
         <div class="pspecs">
           <div class="r"><span class="k">Local</span><span class="v">Balneário Camboriú · SC</span></div>
           <div class="r"><span class="k">Tipologia</span><span class="v">Cobertura Duplex</span></div>
-          <div class="r"><span class="k">Sistema</span><span class="v">Cinema · Climatização</span></div>
+          <div class="r"><span class="k">Sistema</span><span class="v">Iluminação · Clima · Multimídia · Cortinas · Segurança</span></div>
         </div>
       </div>
     </a>
@@ -823,17 +828,20 @@ body.menu-open .sheet{opacity:1;visibility:visible}
         <span class="collab-badge">Edição Limitada</span>
       </div>
       <h2 class="collab-headline reveal d1">A única casa com <em>soberania de dados.</em></h2>
-      <p class="collab-body reveal d2">Governos confiam com dados que não podem vazar. A Palantir nunca enviou um byte para a nuvem. O AVX-Pro-Server também nunca enviou. A Sovereign Edition formaliza esse princípio — com documentação técnica auditável que nenhum outro sistema residencial oferece.</p>
+      <p class="collab-body reveal d2">Governos confiam à Palantir dados que não podem vazar. Ela nunca enviou um byte para a nuvem. O AVX-Pro-Server também nunca enviou. A Sovereign Edition formaliza esse princípio — com documentação técnica auditável que nenhum outro sistema residencial oferece.</p>
       <a href="#contato" class="collab-cta reveal d3">Solicitar Consulta <span>→</span></a>
     </div>
 
     <!-- Direita: spec sheet estilo Anduril -->
     <div class="collab-right reveal d1">
       <div class="collab-num-row">
-        <div class="collab-num">30</div>
+        <div class="collab-numbox">
+          <span class="collab-num">10</span>
+          <span class="collab-num-unit">Residências</span>
+        </div>
         <img class="collab-sticker-spin" src="/assets/palantir-sticker.png" alt="Sticker da edição limitada AVX × Palantir" width="140" height="140" loading="lazy" decoding="async">
       </div>
-      <div class="collab-num-sub">Residências · Numeradas · Série Encerrada ao Esgotar</div>
+      <div class="collab-num-sub">Numeradas · série encerrada ao esgotar</div>
 
       <div class="collab-specs">
         <div class="collab-row">
