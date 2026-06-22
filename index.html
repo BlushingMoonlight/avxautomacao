@@ -313,6 +313,8 @@ body.menu-open .sheet{opacity:1;visibility:visible}
   background-image:url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%238d8980' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
   background-repeat:no-repeat;background-position:right 1rem center;background-size:1.1em;padding-right:2.6rem}
 .field select option{background:var(--ink-soft);color:var(--bone)}
+.field select optgroup{background:var(--ink-soft);color:var(--ash);font-style:normal}
+.field select:disabled{opacity:.5;cursor:not-allowed}
 .cform .submit-row{grid-column:1/-1;display:flex;flex-direction:column;gap:1rem;margin-top:.6rem}
 .cform .btn{justify-content:center;width:100%;border:0;cursor:pointer;font-family:inherit}
 .cform .btn[disabled]{opacity:.6;cursor:wait}
@@ -332,7 +334,7 @@ body.menu-open .sheet{opacity:1;visibility:visible}
 .footer h4{font-size:.7rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--bone);margin-bottom:1.3rem}
 .footer ul{list-style:none;display:flex;flex-direction:column;gap:.75rem}
 .footer ul a{color:var(--ash);font-size:.9rem;transition:color .3s}
-.footer ul a:hover{color:var(--bone)}
+@media(hover:hover){.footer ul a:hover{color:var(--bone)}}
 .footer-base{
   display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;
   max-width:var(--max);margin:0 auto;padding-top:1.9rem;border-top:1px solid var(--line);
@@ -411,6 +413,14 @@ body.menu-open .sheet{opacity:1;visibility:visible}
 .collab-cta::after{content:"";position:absolute;left:0;bottom:0;height:1px;width:100%;background:rgba(255,255,255,.12)}
 .collab-cta::before{content:"";position:absolute;left:0;bottom:0;height:1px;width:0;background:var(--avx);transition:width .5s var(--ease);z-index:1}
 .collab-cta:hover::before{width:100%}
+/* Sticker da collab (edição limitada) — trocável por collab */
+.collab-sticker{margin-top:3.4rem;display:flex;align-items:center;gap:1.2rem}
+.collab-sticker img{width:128px;height:128px;flex-shrink:0;object-fit:contain;
+  filter:drop-shadow(0 12px 30px rgba(0,0,0,.55));transform:rotate(-7deg);transition:transform .5s var(--ease)}
+.collab-sticker img:hover{transform:rotate(0)}
+.collab-sticker figcaption{font-size:.62rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;
+  color:rgba(236,232,225,.5);max-width:15ch;line-height:1.7}
+@media(max-width:880px){.collab-sticker img{width:104px;height:104px}}
 /* Right: number + Anduril spec sheet */
 .collab-num{
   font-size:clamp(5rem,11vw,9.5rem);font-weight:700;
@@ -694,9 +704,9 @@ body.menu-open .sheet{opacity:1;visibility:visible}
       <span class="manifesto-line dim">Automação convencional conecta dispositivos.</span>
       <span class="manifesto-line break">A AVX constrói <em>sistemas.</em></span>
       <div class="manifesto-rule"></div>
-      <span class="manifesto-spec"><b>Hardware proprietário.</b> Servidor privado, com ou sem internet.</span>
-      <span class="manifesto-spec"><b>Instalação em 7 dias.</b> Sem quebrar paredes.</span>
-      <span class="manifesto-spec"><b>Garantia de 5 anos.</b> Com revisões preventivas inclusas.</span>
+      <span class="manifesto-spec"><b>Projeto exclusivo.</b> Cada sistema é desenhado para a planta baixa e o estilo de vida do cliente.</span>
+      <span class="manifesto-spec"><b>Design que desaparece.</b> A tecnologia some na arquitetura — só o resultado permanece visível.</span>
+      <span class="manifesto-spec"><b>White Glove Service.</b> Um único ponto de contato dedicado, do briefing à última visita.</span>
       <div class="manifesto-rule"></div>
       <span class="manifesto-line break">Engenharia <em>Bespoke.</em></span>
     </div>
@@ -760,6 +770,10 @@ body.menu-open .sheet{opacity:1;visibility:visible}
       <h2 class="collab-headline reveal d1">A única casa com <em>soberania de dados.</em></h2>
       <p class="collab-body reveal d2">Governos confiam com dados que não podem vazar. A Palantir nunca enviou um byte para a nuvem. O AVX-Pro-Server também nunca enviou. A Sovereign Edition formaliza esse princípio — com documentação técnica auditável que nenhum outro sistema residencial oferece.</p>
       <a href="#contato" class="collab-cta reveal d3">Solicitar Consulta <span>→</span></a>
+      <figure class="collab-sticker reveal d3">
+        <img src="/assets/palantir-sticker.png" alt="Sticker da edição limitada AVX × Palantir" width="128" height="128" loading="lazy" decoding="async">
+        <figcaption>Sticker da edição · impresso e numerado</figcaption>
+      </figure>
     </div>
 
     <!-- Direita: spec sheet estilo Anduril -->
@@ -820,17 +834,39 @@ body.menu-open .sheet{opacity:1;visibility:visible}
       <input type="tel" id="cf-phone" name="phone" placeholder="(47) 9 0000-0000">
     </div>
     <div class="field">
-      <label for="cf-city">Cidade</label>
-      <input type="text" id="cf-city" name="city" placeholder="Sua cidade">
-    </div>
-    <div class="field full">
       <label for="cf-subject">Tipo de projeto</label>
       <select id="cf-subject" name="subject">
-        <option value="projeto-residencial">Projeto Residencial</option>
-        <option value="estudo-viabilidade">Estudo de Viabilidade (a partir da planta)</option>
-        <option value="incorporadora">Incorporadora</option>
-        <option value="parceria-arquiteto">Parceria Arquiteto / Designer</option>
+        <optgroup label="Residencial">
+          <option value="projeto-residencial">Projeto Residencial</option>
+          <option value="estudo-viabilidade">Estudo de Viabilidade (a partir da planta)</option>
+          <option value="incorporadora">Incorporadora / Multiunidades</option>
+          <option value="parceria-arquiteto">Parceria Arquiteto / Designer</option>
+        </optgroup>
+        <optgroup label="Comercial &amp; Corporativo">
+          <option value="loja">Loja / Varejo</option>
+          <option value="escritorio">Escritório / Corporativo</option>
+          <option value="hospitalidade">Hotel / Restaurante / Hospitalidade</option>
+        </optgroup>
+        <optgroup label="Industrial &amp; Logística">
+          <option value="industria">Indústria / Fábrica</option>
+          <option value="galpao">Galpão</option>
+          <option value="silo">Silo</option>
+          <option value="almoxarifado">Almoxarifado</option>
+          <option value="centro-distribuicao">Centro de Distribuição</option>
+        </optgroup>
         <option value="outro">Outro</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="cf-state">Estado</label>
+      <select id="cf-state" name="state">
+        <option value="" disabled selected>Selecione o estado</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="cf-city">Cidade</label>
+      <select id="cf-city" name="city" disabled>
+        <option value="" disabled selected>Selecione o estado primeiro</option>
       </select>
     </div>
     <div class="field full">
@@ -943,7 +979,7 @@ sheet.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>document.b
     try{
       const res=await fetch(form.action,{method:'POST',body:new FormData(form),headers:{'Accept':'application/json'}});
       if(res.ok){
-        ok.classList.add('show'); form.reset();
+        ok.classList.add('show'); form.reset(); if(window.__avxResetCity) window.__avxResetCity();
         if(window.gtag) gtag('event','form_success_contact');
       }else{
         err.classList.add('show');
@@ -954,6 +990,44 @@ sheet.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>document.b
       btn.disabled=false; btnText.textContent='Enviar Mensagem';
     }
   });
+})();
+
+/* ---------- estado → cidade (API IBGE · oficial, sem chave) ---------- */
+(function(){
+  const stateSel=document.getElementById('cf-state');
+  let citySel=document.getElementById('cf-city');
+  if(!stateSel||!citySel) return;
+  let fallback=false;
+  const UFS=[['AC','Acre'],['AL','Alagoas'],['AP','Amapá'],['AM','Amazonas'],['BA','Bahia'],['CE','Ceará'],['DF','Distrito Federal'],['ES','Espírito Santo'],['GO','Goiás'],['MA','Maranhão'],['MT','Mato Grosso'],['MS','Mato Grosso do Sul'],['MG','Minas Gerais'],['PA','Pará'],['PB','Paraíba'],['PR','Paraná'],['PE','Pernambuco'],['PI','Piauí'],['RJ','Rio de Janeiro'],['RN','Rio Grande do Norte'],['RS','Rio Grande do Sul'],['RO','Rondônia'],['RR','Roraima'],['SC','Santa Catarina'],['SP','São Paulo'],['SE','Sergipe'],['TO','Tocantins']];
+  UFS.forEach(([uf,nome])=>{ const o=document.createElement('option'); o.value=uf; o.textContent=nome; stateSel.appendChild(o); });
+  function setCity(msg,disabled){
+    citySel.innerHTML='';
+    const o=document.createElement('option'); o.value=''; o.disabled=true; o.selected=true; o.textContent=msg;
+    citySel.appendChild(o); citySel.disabled=!!disabled;
+  }
+  function toText(){
+    if(fallback) return; fallback=true;
+    const txt=document.createElement('input');
+    txt.type='text'; txt.id='cf-city'; txt.name='city'; txt.placeholder='Digite sua cidade';
+    txt.className=citySel.className||'';
+    citySel.replaceWith(txt); citySel=txt;
+  }
+  async function loadCities(uf){
+    if(fallback) return;
+    setCity('Carregando cidades...',true);
+    try{
+      const res=await fetch(`https://servicedados.ibge.gov.br/api/v1/localidades/estados/${uf}/municipios`);
+      if(!res.ok) throw 0;
+      const data=await res.json();
+      data.sort((a,b)=>a.nome.localeCompare(b.nome,'pt'));
+      citySel.innerHTML='';
+      const ph=document.createElement('option'); ph.value=''; ph.disabled=true; ph.selected=true; ph.textContent='Selecione a cidade'; citySel.appendChild(ph);
+      data.forEach(m=>{ const o=document.createElement('option'); o.value=m.nome; o.textContent=m.nome; citySel.appendChild(o); });
+      citySel.disabled=false;
+    }catch(_){ toText(); }
+  }
+  stateSel.addEventListener('change',()=>{ if(stateSel.value) loadCities(stateSel.value); });
+  window.__avxResetCity=()=>{ if(!fallback) setCity('Selecione o estado primeiro',true); };
 })();
 
 /* ---------- prefill from catalog "Solicitar proposta" ---------- */
