@@ -73,10 +73,6 @@ button{font-family:inherit;cursor:pointer}
 .nav-links a{font-size:.74rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--bone-dim);transition:color .3s var(--ease)}
 .nav-links a:hover{color:var(--bone)}
 .nav-links a.cat{color:var(--avx)}
-.nav-admin{background:none;border:0;color:var(--ash);cursor:pointer;display:flex;align-items:center;padding:.2rem;transition:color .3s var(--ease)}
-.nav-admin:hover{color:var(--bone)}
-.nav-admin.on{color:var(--avx)}
-.nav-admin i{width:17px;height:17px}
 .nav-cta{border:1px solid var(--line);border-radius:100px;padding:.62rem 1.3rem;color:var(--bone)!important;transition:border-color .4s var(--ease),background .4s var(--ease)}
 .nav-cta:hover{border-color:var(--bone);background:var(--bone);color:var(--ink)!important}
 .burger{display:none;background:none;border:0;color:var(--bone);cursor:pointer;width:30px;height:20px;position:relative}
@@ -122,10 +118,6 @@ body.menu-open .sheet{opacity:1;visibility:visible}
 .sm-btn.solid:hover{background:#fff}
 .sm-btn.danger:hover:not([disabled]){border-color:var(--avx);color:var(--avx)}
 .rb-divider{width:1px;height:24px;background:var(--line)}
-.kits{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;margin-left:auto}
-.kits .klabel{font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ash);margin-right:.2rem}
-.kit{font-size:.72rem;border:1px solid var(--line);background:transparent;color:var(--bone-dim);padding:.5rem .8rem;border-radius:999px;transition:.3s var(--ease)}
-.kit:hover{border-color:var(--avx);color:var(--avx)}
 
 /* LAYOUT */
 .wrap{max-width:var(--max);margin:0 auto;padding:clamp(2rem,4vh,3rem) var(--shell);display:grid;grid-template-columns:1fr 320px;gap:2.5rem;align-items:start}
@@ -158,9 +150,6 @@ body.menu-open .sheet{opacity:1;visibility:visible}
   font-size:1.1rem;line-height:1;display:flex;align-items:center;justify-content:center;transition:.2s var(--ease)}
 .qbtn:hover{border-color:var(--avx);color:var(--avx);background:rgba(218,41,28,.08)}
 .qval{width:34px;text-align:center;font-weight:600;font-size:.92rem}
-.admin-price{display:none;font-size:.7rem;font-weight:600;color:var(--bone-dim);border:1px solid var(--line);
-  border-radius:6px;padding:.15rem .4rem;white-space:nowrap}
-body.is-admin .admin-price{display:inline-block}
 
 /* SIDEBAR */
 .sidebar{position:sticky;top:calc(var(--navh) + 90px)}
@@ -178,8 +167,6 @@ body.is-admin .admin-price{display:inline-block}
 .side-empty{text-align:center;color:var(--ash);font-size:.76rem;padding:2rem 0}
 .side-foot{padding:1rem 1.2rem;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:.5rem}
 .side-row{display:flex;justify-content:space-between;font-size:.8rem;color:var(--bone-dim)}
-.side-row.sub{color:var(--bone);font-weight:600}
-#sidebar-subtotal-container{display:none}
 
 /* FLOATING BAR */
 .float{position:fixed;left:50%;bottom:20px;transform:translateX(-50%) translateY(160%);z-index:90;
@@ -189,7 +176,6 @@ body.is-admin .admin-price{display:inline-block}
 .float.visible{transform:translateX(-50%) translateY(0)}
 .float .meta{font-size:.82rem;color:var(--bone-dim);display:flex;align-items:center;gap:.7rem;flex-wrap:wrap}
 .float .meta b{color:var(--bone);font-weight:600}
-.float .meta .admin-price{color:var(--bone)}
 .btn{display:inline-flex;align-items:center;gap:.7em;background:var(--avx);color:#fff;font-size:.74rem;font-weight:600;
   letter-spacing:.18em;text-transform:uppercase;padding:.9rem 1.6rem;border-radius:100px;border:0;
   transition:transform .4s var(--ease),box-shadow .4s var(--ease),background .4s var(--ease)}
@@ -282,7 +268,6 @@ body.is-admin .admin-price{display:inline-block}
 @media(max-width:1024px){
   .wrap{grid-template-columns:1fr}
   .sidebar{display:none}
-  .kits{margin-left:0;width:100%}
 }
 @media(max-width:920px){
   .nav-links{display:none}
@@ -308,7 +293,6 @@ body.is-admin .admin-price{display:inline-block}
     <a href="index.html#top">Produtos</a>
     <a href="index.html#projetos">Projetos</a>
     <a href="catalogo.html" class="cat">Catálogo</a>
-    <button class="nav-admin" id="btn-admin" onclick="toggleAdmin()" title="Modo administrador" aria-label="Modo administrador"><i data-lucide="lock"></i></button>
     <a href="index.html#contato" class="nav-cta">Iniciar Projeto</a>
   </div>
   <button class="burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
@@ -345,14 +329,6 @@ body.is-admin .admin-price{display:inline-block}
       <button class="sm-btn danger" id="delete-btn" onclick="deleteRoom()" disabled title="Excluir ambiente"><i data-lucide="trash-2" style="width:14px;height:14px"></i></button>
       <button class="sm-btn danger" onclick="resetProject()" title="Reiniciar projeto"><i data-lucide="rotate-ccw" style="width:14px;height:14px"></i></button>
     </div>
-    <div class="kits">
-      <span class="klabel">Kits</span>
-      <button class="kit" onclick="applyKit('cinema')">Cinema</button>
-      <button class="kit" onclick="applyKit('suite')">Suíte</button>
-      <button class="kit" onclick="applyKit('security')">Segurança</button>
-      <button class="kit" onclick="applyKit('climate')">Climatização</button>
-      <button class="kit" onclick="applyKit('gourmet')">Gourmet</button>
-    </div>
   </div>
 </div>
 
@@ -373,7 +349,6 @@ body.is-admin .admin-price{display:inline-block}
       </div>
       <div class="side-list" id="sidebar-items-list"></div>
       <div class="side-foot">
-        <div class="side-row sub" id="sidebar-subtotal-container"><span>Subtotal</span><span id="sidebar-subtotal">R$ 0,00</span></div>
         <div class="side-row"><span>Ambientes no projeto</span><span id="side-rooms">0</span></div>
       </div>
     </div>
@@ -414,7 +389,6 @@ body.is-admin .admin-price{display:inline-block}
   <div class="meta">
     <span><b id="total-rooms-badge">0</b> ambientes</span>
     <span><b id="total-items-badge">0</b> itens</span>
-    <span class="admin-price">Total <b id="float-total-price">R$ 0</b></span>
   </div>
   <button class="btn" onclick="openBudgetModal()">Finalizar projeto <i data-lucide="arrow-right" style="width:15px;height:15px"></i></button>
 </div>
@@ -438,7 +412,7 @@ body.is-admin .admin-price{display:inline-block}
           <div class="legend" id="breakdown-legend"></div>
           <div class="modal-tot">
             <span>Total de dispositivos</span>
-            <span><b id="modal-total-items" style="color:var(--bone);font-size:1.1rem">0</b><span class="admin-price" style="margin-left:.6rem">· <b id="modal-total-price">R$ 0,00</b></span></span>
+            <span><b id="modal-total-items" style="color:var(--bone);font-size:1.1rem">0</b></span>
           </div>
         </div>
       </div>
@@ -454,47 +428,47 @@ body.is-admin .admin-price{display:inline-block}
 
 <script>
 /* ============ PRODUCT DATA (37 itens · 7 categorias) ============ */
-function avxIcons(){ try{ if(window.lucide && lucide.createIcons) avxIcons(); }catch(e){} }
+function avxIcons(){ try{ if(window.lucide && lucide.createIcons) lucide.createIcons(); }catch(e){} }
 const productsData = [
-  { id:'avx-pro-server', cat:'Central', name:'AVX-Pro-Server', desc:'O maestro do ecossistema. Processamento dedicado, IA e segurança de dados.', tech:'Central de Processamento', icon:'server', color:'#b8b4ab', price:100 },
+  { id:'avx-pro-server', cat:'Central', name:'AVX-Pro-Server', desc:'O maestro do ecossistema. Processamento dedicado, IA e segurança de dados.', tech:'Central de Processamento', icon:'server', color:'#b8b4ab' },
 
-  { id:'avx-rgbw', cat:'Iluminação', name:'AVX-RGBW', desc:'Crie atmosferas imersivas, de cenas vibrantes ao relaxamento profundo.', tech:'Controlador LED', icon:'palette', color:'#c9a35e', price:100 },
-  { id:'avx-touchpad-1', cat:'Iluminação', name:'AVX-Touchpad 1', desc:'Design em vidro de cristal. Acabamento premium, 1 zona tátil.', tech:'Interruptor 1 Tecla', icon:'square', color:'#c9a35e', price:100 },
-  { id:'avx-touchpad-2', cat:'Iluminação', name:'AVX-Touchpad 2', desc:'Design em vidro de cristal. Acabamento premium, 2 zonas táteis.', tech:'Interruptor 2 Teclas', icon:'layout-grid', color:'#c9a35e', price:100 },
-  { id:'avx-touchpad-3', cat:'Iluminação', name:'AVX-Touchpad 3', desc:'Design em vidro de cristal. Acabamento premium, 3 zonas táteis.', tech:'Interruptor 3 Teclas', icon:'layout-grid', color:'#c9a35e', price:100 },
-  { id:'avx-touchpad-4', cat:'Iluminação', name:'AVX-Touchpad 4', desc:'Design em vidro de cristal. Acabamento premium, 4 zonas táteis.', tech:'Interruptor 4 Teclas', icon:'layout-grid', color:'#c9a35e', price:100 },
-  { id:'avx-dimmer', cat:'Iluminação', name:'AVX-Dimmer', desc:'Conforto visual. Ajuste preciso de intensidade para cenas perfeitas.', tech:'Dimerizador de Luz', icon:'sliders-horizontal', color:'#c9a35e', price:100 },
-  { id:'avx-plus-1', cat:'Iluminação', name:'AVX-Plus-1', desc:'Automação invisível. Módulo micro de 1 canal para retrofit.', tech:'Módulo 1 Canal', icon:'zap', color:'#c9a35e', price:100 },
-  { id:'avx-plus-2', cat:'Iluminação', name:'AVX-Plus-2', desc:'Automação invisível. Módulo micro de 2 canais para retrofit.', tech:'Módulo 2 Canais', icon:'zap', color:'#c9a35e', price:100 },
-  { id:'avx-pro-4', cat:'Iluminação', name:'AVX-Pro-4', desc:'Solução profissional. Módulo robusto de 4 canais para trilho DIN.', tech:'Módulo 4 Canais', icon:'zap', color:'#c9a35e', price:100 },
+  { id:'avx-rgbw', cat:'Iluminação', name:'AVX-RGBW', desc:'Crie atmosferas imersivas, de cenas vibrantes ao relaxamento profundo.', tech:'Controlador LED', icon:'palette', color:'#c9a35e' },
+  { id:'avx-touchpad-1', cat:'Iluminação', name:'AVX-Touchpad 1', desc:'Design em vidro de cristal. Acabamento premium, 1 zona tátil.', tech:'Interruptor 1 Tecla', icon:'square', color:'#c9a35e' },
+  { id:'avx-touchpad-2', cat:'Iluminação', name:'AVX-Touchpad 2', desc:'Design em vidro de cristal. Acabamento premium, 2 zonas táteis.', tech:'Interruptor 2 Teclas', icon:'layout-grid', color:'#c9a35e' },
+  { id:'avx-touchpad-3', cat:'Iluminação', name:'AVX-Touchpad 3', desc:'Design em vidro de cristal. Acabamento premium, 3 zonas táteis.', tech:'Interruptor 3 Teclas', icon:'layout-grid', color:'#c9a35e' },
+  { id:'avx-touchpad-4', cat:'Iluminação', name:'AVX-Touchpad 4', desc:'Design em vidro de cristal. Acabamento premium, 4 zonas táteis.', tech:'Interruptor 4 Teclas', icon:'layout-grid', color:'#c9a35e' },
+  { id:'avx-dimmer', cat:'Iluminação', name:'AVX-Dimmer', desc:'Conforto visual. Ajuste preciso de intensidade para cenas perfeitas.', tech:'Dimerizador de Luz', icon:'sliders-horizontal', color:'#c9a35e' },
+  { id:'avx-plus-1', cat:'Iluminação', name:'AVX-Plus-1', desc:'Automação invisível. Módulo micro de 1 canal para retrofit.', tech:'Módulo 1 Canal', icon:'zap', color:'#c9a35e' },
+  { id:'avx-plus-2', cat:'Iluminação', name:'AVX-Plus-2', desc:'Automação invisível. Módulo micro de 2 canais para retrofit.', tech:'Módulo 2 Canais', icon:'zap', color:'#c9a35e' },
+  { id:'avx-pro-4', cat:'Iluminação', name:'AVX-Pro-4', desc:'Solução profissional. Módulo robusto de 4 canais para trilho DIN.', tech:'Módulo 4 Canais', icon:'zap', color:'#c9a35e' },
 
-  { id:'avx-socket-touchpad-1', cat:'Elétrica', name:'AVX-Socket & Touch 1', desc:'Design unificado. Tomada inteligente + 1 tecla touch.', tech:'Tomada + 1 Tecla', icon:'plug-zap', color:'#8d8980', price:100 },
-  { id:'avx-socket-touchpad-2', cat:'Elétrica', name:'AVX-Socket & Touch 2', desc:'Design unificado. Tomada inteligente + 2 teclas touch.', tech:'Tomada + 2 Teclas', icon:'plug-zap', color:'#8d8980', price:100 },
-  { id:'avx-socket-1', cat:'Elétrica', name:'AVX-Socket 1', desc:'Gestão de energia. Tomada inteligente 10A/20A com monitoramento.', tech:'Tomada Inteligente', icon:'power', color:'#8d8980', price:100 },
-  { id:'avx-socket-2', cat:'Elétrica', name:'AVX-Socket 2', desc:'Acabamento em cristal. Duas tomadas inteligentes 10A/20A.', tech:'Tomada Dupla', icon:'power', color:'#8d8980', price:100 },
-  { id:'avx-socket-3', cat:'Elétrica', name:'AVX-Socket 3', desc:'Acabamento em cristal. Três tomadas inteligentes 10A/20A.', tech:'Tomada Tripla', icon:'power', color:'#8d8980', price:100 },
-  { id:'avx-dual-usb-a', cat:'Elétrica', name:'AVX-Dual USB-A', desc:'Carregamento rápido. Duas portas USB-A de alta potência.', tech:'Carregador USB Duplo', icon:'usb', color:'#8d8980', price:100 },
-  { id:'avx-usb-a-c', cat:'Elétrica', name:'AVX-USB-A & C', desc:'Carregamento híbrido. Portas USB-A e USB-C integradas.', tech:'Carregador Híbrido', icon:'cable', color:'#8d8980', price:100 },
-  { id:'avx-ethernet', cat:'Elétrica', name:'AVX-Ethernet', desc:'Conectividade estável. Ponto de rede RJ45 gigabit.', tech:'Ponto de Rede', icon:'network', color:'#8d8980', price:100 },
-  { id:'avx-tv-cabo', cat:'Elétrica', name:'AVX-TV a Cabo', desc:'Mídia. Módulo coaxial de alta fidelidade para antena/TV.', tech:'Ponto Coaxial', icon:'tv', color:'#8d8980', price:100 },
-  { id:'avx-painel-vidro', cat:'Elétrica', name:'AVX-Painel de Vidro', desc:'Acabamento premium. Espelho de vidro temperado, sem funções smart.', tech:'Acabamento em Vidro', icon:'square', color:'#8d8980', price:100 },
-  { id:'avx-empty-cover', cat:'Elétrica', name:'AVX-Empty Cover', desc:'Estética limpa. Módulo cego para pontos de reserva.', tech:'Módulo Cego', icon:'square-dashed', color:'#8d8980', price:100 },
+  { id:'avx-socket-touchpad-1', cat:'Elétrica', name:'AVX-Socket & Touch 1', desc:'Design unificado. Tomada inteligente + 1 tecla touch.', tech:'Tomada + 1 Tecla', icon:'plug-zap', color:'#8d8980' },
+  { id:'avx-socket-touchpad-2', cat:'Elétrica', name:'AVX-Socket & Touch 2', desc:'Design unificado. Tomada inteligente + 2 teclas touch.', tech:'Tomada + 2 Teclas', icon:'plug-zap', color:'#8d8980' },
+  { id:'avx-socket-1', cat:'Elétrica', name:'AVX-Socket 1', desc:'Gestão de energia. Tomada inteligente 10A/20A com monitoramento.', tech:'Tomada Inteligente', icon:'power', color:'#8d8980' },
+  { id:'avx-socket-2', cat:'Elétrica', name:'AVX-Socket 2', desc:'Acabamento em cristal. Duas tomadas inteligentes 10A/20A.', tech:'Tomada Dupla', icon:'power', color:'#8d8980' },
+  { id:'avx-socket-3', cat:'Elétrica', name:'AVX-Socket 3', desc:'Acabamento em cristal. Três tomadas inteligentes 10A/20A.', tech:'Tomada Tripla', icon:'power', color:'#8d8980' },
+  { id:'avx-dual-usb-a', cat:'Elétrica', name:'AVX-Dual USB-A', desc:'Carregamento rápido. Duas portas USB-A de alta potência.', tech:'Carregador USB Duplo', icon:'usb', color:'#8d8980' },
+  { id:'avx-usb-a-c', cat:'Elétrica', name:'AVX-USB-A & C', desc:'Carregamento híbrido. Portas USB-A e USB-C integradas.', tech:'Carregador Híbrido', icon:'cable', color:'#8d8980' },
+  { id:'avx-ethernet', cat:'Elétrica', name:'AVX-Ethernet', desc:'Conectividade estável. Ponto de rede RJ45 gigabit.', tech:'Ponto de Rede', icon:'network', color:'#8d8980' },
+  { id:'avx-tv-cabo', cat:'Elétrica', name:'AVX-TV a Cabo', desc:'Mídia. Módulo coaxial de alta fidelidade para antena/TV.', tech:'Ponto Coaxial', icon:'tv', color:'#8d8980' },
+  { id:'avx-painel-vidro', cat:'Elétrica', name:'AVX-Painel de Vidro', desc:'Acabamento premium. Espelho de vidro temperado, sem funções smart.', tech:'Acabamento em Vidro', icon:'square', color:'#8d8980' },
+  { id:'avx-empty-cover', cat:'Elétrica', name:'AVX-Empty Cover', desc:'Estética limpa. Módulo cego para pontos de reserva.', tech:'Módulo Cego', icon:'square-dashed', color:'#8d8980' },
 
-  { id:'avx-ht', cat:'Climatização', name:'AVX-H&T', desc:'Monitoramento preciso de temperatura e umidade para conforto térmico.', tech:'Sensor Temp/Umidade', icon:'droplets', color:'#7fa6b8', price:100 },
-  { id:'avx-rm', cat:'Climatização', name:'AVX-RM', desc:'Controle universal. Integração de ar-condicionado e TV via infravermelho.', tech:'Controle IR Universal', icon:'wifi', color:'#7fa6b8', price:100 },
+  { id:'avx-ht', cat:'Climatização', name:'AVX-H&T', desc:'Monitoramento preciso de temperatura e umidade para conforto térmico.', tech:'Sensor Temp/Umidade', icon:'droplets', color:'#7fa6b8' },
+  { id:'avx-rm', cat:'Climatização', name:'AVX-RM', desc:'Controle universal. Integração de ar-condicionado e TV via infravermelho.', tech:'Controle IR Universal', icon:'wifi', color:'#7fa6b8' },
 
-  { id:'avx-2pm', cat:'Cortinas', name:'AVX-2PM', desc:'Gestão de sombra. Controle de motores de persiana existentes.', tech:'Controlador de Persiana', icon:'settings-2', color:'#9a8fae', price:100 },
-  { id:'avx-curtain', cat:'Cortinas', name:'AVX-Curtain', desc:'Gestão de luz natural. Integração silenciosa para trilhos motorizados.', tech:'Motor de Cortina', icon:'blinds', color:'#9a8fae', price:100 },
+  { id:'avx-2pm', cat:'Cortinas', name:'AVX-2PM', desc:'Gestão de sombra. Controle de motores de persiana existentes.', tech:'Controlador de Persiana', icon:'settings-2', color:'#9a8fae' },
+  { id:'avx-curtain', cat:'Cortinas', name:'AVX-Curtain', desc:'Gestão de luz natural. Integração silenciosa para trilhos motorizados.', tech:'Motor de Cortina', icon:'blinds', color:'#9a8fae' },
 
-  { id:'avx-ip', cat:'Multimídia', name:'AVX-IP', desc:'Entretenimento imersivo. Módulo de integração para som e Home Theater.', tech:'Módulo de Áudio IP', icon:'music', color:'#b88a9e', price:100 },
+  { id:'avx-ip', cat:'Multimídia', name:'AVX-IP', desc:'Entretenimento imersivo. Módulo de integração para som e Home Theater.', tech:'Módulo de Áudio IP', icon:'music', color:'#b88a9e' },
 
-  { id:'avx-door', cat:'Segurança', name:'AVX-Door Window', desc:'Perímetro seguro. Sensor instantâneo de abertura de portas e janelas.', tech:'Sensor de Abertura', icon:'door-open', color:'#da291c', price:100 },
-  { id:'avx-flood', cat:'Segurança', name:'AVX-Flood', desc:'Proteção ativa. Sensor de detecção de vazamentos e inundações.', tech:'Sensor de Inundação', icon:'waves', color:'#da291c', price:100 },
-  { id:'avx-gas', cat:'Segurança', name:'AVX-GasGLP', desc:'Proteção crítica. Detecção avançada de vazamento de gás.', tech:'Sensor de Gás', icon:'flame', color:'#da291c', price:100 },
-  { id:'avx-mmwave', cat:'Segurança', name:'AVX-MMWave', desc:'AI Security. Radar de presença humana de alta precisão (ignora pets).', tech:'Sensor de Presença', icon:'radio', color:'#da291c', price:100 },
-  { id:'avx-motion', cat:'Segurança', name:'AVX-Motion', desc:'Segurança essencial. Sensor de movimento infravermelho.', tech:'Sensor de Movimento', icon:'activity', color:'#da291c', price:100 },
-  { id:'avx-siren', cat:'Segurança', name:'AVX-Siren', desc:'Alerta sonoro. Sirene inteligente integrada ao sistema de alarme.', tech:'Sirene', icon:'bell-ring', color:'#da291c', price:100 },
-  { id:'avx-smoke', cat:'Segurança', name:'AVX-Smoke', desc:'Prevenção. Detector de fumaça inteligente de alta sensibilidade.', tech:'Detector de Fumaça', icon:'cloud-fog', color:'#da291c', price:100 }
+  { id:'avx-door', cat:'Segurança', name:'AVX-Door Window', desc:'Perímetro seguro. Sensor instantâneo de abertura de portas e janelas.', tech:'Sensor de Abertura', icon:'door-open', color:'#da291c' },
+  { id:'avx-flood', cat:'Segurança', name:'AVX-Flood', desc:'Proteção ativa. Sensor de detecção de vazamentos e inundações.', tech:'Sensor de Inundação', icon:'waves', color:'#da291c' },
+  { id:'avx-gas', cat:'Segurança', name:'AVX-GasGLP', desc:'Proteção crítica. Detecção avançada de vazamento de gás.', tech:'Sensor de Gás', icon:'flame', color:'#da291c' },
+  { id:'avx-mmwave', cat:'Segurança', name:'AVX-MMWave', desc:'AI Security. Radar de presença humana de alta precisão (ignora pets).', tech:'Sensor de Presença', icon:'radio', color:'#da291c' },
+  { id:'avx-motion', cat:'Segurança', name:'AVX-Motion', desc:'Segurança essencial. Sensor de movimento infravermelho.', tech:'Sensor de Movimento', icon:'activity', color:'#da291c' },
+  { id:'avx-siren', cat:'Segurança', name:'AVX-Siren', desc:'Alerta sonoro. Sirene inteligente integrada ao sistema de alarme.', tech:'Sirene', icon:'bell-ring', color:'#da291c' },
+  { id:'avx-smoke', cat:'Segurança', name:'AVX-Smoke', desc:'Prevenção. Detector de fumaça inteligente de alta sensibilidade.', tech:'Detector de Fumaça', icon:'cloud-fog', color:'#da291c' }
 ];
 
 const CATS = [
@@ -517,22 +491,12 @@ const smartTips = {
   'Central':      { icon:'server',        title:'O mordomo invisível',text:'A central AVX-Pro é o coração do sistema.' }
 };
 
-const kits = {
-  'cinema':   { 'avx-rgbw':1, 'avx-dimmer':1, 'avx-ip':1, 'avx-curtain':1 },
-  'security': { 'avx-door':2, 'avx-motion':1, 'avx-siren':1, 'avx-mmwave':1 },
-  'climate':  { 'avx-ht':1, 'avx-rm':1 },
-  'gourmet':  { 'avx-rgbw':2, 'avx-ip':1, 'avx-socket-2':2 },
-  'suite':    { 'avx-touchpad-2':1, 'avx-curtain':1, 'avx-dimmer':1, 'avx-socket-touchpad-1':2 }
-};
-
 /* ============ STATE ============ */
 let budgetData = {};
 let currentRoom = null;
-let isAdmin = false;
 const shownTips = new Set();
 
 const hexToRgb = h => { const n=h.replace('#',''); return `${parseInt(n.slice(0,2),16)},${parseInt(n.slice(2,4),16)},${parseInt(n.slice(4,6),16)}`; };
-const brl = v => v.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
 
 /* ============ RENDER CATALOG ============ */
 function renderCatalog(){
@@ -551,7 +515,6 @@ function renderCatalog(){
         <div class="card-ico" style="background:rgba(${hexToRgb(p.color)},.06);color:${p.color}"><i data-lucide="${p.icon}"></i></div>
         <div class="card-top">
           <h3>${p.name}</h3>
-          <span class="admin-price" data-price="${p.id}">R$ ${p.price}</span>
         </div>
         <div class="card-tech">${p.tech}</div>
         <p class="card-desc">${p.desc}</p>
@@ -683,18 +646,10 @@ function refreshCounters(){
   }
 }
 
-function applyKit(kit){
-  if(!currentRoom){ showToast({icon:'layout-panel-left',title:'Crie um ambiente primeiro',text:'Dê um nome ao ambiente e clique em Criar.'}); return; }
-  const items=kits[kit]; if(!items) return;
-  Object.entries(items).forEach(([pid,q])=>updateQty(pid,q));
-  showToast({icon:'check',title:'Kit aplicado',text:`Itens adicionados a "${currentRoom}".`});
-}
-
 /* ============ SUMMARIES ============ */
 function updateSidebar(){
   const list=document.getElementById('sidebar-items-list');
   const nameEl=document.getElementById('sidebar-room-name');
-  const subC=document.getElementById('sidebar-subtotal-container');
   if(!currentRoom){
     nameEl.innerText='Nenhum';
     list.innerHTML=`<div class="side-empty">Crie ou selecione um ambiente</div>`;
@@ -704,24 +659,22 @@ function updateSidebar(){
   }
   nameEl.innerText=currentRoom;
   const items=budgetData[currentRoom]||{};
-  let html='', total=0, cost=0;
+  let html='', total=0;
   for(const [pid,q] of Object.entries(items)){
-    if(q>0){ const m=productMeta[pid]; cost+=m.price*q; total+=q;
-      html+=`<div class="side-item"><div class="nm"><span class="dt" style="background:${m.color}"></span><span title="${m.name}">${m.name}</span></div><div style="display:flex;align-items:center;gap:.4rem"><span class="admin-price" style="border:0;padding:0;color:var(--ash)">R$ ${m.price*q}</span><span class="q">×${q}</span></div></div>`;
+    if(q>0){ const m=productMeta[pid]; total+=q;
+      html+=`<div class="side-item"><div class="nm"><span class="dt" style="background:${m.color}"></span><span title="${m.name}">${m.name}</span></div><span class="q">×${q}</span></div>`;
     }
   }
   list.innerHTML = html || `<div class="side-empty">Ambiente vazio</div>`;
   document.getElementById('sidebar-total-qty').innerText=total;
-  document.getElementById('sidebar-subtotal').innerText=brl(cost);
   document.getElementById('side-rooms').innerText=Object.keys(budgetData).length;
 }
 
 function updateSummary(){
-  let items=0, total=0; const rooms=Object.keys(budgetData).length;
-  for(const r in budgetData) for(const pid in budgetData[r]){ const q=budgetData[r][pid]; items+=q; total+=(productMeta[pid]||{price:0}).price*q; }
+  let items=0; const rooms=Object.keys(budgetData).length;
+  for(const r in budgetData) for(const pid in budgetData[r]){ items+=budgetData[r][pid]; }
   document.getElementById('total-items-badge').innerText=items;
   document.getElementById('total-rooms-badge').innerText=rooms;
-  document.getElementById('float-total-price').innerText=total.toLocaleString('pt-BR',{style:'currency',currency:'BRL',maximumFractionDigits:0});
   document.getElementById('budget-float').classList.toggle('visible', items>0);
 }
 
@@ -748,24 +701,6 @@ function checkAndShowTip(pid){
   if(smartTips[m.cat] && !shownTips.has(m.cat)){ showToast(smartTips[m.cat]); shownTips.add(m.cat); }
 }
 
-/* ============ ADMIN ============ */
-function toggleAdmin(){
-  if(isAdmin){ isAdmin=false; sessionStorage.removeItem('avxIsAdmin'); refreshAdminUI(); showToast({icon:'lock',title:'Modo admin desativado',text:'Preços ocultados.'}); return; }
-  const p=prompt('Senha de administrador (para exibir preços):');
-  if(p===null) return;
-  if(p==='admin'){ isAdmin=true; sessionStorage.setItem('avxIsAdmin','true'); refreshAdminUI(); showToast({icon:'unlock',title:'Modo admin ativo',text:'Preços e totais agora visíveis.'}); }
-  else showToast({icon:'lock',title:'Senha incorreta',text:'Tente novamente.'});
-}
-function checkAdmin(){ if(sessionStorage.getItem('avxIsAdmin')==='true'){ isAdmin=true; refreshAdminUI(); } }
-function refreshAdminUI(){
-  document.body.classList.toggle('is-admin', isAdmin);
-  document.getElementById('sidebar-subtotal-container').style.display = isAdmin ? 'flex' : 'none';
-  const b=document.getElementById('btn-admin');
-  b.classList.toggle('on', isAdmin);
-  b.innerHTML=`<i data-lucide="${isAdmin?'unlock':'lock'}"></i>`;
-  updateSidebar(); updateSummary(); avxIcons();
-}
-
 /* ============ PERSISTENCE ============ */
 function saveProgress(){ localStorage.setItem('avxBudgetData',JSON.stringify(budgetData)); localStorage.setItem('avxCurrentRoom',currentRoom||''); }
 function loadProgress(){
@@ -789,16 +724,16 @@ function openBudgetModal(){
   const bar=document.getElementById('breakdown-bar');
   const legend=document.getElementById('breakdown-legend');
   list.innerHTML=''; bar.innerHTML=''; legend.innerHTML='';
-  let qty=0, price=0; const catMap={};
+  let qty=0; const catMap={};
 
   for(const room in budgetData){
     const items=budgetData[room]; if(!Object.keys(items).length) continue;
     const div=document.createElement('div'); div.className='bd-room';
     let html=`<h3><i data-lucide="map-pin"></i>${room}</h3>`;
     for(const [pid,q] of Object.entries(items)){
-      const m=productMeta[pid]; qty+=q; price+=m.price*q;
+      const m=productMeta[pid]; qty+=q;
       if(!catMap[m.cat]) catMap[m.cat]={c:0,color:m.color}; catMap[m.cat].c+=q;
-      html+=`<div class="bd-item"><div class="nm">${m.name}<small>${m.tech}</small></div><div style="display:flex;align-items:center;gap:.5rem"><span class="admin-price" style="border:0;padding:0;color:var(--ash)">R$ ${m.price*q}</span><span class="x">×${q}</span></div></div>`;
+      html+=`<div class="bd-item"><div class="nm">${m.name}<small>${m.tech}</small></div><span class="x">×${q}</span></div>`;
     }
     div.innerHTML=html; list.appendChild(div);
   }
@@ -811,7 +746,6 @@ function openBudgetModal(){
     }
   }
   document.getElementById('modal-total-items').innerText=qty;
-  document.getElementById('modal-total-price').innerText=brl(price);
   document.getElementById('budget-modal').classList.add('open');
   avxIcons();
 }
@@ -839,7 +773,7 @@ function generatePDF(){
   doc.setTextColor(255,255,255); doc.setFontSize(18); doc.setFont('helvetica','bold'); doc.text('AVX.',15,18);
   doc.setFontSize(9); doc.setFont('helvetica','normal'); doc.text('Automação Bespoke',195,18,{align:'right'});
   doc.setTextColor(11,11,12); doc.setFontSize(14); doc.setFont('helvetica','bold'); doc.text('Resumo do Projeto',15,42);
-  let y=52, gt=0;
+  let y=52;
   for(const r in budgetData){
     const items=budgetData[r]; if(!Object.keys(items).length) continue;
     if(y>270){ doc.addPage(); y=20; }
@@ -852,12 +786,10 @@ function generatePDF(){
       doc.setFont('helvetica','bold'); doc.setTextColor(11,11,12); doc.text(`• ${q}x ${m.name}`,22,y);
       doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.setTextColor(120,120,120); doc.text(`(${m.tech})`,90,y);
       doc.setFontSize(10);
-      if(isAdmin){ const s=m.price*q; gt+=s; doc.setTextColor(11,11,12); doc.text(`R$ ${s.toLocaleString('pt-BR')}`,190,y,{align:'right'}); }
       y+=6;
     }
     y+=4;
   }
-  if(isAdmin){ y+=4; doc.setFontSize(12); doc.setFont('helvetica','bold'); doc.text(`TOTAL: R$ ${gt.toLocaleString('pt-BR')}`,190,y,{align:'right'}); }
   doc.save('AVX_Projeto.pdf');
 }
 
@@ -874,7 +806,6 @@ function avxOpenConsent(){ const b=document.getElementById('cookie-banner'); if(
 /* ============ INIT ============ */
 document.addEventListener('DOMContentLoaded',()=>{
   renderCatalog();
-  checkAdmin();
   loadProgress();
   const burger=document.getElementById('burger'), sheet=document.getElementById('sheet');
   if(burger) burger.addEventListener('click',()=>document.body.classList.toggle('menu-open'));
