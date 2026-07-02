@@ -417,6 +417,7 @@ body.menu-open .sheet{opacity:1;visibility:visible}
 .collab-cta::after{content:"";position:absolute;left:0;bottom:0;height:1px;width:100%;background:rgba(255,255,255,.12)}
 .collab-cta::before{content:"";position:absolute;left:0;bottom:0;height:1px;width:0;background:var(--avx);transition:width .5s var(--ease);z-index:1}
 .collab-cta:hover::before{width:100%}
+.collab-legal{margin-top:1.6rem;font-size:.68rem;font-weight:300;line-height:1.6;color:var(--ash);max-width:44ch}
 /* Sticker da collab (edição limitada) — gira como um disco de vinil. Trocável por collab. */
 .collab-head{display:flex;align-items:center;justify-content:space-between;gap:clamp(1.4rem,3vw,2.6rem);margin-bottom:2.6rem}
 .collab-sticker-spin{width:clamp(96px,12vw,140px);height:clamp(96px,12vw,140px);flex-shrink:0;object-fit:contain;
@@ -559,7 +560,7 @@ body.menu-open .sheet{opacity:1;visibility:visible}
 
     <!-- Climatização -->
     <div class="slide">
-      <div class="slide-bg" style="background-image:url('https://images.unsplash.com/photo-1556909211-36987daf7b4d?q=80&w=2400&auto=format&fit=crop')"></div>
+      <div class="slide-bg" data-bg="https://images.unsplash.com/photo-1556909211-36987daf7b4d?q=80&w=2400&auto=format&fit=crop"></div>
       <div class="slide-veil"></div>
       <div class="slide-inner">
         <p class="eyebrow">Climatização <span class="dot">·</span> AVX-H&amp;T</p>
@@ -574,12 +575,12 @@ body.menu-open .sheet{opacity:1;visibility:visible}
 
     <!-- AI Security -->
     <div class="slide">
-      <div class="slide-bg" style="background-image:url('https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=2400&auto=format&fit=crop')"></div>
+      <div class="slide-bg" data-bg="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=2400&auto=format&fit=crop"></div>
       <div class="slide-veil"></div>
       <div class="slide-inner">
         <p class="eyebrow">AI Security <span class="dot">·</span> AVX-MMWave</p>
         <h2 class="display">Sente sua presença. <em>Ignora seus pets.</em></h2>
-        <p class="lead">Radar de grau militar que detecta respiração e micro-movimentos. Sem câmeras, sem invasão.</p>
+        <p class="lead">Radar de alta precisão que detecta respiração e micro-movimentos. Sem câmeras, sem invasão.</p>
         <div class="hero-actions">
           <a href="#contato" class="btn">Iniciar Projeto <span class="arw">→</span></a>
           <a href="catalogo.html" class="qlink">Ver no Catálogo <span class="arw">→</span></a>
@@ -589,7 +590,7 @@ body.menu-open .sheet{opacity:1;visibility:visible}
 
     <!-- Multimídia -->
     <div class="slide">
-      <div class="slide-bg" style="background-image:url('https://images.unsplash.com/photo-1493225255756-d9584f8606e9?q=80&w=2400&auto=format&fit=crop')"></div>
+      <div class="slide-bg" data-bg="https://images.unsplash.com/photo-1493225255756-d9584f8606e9?q=80&w=2400&auto=format&fit=crop"></div>
       <div class="slide-veil"></div>
       <div class="slide-inner">
         <p class="eyebrow">Multimídia <span class="dot">·</span> AVX-IP</p>
@@ -604,7 +605,7 @@ body.menu-open .sheet{opacity:1;visibility:visible}
 
     <!-- Cortinas & Persianas -->
     <div class="slide">
-      <div class="slide-bg" style="background-image:url('https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?q=80&w=2400&auto=format&fit=crop')"></div>
+      <div class="slide-bg" data-bg="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?q=80&w=2400&auto=format&fit=crop"></div>
       <div class="slide-veil"></div>
       <div class="slide-inner">
         <p class="eyebrow">Cortinas &amp; Persianas <span class="dot">·</span> AVX-Curtain</p>
@@ -619,7 +620,7 @@ body.menu-open .sheet{opacity:1;visibility:visible}
 
     <!-- Tomadas & Elétrica -->
     <div class="slide">
-      <div class="slide-bg" style="background-image:url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2400&auto=format&fit=crop')"></div>
+      <div class="slide-bg" data-bg="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2400&auto=format&fit=crop"></div>
       <div class="slide-veil"></div>
       <div class="slide-inner">
         <p class="eyebrow">Elétrica <span class="dot">·</span> AVX-Socket</p>
@@ -634,7 +635,7 @@ body.menu-open .sheet{opacity:1;visibility:visible}
 
     <!-- Central de Controle -->
     <div class="slide">
-      <div class="slide-bg" style="background-image:url('https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=2400&auto=format&fit=crop')"></div>
+      <div class="slide-bg" data-bg="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=2400&auto=format&fit=crop"></div>
       <div class="slide-veil"></div>
       <div class="slide-inner">
         <p class="eyebrow">Central de Controle <span class="dot">·</span> AVX-Pro-Server</p>
@@ -649,7 +650,7 @@ body.menu-open .sheet{opacity:1;visibility:visible}
 
     <!-- Controle por Voz -->
     <div class="slide">
-      <div class="slide-bg" style="background-image:url('https://images.unsplash.com/photo-1600585152220-90363fe7e115?q=80&w=2400&auto=format&fit=crop')"></div>
+      <div class="slide-bg" data-bg="https://images.unsplash.com/photo-1600585152220-90363fe7e115?q=80&w=2400&auto=format&fit=crop"></div>
       <div class="slide-veil"></div>
       <div class="slide-inner">
         <p class="eyebrow">Controle por Voz <span class="dot">·</span> Alexa &amp; HomeKit</p>
@@ -821,12 +822,13 @@ body.menu-open .sheet{opacity:1;visibility:visible}
     <!-- Esquerda: copy editorial -->
     <div class="collab-left">
       <div class="collab-eyebrow reveal">
-        <span class="collab-tag">AVX × <a href="https://www.palantir.com" target="_blank" rel="noopener" class="collab-partner">Palantir</a></span>
-        <span class="collab-badge">Edição Limitada</span>
+        <span class="collab-tag">Sovereign Edition</span>
+        <span class="collab-badge">Série Limitada</span>
       </div>
       <h2 class="collab-headline reveal d1">A única casa com <em>soberania de dados.</em></h2>
-      <p class="collab-body reveal d2">Governos confiam à Palantir dados que não podem vazar. Ela nunca enviou um byte para a nuvem. O AVX-Pro-Server também nunca enviou. A Sovereign Edition formaliza esse princípio — com documentação técnica auditável que nenhum outro sistema residencial oferece.</p>
+      <p class="collab-body reveal d2">Governos confiam a sistemas como o da Palantir dados que não podem vazar — a inteligência roda onde os dados nascem, e nenhum byte vai para a nuvem. O AVX-Pro-Server opera pelo mesmo princípio. A Sovereign Edition, inspirada nessa filosofia de soberania de dados, formaliza o compromisso com documentação técnica auditável que nenhum outro sistema residencial oferece.</p>
       <a href="#contato" class="collab-cta reveal d3">Solicitar Consulta <span>→</span></a>
+      <p class="collab-legal reveal d3">Edição de engenharia inspirada no princípio de soberania de dados. A AVX não possui vínculo, parceria ou endosso da Palantir Technologies.</p>
     </div>
 
     <!-- Direita: spec sheet estilo Anduril -->
@@ -837,7 +839,7 @@ body.menu-open .sheet{opacity:1;visibility:visible}
           <span class="collab-desig-name">Sovereign</span>
           <span class="collab-desig-code">Edição numerada · encerrada ao esgotar</span>
         </div>
-        <img class="collab-sticker-spin" src="/assets/palantir-sticker.png" alt="Sticker da edição limitada AVX × Palantir" width="140" height="140" loading="lazy" decoding="async">
+        <img class="collab-sticker-spin" src="/assets/palantir-sticker.png" alt="Selo numerado da Sovereign Edition AVX" width="140" height="140" loading="lazy" decoding="async">
       </div>
 
       <div class="collab-specs">
@@ -908,10 +910,8 @@ body.menu-open .sheet{opacity:1;visibility:visible}
         </optgroup>
         <optgroup label="Industrial &amp; Logística">
           <option value="industria">Indústria / Fábrica</option>
-          <option value="galpao">Galpão</option>
-          <option value="silo">Silo</option>
-          <option value="almoxarifado">Almoxarifado</option>
-          <option value="centro-distribuicao">Centro de Distribuição</option>
+          <option value="galpao-cd">Galpão / Centro de Distribuição</option>
+          <option value="silo-almoxarifado">Silo / Almoxarifado</option>
         </optgroup>
         <option value="outro">Outro</option>
       </select>
@@ -991,12 +991,21 @@ sheet.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>document.b
   const DUR=5500;
   let i=0,timer=null;
 
+  function hydrate(k){
+    const bg=slides[(k+slides.length)%slides.length]?.querySelector('.slide-bg[data-bg]');
+    if(bg){ bg.style.backgroundImage=`url('${bg.dataset.bg}')`; bg.removeAttribute('data-bg'); }
+  }
   function go(n){
     i=(n+slides.length)%slides.length;
+    hydrate(i); hydrate(i+1);
     track.style.transform=`translateX(-${i*100}%)`;
     slides.forEach((s,k)=>s.classList.toggle('active',k===i));
     dots.forEach((d,k)=>d.classList.toggle('active',k===i));
   }
+  addEventListener('load',()=>{
+    const all=()=>slides.forEach((_,k)=>hydrate(k));
+    'requestIdleCallback' in window ? requestIdleCallback(all,{timeout:4000}) : setTimeout(all,2500);
+  });
   const next=()=>go(i+1), prev=()=>go(i-1);
   function start(){ if(reduceM) return; stop(); timer=setInterval(next,DUR); }
   function stop(){ if(timer){clearInterval(timer);timer=null;} }
