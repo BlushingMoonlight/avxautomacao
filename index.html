@@ -39,10 +39,12 @@
 <meta property="og:title" content="AVX | Automação Residencial Bespoke">
 <meta property="og:description" content="Keypads de cristal e segurança com IA. A tecnologia desaparece — você apenas vive.">
 <meta property="og:image" content="https://avxautomacao.com.br/assets/og-avx.png">
+<meta property="og:image:alt" content="AVX — Automação Residencial Bespoke">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="AVX | Automação Residencial Bespoke">
 <meta name="twitter:description" content="Keypads de cristal e segurança com IA. Você apenas vive.">
 <meta name="twitter:image" content="https://avxautomacao.com.br/assets/og-avx.png">
+<meta name="twitter:image:alt" content="AVX — Automação Residencial Bespoke">
 
 <!-- Dados estruturados (SEO) -->
 <script type="application/ld+json">
@@ -60,6 +62,7 @@
 </script>
 
 <link rel="preconnect" href="https://images.unsplash.com" crossorigin>
+<link rel="preload" as="image" href="https://images.unsplash.com/photo-1616594039964-ae9021a400a0?q=80&w=2400&auto=format&fit=crop" fetchpriority="high">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -72,6 +75,7 @@
   --ink:#0b0b0c;          /* near-black, warm */
   --ink-soft:#0d0d0d;
   --paper:#f0ede7;         /* off-white inversion sections */
+  --panel:#111113; --line-soft:rgba(236,232,225,.07); /* tokens compartilhados com o catálogo */
   --bone:#ece8e1;         /* primary text on dark */
   --bone-dim:#b6b2aa;
   --ash:#8d8980;          /* muted / secondary */
@@ -86,6 +90,10 @@
 
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+::selection{background:var(--avx);color:#fff}
+.skip-link{position:absolute;left:-9999px;top:0;z-index:200;background:var(--avx);color:#fff;padding:.7rem 1.2rem;font-size:.85rem;border-radius:0 0 8px 0}
+.skip-link:focus{left:0}
+
 body{
   font-family:'Inter',system-ui,sans-serif;
   background:var(--ink);
@@ -427,7 +435,7 @@ body.menu-open .sheet{opacity:1;visibility:visible}
 .collab-desig{display:flex;flex-direction:column;gap:.75rem;min-width:0}
 .collab-desig-tag{font-size:.56rem;font-weight:600;letter-spacing:.28em;text-transform:uppercase;color:var(--avx)}
 .collab-desig-name{
-  font-family:'Inter',sans-serif;font-weight:700;
+  font-family:'Inter',sans-serif;font-weight:600;
   font-size:clamp(2.6rem,6vw,4.6rem);letter-spacing:-.025em;line-height:.92;color:#f0ede7;
 }
 .collab-desig-code{
@@ -516,6 +524,7 @@ body.menu-open .sheet{opacity:1;visibility:visible}
 </style>
 </head>
 <body>
+<a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
 
 <h1 class="sr-only">AVX — Automação residencial bespoke e segurança com IA</h1>
 
@@ -538,6 +547,8 @@ body.menu-open .sheet{opacity:1;visibility:visible}
   <a href="catalogo.html"><span class="num">03</span>Catálogo</a>
   <a href="#contato"><span class="num">04</span>Iniciar Projeto</a>
 </div>
+
+<main id="conteudo">
 
 <!-- ===================== HERO — auto-sliding product features ===================== -->
 <header class="hero" id="top">
@@ -941,6 +952,8 @@ body.menu-open .sheet{opacity:1;visibility:visible}
   <p class="privacy reveal">Seus dados são tratados conforme a LGPD e usados apenas para contato sobre seu projeto.</p>
 </section>
 
+</main>
+
 <!-- ===================== FOOTER ===================== -->
 <footer class="footer">
   <div class="footer-grid">
@@ -958,7 +971,7 @@ body.menu-open .sheet{opacity:1;visibility:visible}
     </div>
     <div>
       <h4>Legal</h4>
-      <ul><li><a href="#">Privacidade</a></li><li><a href="#">Termos de Uso</a></li><li><a href="#" onclick="avxOpenConsent();return false;">Cookies</a></li><li><a href="#">Certificações</a></li></ul>
+      <ul><li><a href="#">Privacidade</a></li><li><a href="#">Termos de Uso</a></li><li><a href="#" id="open-consent-link">Cookies</a></li><li><a href="#">Certificações</a></li></ul>
     </div>
   </div>
 
@@ -1142,7 +1155,7 @@ document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
 
 /* ---------- cookie consent (LGPD · Consent Mode v2) ---------- */
 function avxConsent(grant){
-  try{ localStorage.setItem('avxConsent', grant?'granted':'denied'); }catch(e){}
+  try{ localStorage.setItem('avxConsent', grant?'granted':'denied'); }catch(e){ console.warn('AVX: localStorage indisponível', e); }
   if(grant && typeof gtag==='function'){
     gtag('consent','update',{ad_storage:'granted',ad_user_data:'granted',ad_personalization:'granted',analytics_storage:'granted'});
   }
@@ -1151,7 +1164,10 @@ function avxConsent(grant){
 function avxOpenConsent(){ const b=document.getElementById('cookie-banner'); if(b) b.classList.add('show'); }
 (function(){
   function initCookie(){
-    let c=null; try{ c=localStorage.getItem('avxConsent'); }catch(e){}
+    document.getElementById('ck-decline')?.addEventListener('click',()=>avxConsent(false));
+  document.getElementById('ck-accept')?.addEventListener('click',()=>avxConsent(true));
+  document.getElementById('open-consent-link')?.addEventListener('click',e=>{e.preventDefault();avxOpenConsent();});
+  let c=null; try{ c=localStorage.getItem('avxConsent'); }catch(e){ console.warn('AVX: localStorage indisponível', e); }
     if(c!=='granted' && c!=='denied'){ const b=document.getElementById('cookie-banner'); if(b) setTimeout(()=>b.classList.add('show'),700); }
   }
   if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded',initCookie); }
@@ -1164,8 +1180,8 @@ function avxOpenConsent(){ const b=document.getElementById('cookie-banner'); if(
   <div class="cookie-in">
     <p>Usamos cookies para medir o tráfego e melhorar sua experiência. Os cookies de análise só são ativados com o seu consentimento. <a href="#">Saiba mais</a>.</p>
     <div class="cookie-btns">
-      <button class="ck-decline" onclick="avxConsent(false)">Recusar</button>
-      <button class="ck-accept" onclick="avxConsent(true)">Aceitar</button>
+      <button class="ck-decline" id="ck-decline">Recusar</button>
+      <button class="ck-accept" id="ck-accept">Aceitar</button>
     </div>
   </div>
 </div>
