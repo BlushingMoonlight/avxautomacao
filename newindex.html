@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AVX | Automação Residencial Bespoke de Alto Padrão</title>
+<meta name="description" content="Automação residencial de alto padrão com hardware próprio, inteligência que roda na sua casa e infraestrutura que continua funcionando quando a rua para.">
+<meta name="author" content="AVX">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="theme-color" content="#0b0b0c">
+<link rel="canonical" href="https://avxautomacao.com.br/">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="AVX">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:url" content="https://avxautomacao.com.br/">
+<meta property="og:title" content="AVX | Automação Residencial Bespoke">
+<meta property="og:description" content="Hardware próprio, inteligência local e infraestrutura que não para. A tecnologia desaparece — você apenas vive.">
+<meta property="og:image" content="https://avxautomacao.com.br/assets/og-avx.png">
+<meta property="og:image:alt" content="AVX — Automação Residencial Bespoke">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="AVX | Automação Residencial Bespoke">
+<meta name="twitter:description" content="Hardware próprio, inteligência local e infraestrutura que não para.">
+<meta name="twitter:image" content="https://avxautomacao.com.br/assets/og-avx.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="avx.css">
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-PQ6LZPBGHN"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('consent','default',{
+    ad_storage:'denied', ad_user_data:'denied', ad_personalization:'denied',
+    analytics_storage:'denied', wait_for_update:500
+  });
+  try{ if(localStorage.getItem('avxConsent')==='granted'){
+    gtag('consent','update',{ad_storage:'granted',ad_user_data:'granted',ad_personalization:'granted',analytics_storage:'granted'});
+  }}catch(e){}
+  gtag('js', new Date());
+  gtag('config', 'G-PQ6LZPBGHN');
+</script>
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"Organization",
+  "name":"AVX",
+  "legalName":"AVX",
+  "url":"https://avxautomacao.com.br/",
+  "logo":"https://avxautomacao.com.br/assets/og-avx.png",
+  "description":"Automação residencial de alto padrão com hardware proprietário, inteligência local e continuidade de infraestrutura.",
+  "email":"sac@avxautomacao.com.br",
+  "address":{"@type":"PostalAddress","addressLocality":"Florianópolis","addressRegion":"SC","addressCountry":"BR"}
+}
+</script>
+
+<style>
+/* ============================================================
+   index.html — estilos de página
+   Tokens e shell vêm de avx.css (Doc. Interno v8.1 · 18.3)
+   ============================================================ */
+
+body{padding-bottom:0}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 var(--shell)}
+.display{font-weight:300;letter-spacing:-.025em;line-height:1.02}
+.lead{color:var(--bone-dim);font-weight:300;line-height:1.65}
+
+/* reveal — um único mecanismo de entrada em toda a página */
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
+.reveal.in{opacity:1;transform:none}
+.reveal.d1{transition-delay:.09s}.reveal.d2{transition-delay:.18s}.reveal.d3{transition-delay:.27s}
+
+/* ————————————————— HERO ————————————————— */
+.hero{
+  position:relative;min-height:calc(100svh - var(--navh));
+  display:grid;grid-template-columns:1.15fr .85fr;align-items:center;gap:clamp(2rem,5vw,5rem);
+  max-width:var(--max);margin:0 auto;padding:clamp(3rem,9vh,7rem) var(--shell) clamp(3rem,8vh,6rem);
+}
+.hero-copy .eyebrow{display:flex;align-items:center;gap:.55rem}
+.hero h2{font-size:clamp(2.6rem,6.4vw,5.1rem);margin:1.4rem 0 0}
+.hero h2 .soft{color:var(--ash)}
+.hero .rule{margin:2rem 0 1.6rem}
+.hero .lead{font-size:clamp(1rem,1.6vw,1.16rem);max-width:46ch}
+.hero-actions{display:flex;flex-wrap:wrap;gap:.85rem;margin-top:2.4rem}
+.qlink{display:inline-flex;align-items:center;gap:.6rem;font-size:.74rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--bone-dim);border:1px solid transparent;padding:.92rem .4rem;transition:color .3s var(--ease)}
+.qlink:hover{color:var(--bone)}
+
+/* desenho técnico do keypad — substitui a fotografia */
+.hero-figure{position:relative;display:flex;justify-content:center;align-items:center}
+.hero-figure svg{width:100%;max-width:420px;height:auto;overflow:visible}
+.hero-figure figcaption{position:absolute;bottom:-2.2rem;left:0;right:0;text-align:center;font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;color:var(--ash)}
+.kp-glass{fill:var(--ink-soft);stroke:var(--line);stroke-width:1}
+.kp-bevel{fill:none;stroke:var(--line-soft);stroke-width:1}
+.kp-zone{fill:none;stroke:rgba(236,232,225,.22);stroke-width:1}
+.kp-led{fill:var(--avx)}
+.kp-dim{stroke:var(--ash);stroke-width:.75;opacity:.5}
+.kp-txt{fill:var(--ash);font-size:9px;letter-spacing:.14em;font-weight:500}
+
+/* ————————————————— CAMADAS ————————————————— */
+.layers{border-top:1px solid var(--line);padding:clamp(4rem,9vh,7rem) 0}
+.sec-head{display:grid;grid-template-columns:1fr auto;align-items:end;gap:2rem;margin-bottom:clamp(2.4rem,5vh,3.6rem)}
+.sec-head h2{font-size:clamp(1.9rem,3.6vw,2.9rem)}
+.sec-head .lead{max-width:40ch;font-size:.95rem}
+.layer-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line)}
+.layer{background:var(--ink);padding:clamp(1.8rem,3vw,2.6rem)}
+.layer-ix{font-size:.66rem;font-weight:600;letter-spacing:.26em;color:var(--ash)}
+.layer h3{font-weight:300;font-size:clamp(1.3rem,2.2vw,1.75rem);letter-spacing:-.02em;margin:1.1rem 0 .9rem}
+.layer p{color:var(--bone-dim);font-weight:300;font-size:.95rem;line-height:1.7}
+.layer .tag{display:inline-block;margin-top:1.4rem;font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ash);border-top:1px solid var(--line);padding-top:.9rem;width:100%}
+
+/* ————————————————— LINHAS (índice por categoria) ————————————————— */
+.lines{border-top:1px solid var(--line);padding:clamp(4rem,9vh,7rem) 0}
+.line-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line)}
+.line{
+  background:var(--ink);display:grid;grid-template-columns:3px 1fr;gap:1.4rem;
+  padding:clamp(1.5rem,2.6vw,2rem) clamp(1.4rem,2.4vw,2rem);
+  transition:background .4s var(--ease);
+}
+.line-bar{background:var(--c);opacity:.55;transition:opacity .4s var(--ease)}
+@media(hover:hover){
+  .line:hover{background:var(--ink-soft)}
+  .line:hover .line-bar{opacity:1}
+  .line:hover .line-go{color:var(--bone)}
+}
+.line-cat{font-size:.66rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--c)}
+.line h3{font-weight:300;font-size:clamp(1.35rem,2.4vw,1.9rem);letter-spacing:-.02em;line-height:1.15;margin:.75rem 0 .7rem}
+.line p{color:var(--bone-dim);font-weight:300;font-size:.93rem;line-height:1.65;max-width:44ch}
+.line-foot{display:flex;justify-content:space-between;align-items:center;gap:1rem;margin-top:1.4rem;padding-top:1rem;border-top:1px solid var(--line-soft)}
+.line-sku{font-size:.72rem;letter-spacing:.06em;color:var(--ash)}
+.line-go{font-size:.68rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--ash);transition:color .35s var(--ease)}
+
+/* ————————————————— CONTINUIDADE (Command) ————————————————— */
+.command{background:var(--panel);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:clamp(4.5rem,10vh,8rem) 0}
+.command-head{max-width:var(--max);margin:0 auto clamp(2.6rem,5vh,4rem);padding:0 var(--shell)}
+.command-head .eyebrow{display:flex;align-items:center;gap:.55rem;color:var(--cat-command)}
+.command-head h2{font-size:clamp(2.1rem,4.6vw,3.6rem);margin:1.3rem 0 0;max-width:19ch}
+.command-head .lead{margin-top:1.6rem;max-width:56ch;font-size:1.02rem}
+.cmd-grid{max-width:var(--max);margin:0 auto;padding:0 var(--shell);display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line)}
+.cmd{background:var(--panel);padding:1.6rem 1.4rem}
+.cmd h4{font-weight:500;font-size:.94rem;letter-spacing:.01em;margin-bottom:.6rem}
+.cmd h4::before{content:"";display:block;width:22px;height:2px;background:var(--cat-command);margin-bottom:.9rem}
+.cmd p{color:var(--ash);font-weight:300;font-size:.88rem;line-height:1.62}
+.cmd-note{max-width:var(--max);margin:clamp(2rem,4vh,3rem) auto 0;padding:0 var(--shell)}
+.cmd-note p{color:var(--ash);font-size:.82rem;font-weight:300;line-height:1.7;max-width:76ch;border-left:2px solid var(--cat-command);padding-left:1.1rem}
+
+/* ————————————————— MANIFESTO ————————————————— */
+.manifesto{padding:clamp(5rem,12vh,9rem) var(--shell);max-width:var(--max);margin:0 auto}
+.manifesto-body{display:flex;flex-direction:column;gap:.2rem}
+.manifesto-line{font-weight:300;font-size:clamp(1.7rem,4.4vw,3.2rem);letter-spacing:-.025em;line-height:1.14}
+.manifesto-line.dim{color:var(--ash)}
+.manifesto-line em{font-style:normal;color:var(--avx)}
+.manifesto-rule{width:58px;height:2px;background:var(--avx);margin:2.4rem 0}
+.manifesto-spec{font-weight:300;font-size:1rem;color:var(--bone-dim);line-height:1.75;max-width:62ch;margin-bottom:.5rem}
+.manifesto-spec b{font-weight:500;color:var(--bone)}
+
+/* ————————————————— SPECS ————————————————— */
+.specs{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.spec{background:var(--ink);padding:clamp(2rem,4vw,3rem) clamp(1.4rem,3vw,2.4rem)}
+.spec-top{font-size:.66rem;font-weight:600;letter-spacing:.26em;text-transform:uppercase;color:var(--ash)}
+.spec-val{display:flex;align-items:baseline;gap:.5rem;margin:1.4rem 0 1rem}
+.spec-val .num{font-weight:300;font-size:clamp(2.8rem,6vw,4.4rem);letter-spacing:-.03em;line-height:1}
+.spec-val .unit{font-weight:300;font-size:1rem;color:var(--bone-dim)}
+.spec-key{color:var(--ash);font-weight:300;font-size:.9rem;line-height:1.65;max-width:34ch}
+
+/* ————————————————— INTEGRAÇÕES ————————————————— */
+.eco{padding:clamp(4rem,9vh,7rem) 0}
+.eco-block{max-width:var(--max);margin:0 auto;padding:0 var(--shell)}
+.eco-block + .eco-block{margin-top:clamp(2.6rem,5vh,3.8rem);padding-top:clamp(2.6rem,5vh,3.8rem);border-top:1px solid var(--line)}
+.eco-lbl{display:flex;align-items:baseline;gap:.7rem;flex-wrap:wrap;margin-bottom:1.4rem}
+.eco-lbl .t{font-size:.7rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--bone)}
+.eco-lbl .s{font-size:.78rem;font-weight:300;color:var(--ash)}
+.eco-own{display:flex;flex-wrap:wrap;gap:.55rem}
+.eco-own span{font-size:.78rem;letter-spacing:.02em;color:var(--bone-dim);border:1px solid var(--line);border-radius:999px;padding:.44rem .95rem}
+.mq-wrap{overflow:hidden;mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+.marquee{display:flex;gap:2.6rem;width:max-content;animation:mq 58s linear infinite}
+.marquee span{font-size:.9rem;font-weight:300;color:var(--ash);white-space:nowrap}
+@keyframes mq{to{transform:translateX(-50%)}}
+@media(prefers-reduced-motion:reduce){.marquee{animation:none;flex-wrap:wrap;width:auto}.mq-wrap{mask-image:none;-webkit-mask-image:none}}
+
+/* ————————————————— PROJETOS ————————————————— */
+.projects{padding:clamp(4rem,9vh,7rem) 0;border-top:1px solid var(--line)}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line)}
+.pcard{background:var(--ink);padding:clamp(1.6rem,3vw,2.2rem);display:block;transition:background .4s var(--ease)}
+@media(hover:hover){.pcard:hover{background:var(--ink-soft)}}
+.pcard .dev{font-size:.66rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--ash)}
+.pcard .name{display:block;font-weight:300;font-size:clamp(1.3rem,2.2vw,1.7rem);letter-spacing:-.02em;margin:.75rem 0 1.5rem}
+.pspecs{display:flex;flex-direction:column;gap:.65rem;border-top:1px solid var(--line-soft);padding-top:1.2rem}
+.pspecs .r{display:grid;grid-template-columns:5.5rem 1fr;gap:1rem;align-items:baseline}
+.pspecs .k{font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ash)}
+.pspecs .v{font-size:.88rem;font-weight:300;color:var(--bone-dim)}
+
+/* ————————————————— CONTATO ————————————————— */
+.contact{padding:clamp(4rem,9vh,7rem) 0 clamp(3rem,6vh,5rem);border-top:1px solid var(--line)}
+.cform{max-width:var(--max);margin:0 auto;padding:0 var(--shell);display:grid;grid-template-columns:1fr 1fr;gap:1.2rem}
+.f-full{grid-column:1/-1}
+.cform label{display:block;font-size:.68rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--ash);margin-bottom:.6rem}
+.cform input,.cform select,.cform textarea{
+  width:100%;background:rgba(236,232,225,.04);border:1px solid var(--line);border-radius:12px;
+  color:var(--bone);font-family:inherit;font-size:.92rem;font-weight:300;padding:.85rem 1rem;
+  transition:border-color .3s var(--ease),background .3s var(--ease);
+}
+.cform textarea{resize:vertical;min-height:130px}
+.cform input::placeholder,.cform textarea::placeholder{color:var(--ash)}
+.cform input:focus,.cform select:focus,.cform textarea:focus{outline:0;border-color:var(--avx);background:rgba(236,232,225,.06)}
+.cform select{appearance:none;cursor:pointer;
+  background-image:url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%238d8980' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+  background-repeat:no-repeat;background-position:right 1rem center;background-size:1.1em;padding-right:2.6rem}
+.cform select option,.cform select optgroup{background:var(--ink-soft);color:var(--bone)}
+.f-msg{font-size:.86rem;font-weight:300;border-radius:12px;padding:.9rem 1.1rem;display:none}
+.f-msg.show{display:block}
+#form-ok{background:rgba(159,224,180,.1);border:1px solid rgba(159,224,180,.35);color:#9fe0b4}
+#form-err{background:rgba(240,168,159,.1);border:1px solid rgba(240,168,159,.35);color:#f0a89f}
+.f-legal{font-size:.78rem;font-weight:300;color:var(--ash);line-height:1.6}
+
+/* ————————————————— responsivo ————————————————— */
+@media(max-width:1080px){
+  .hero{grid-template-columns:1fr;min-height:auto}
+  .hero-figure{order:-1;max-width:320px;margin:0 auto 1rem}
+  .hero-figure figcaption{position:static;margin-top:1rem}
+  .layer-grid{grid-template-columns:1fr}
+  .cmd-grid{grid-template-columns:1fr 1fr}
+  .grid3{grid-template-columns:1fr}
+}
+@media(max-width:820px){
+  .line-grid{grid-template-columns:1fr}
+  .sec-head{grid-template-columns:1fr}
+  .specs{grid-template-columns:1fr}
+  .cform{grid-template-columns:1fr}
+}
+@media(max-width:560px){
+  .cmd-grid{grid-template-columns:1fr}
+  .pspecs .r{grid-template-columns:1fr;gap:.2rem}
+}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+<h1 class="sr-only">AVX — Automação residencial bespoke, inteligência local e continuidade de infraestrutura</h1>
+
+<!-- ===================== NAV ===================== -->
+<nav class="nav" id="nav">
+  <a href="#top" class="brand">AVX<span class="dot">.</span></a>
+  <div class="nav-links">
+    <a href="#linhas">Linhas</a>
+    <a href="#continuidade">Continuidade</a>
+    <a href="#projetos">Projetos</a>
+    <a href="catalogo.html">Catálogo</a>
+    <a href="#contato" class="nav-cta">Iniciar Projeto</a>
+  </div>
+  <button class="burger" id="burger" aria-label="Abrir menu" aria-expanded="false"><span></span><span></span><span></span></button>
+</nav>
+
+<!-- ===================== MENU MOBILE ===================== -->
+<div class="sheet" id="sheet">
+  <a href="#linhas"><span class="num">01</span>Linhas</a>
+  <a href="#continuidade"><span class="num">02</span>Continuidade</a>
+  <a href="#projetos"><span class="num">03</span>Projetos</a>
+  <a href="catalogo.html"><span class="num">04</span>Catálogo</a>
+  <a href="#contato"><span class="num">05</span>Iniciar Projeto</a>
+</div>
+
+<main id="conteudo">
+
+<!-- ===================== HERO ===================== -->
+<header class="hero" id="top">
+  <div class="hero-copy">
+    <p class="eyebrow">Engenharia Bespoke <span class="dot">·</span> Florianópolis</p>
+    <h2 class="display">Você não opera a casa.<br><span class="soft">A casa opera para você.</span></h2>
+    <hr class="rule">
+    <p class="lead">Hardware próprio de alto padrão, uma inteligência que aprende a rotina da sua casa sem enviar nada para fora dela, e uma infraestrutura que continua funcionando quando a rua para.</p>
+    <div class="hero-actions">
+      <a href="#contato" class="btn">Iniciar projeto</a>
+      <a href="#linhas" class="qlink">Ver as linhas</a>
+    </div>
+  </div>
+
+  <figure class="hero-figure" aria-hidden="true">
+    <svg viewBox="0 0 340 400" xmlns="http://www.w3.org/2000/svg" role="img">
+      <!-- painel de cristal -->
+      <rect class="kp-glass" x="60" y="40" width="220" height="300" rx="14"/>
+      <rect class="kp-bevel" x="70" y="50" width="200" height="280" rx="9"/>
+      <!-- zonas táteis -->
+      <rect class="kp-zone" x="92" y="76"  width="156" height="54" rx="7"/>
+      <rect class="kp-zone" x="92" y="146" width="156" height="54" rx="7"/>
+      <rect class="kp-zone" x="92" y="216" width="156" height="54" rx="7"/>
+      <rect class="kp-zone" x="92" y="286" width="156" height="26" rx="7"/>
+      <!-- indicador -->
+      <circle class="kp-led" cx="170" cy="299" r="3"/>
+      <!-- cotas: estilo desenho de engenharia -->
+      <line class="kp-dim" x1="60" y1="368" x2="280" y2="368"/>
+      <line class="kp-dim" x1="60" y1="362" x2="60" y2="374"/>
+      <line class="kp-dim" x1="280" y1="362" x2="280" y2="374"/>
+      <text class="kp-txt" x="146" y="386">86 MM</text>
+      <line class="kp-dim" x1="26" y1="40" x2="26" y2="340"/>
+      <line class="kp-dim" x1="20" y1="40" x2="32" y2="40"/>
+      <line class="kp-dim" x1="20" y1="340" x2="32" y2="340"/>
+      <text class="kp-txt" x="0" y="196" transform="rotate(-90 12 196)">86 MM</text>
+      <!-- chamada -->
+      <line class="kp-dim" x1="248" y1="103" x2="310" y2="103"/>
+      <circle class="kp-dim" cx="248" cy="103" r="2.5" fill="none"/>
+      <text class="kp-txt" x="292" y="96">ZONA 01</text>
+    </svg>
+    <figcaption>AVX-Touchpad 4 · vidro de cristal</figcaption>
+  </figure>
+</header>
+
+<!-- ===================== CAMADAS ===================== -->
+<section class="layers">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <p class="eyebrow reveal">O sistema</p>
+        <h2 class="display reveal d1">Três camadas, um sistema só.</h2>
+      </div>
+      <p class="lead reveal d2">A maioria dos integradores entrega a primeira. Nós entregamos as três, e elas conversam entre si.</p>
+    </div>
+    <div class="layer-grid">
+      <article class="layer reveal">
+        <span class="layer-ix">Camada 01</span>
+        <h3>Automação</h3>
+        <p>Iluminação, clima, cortinas, áudio e sensores operando como um sistema único, com hardware próprio em vidro de cristal e instalação sem quebrar paredes.</p>
+        <span class="tag">Linha AVX · 2.500+ dispositivos integráveis</span>
+      </article>
+      <article class="layer reveal d1">
+        <span class="layer-ix">Camada 02</span>
+        <h3>Inteligência</h3>
+        <p>Uma inteligência que mora no seu servidor, aprende a rotina de cada morador e entende o que você pede em português. Nada do que ela sabe sai da sua rede.</p>
+        <span class="tag">AVX-Butler · processamento local</span>
+      </article>
+      <article class="layer reveal d2">
+        <span class="layer-ix">Camada 03</span>
+        <h3>Continuidade</h3>
+        <p>Conectividade em três vias, energia ininterrupta no núcleo e supervisão contínua de tudo que mantém a casa viva. A queda de um link não interrompe nada.</p>
+        <span class="tag">AVX-Command · a casa que continua</span>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== LINHAS ===================== -->
+<section class="lines" id="linhas">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <p class="eyebrow reveal">Linhas</p>
+        <h2 class="display reveal d1">O que compõe um projeto.</h2>
+      </div>
+      <p class="lead reveal d2">Oito linhas, especificadas ambiente por ambiente. Monte a sua no catálogo e receba o resumo em PDF.</p>
+    </div>
+
+    <div class="line-grid">
+      <a class="line reveal" href="catalogo.html" style="--c:var(--cat-iluminacao)">
+        <span class="line-bar"></span>
+        <span>
+          <span class="line-cat">Iluminação</span>
+          <h3>A luz que segue o sol.</h3>
+          <p>Keypads de cristal e cenas circadianas que afinam sono, foco e humor — sem você tocar em nada.</p>
+          <span class="line-foot"><span class="line-sku">AVX-Touchpad · Dimmer · RGBW</span><span class="line-go">Ver no catálogo</span></span>
+        </span>
+      </a>
+
+      <a class="line reveal d1" href="catalogo.html" style="--c:var(--cat-climatizacao)">
+        <span class="line-bar"></span>
+        <span>
+          <span class="line-cat">Climatização</span>
+          <h3>O conforto que antecipa.</h3>
+          <p>Sensores de temperatura e umidade ajustam o ambiente antes do desconforto existir. A casa age em silêncio.</p>
+          <span class="line-foot"><span class="line-sku">AVX-H&amp;T · AVX-RM</span><span class="line-go">Ver no catálogo</span></span>
+        </span>
+      </a>
+
+      <a class="line reveal" href="catalogo.html" style="--c:var(--cat-security)">
+        <span class="line-bar"></span>
+        <span>
+          <span class="line-cat">AI Security</span>
+          <h3>Sente sua presença. Ignora seus pets.</h3>
+          <p>Radar que detecta respiração e micro-movimentos, sem câmera e sem invasão. Vazou gás ou água, o sistema fecha sozinho.</p>
+          <span class="line-foot"><span class="line-sku">AVX-MMWave · Flood · Gas · Smoke</span><span class="line-go">Ver no catálogo</span></span>
+        </span>
+      </a>
+
+      <a class="line reveal d1" href="catalogo.html" style="--c:var(--cat-multimidia)">
+        <span class="line-bar"></span>
+        <span>
+          <span class="line-cat">Multimídia</span>
+          <h3>Cinema e som em cada ambiente.</h3>
+          <p>Integração com Sonos, Bowers &amp; Wilkins, Bang &amp; Olufsen e os maiores nomes do áudio mundial.</p>
+          <span class="line-foot"><span class="line-sku">AVX-IP</span><span class="line-go">Ver no catálogo</span></span>
+        </span>
+      </a>
+
+      <a class="line reveal" href="catalogo.html" style="--c:var(--cat-cortinas)">
+        <span class="line-bar"></span>
+        <span>
+          <span class="line-cat">Cortinas &amp; Persianas</span>
+          <h3>Sombra e luz, no horário certo.</h3>
+          <p>Motorização silenciosa que protege seu mobiliário e sua privacidade conforme o movimento do sol.</p>
+          <span class="line-foot"><span class="line-sku">AVX-Curtain · AVX-2PM</span><span class="line-go">Ver no catálogo</span></span>
+        </span>
+      </a>
+
+      <a class="line reveal d1" href="catalogo.html" style="--c:var(--cat-eletrica)">
+        <span class="line-bar"></span>
+        <span>
+          <span class="line-cat">Elétrica &amp; Acabamentos</span>
+          <h3>Tomadas em cristal que medem energia.</h3>
+          <p>Acabamento de joalheria, monitoramento de consumo em tempo real e gestão de energia invisível.</p>
+          <span class="line-foot"><span class="line-sku">AVX-Socket · USB · Ethernet</span><span class="line-go">Ver no catálogo</span></span>
+        </span>
+      </a>
+
+      <a class="line reveal" href="catalogo.html" style="--c:var(--cat-central)">
+        <span class="line-bar"></span>
+        <span>
+          <span class="line-cat">Central de Controle</span>
+          <h3>Funciona com ou sem internet.</h3>
+          <p>Todo o processamento acontece no seu servidor privado, com a inteligência da casa rodando dentro de casa. Seus dados nunca saem da sua rede.</p>
+          <span class="line-foot"><span class="line-sku">AVX-Pro-Server · Butler · Continuity</span><span class="line-go">Ver no catálogo</span></span>
+        </span>
+      </a>
+
+      <a class="line reveal d1" href="#continuidade" style="--c:var(--cat-command)">
+        <span class="line-bar"></span>
+        <span>
+          <span class="line-cat">Comunicação &amp; Continuidade</span>
+          <h3>Quando a rua para, a casa continua.</h3>
+          <p>Conectividade redundante, energia ininterrupta e consciência do que acontece ao redor do imóvel — supervisionado numa interface só.</p>
+          <span class="line-foot"><span class="line-sku">AVX-Command</span><span class="line-go">Conhecer</span></span>
+        </span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CONTINUIDADE ===================== -->
+<section class="command" id="continuidade">
+  <div class="command-head">
+    <p class="eyebrow reveal">AVX-Command <span class="dot">·</span> Continuidade Operacional</p>
+    <h2 class="display reveal d1">Luxo é não ser interrompido.</h2>
+    <p class="lead reveal d2">A casa passa a ter a redundância de infraestrutura de um centro de operações: se um enlace cai, outro assume sem que ninguém perceba. Se a energia falta, o núcleo continua. E você sabe o estado de tudo, o tempo todo, numa interface só.</p>
+  </div>
+
+  <div class="cmd-grid">
+    <article class="cmd reveal"><h4>Conectividade em três vias</h4><p>Fibra, celular por antena externa direcionada e satélite. A troca é automática e transparente, e cada evento fica registrado.</p></article>
+    <article class="cmd reveal d1"><h4>Energia que não interrompe</h4><p>Servidor, rede e ativos críticos seguem operando na falta de luz, com a autonomia restante visível em tempo real.</p></article>
+    <article class="cmd reveal d2"><h4>Consciência do entorno</h4><p>Leitura própria do tráfego aéreo sobre o imóvel e detecção de drones nas proximidades, com resposta programada pelo sistema.</p></article>
+    <article class="cmd reveal d3"><h4>Meteorologia do seu terreno</h4><p>Estação própria no imóvel. A casa recolhe o toldo pela rajada que ela mediu, não pela previsão da cidade.</p></article>
+    <article class="cmd reveal"><h4>Rádio de contingência</h4><p>Monitoramento dos canais públicos de meteorologia, marinha e emergência quando os demais meios falham.</p></article>
+    <article class="cmd reveal d1"><h4>Supervisão contínua</h4><p>Enlaces, energia, servidores e sensores num painel único, com alerta antes de a falha chegar até você.</p></article>
+    <article class="cmd reveal d2"><h4>Câmeras como sensores</h4><p>O CFTV deixa de ser um aplicativo à parte e passa a disparar e receber ações do restante da casa.</p></article>
+    <article class="cmd reveal d3"><h4>Testado em falha real</h4><p>Nada é entregue sem que o enlace principal seja cortado de propósito e a autonomia seja medida na sua casa.</p></article>
+  </div>
+
+  <div class="cmd-note reveal">
+    <p>A AVX detecta e identifica — não interfere. Não fornecemos, especificamos ou instalamos qualquer equipamento de bloqueio ou neutralização. A detecção depende de a aeronave transmitir sua identificação, e o alcance é verificado em campo, projeto a projeto. A transmissão de rádio é opcional e condicionada à licença do proprietário.</p>
+  </div>
+</section>
+
+<!-- ===================== MANIFESTO ===================== -->
+<section class="manifesto">
+  <div class="manifesto-body reveal">
+    <span class="manifesto-line dim">Automação convencional conecta dispositivos.</span>
+    <span class="manifesto-line">A AVX constrói <em>sistemas.</em></span>
+    <div class="manifesto-rule"></div>
+    <span class="manifesto-spec"><b>Projeto exclusivo.</b> Cada sistema é desenhado para a planta baixa e o estilo de vida do usuário.</span>
+    <span class="manifesto-spec"><b>Design que desaparece.</b> A tecnologia some na arquitetura — só o resultado permanece visível.</span>
+    <span class="manifesto-spec"><b>Integração total.</b> Iluminação, clima, áudio, segurança, cortinas e infraestrutura operam como um sistema único.</span>
+    <div class="manifesto-rule"></div>
+    <span class="manifesto-line">Engenharia <em>Bespoke.</em></span>
+  </div>
+</section>
+
+<!-- ===================== NÚMEROS ===================== -->
+<section class="specs">
+  <div class="spec reveal">
+    <div class="spec-top">Entrega</div>
+    <div class="spec-val"><span class="num">7</span><span class="unit">dias úteis</span></div>
+    <div class="spec-key">Implantação média de um projeto de Linha AVX, sem quebrar paredes.</div>
+  </div>
+  <div class="spec reveal d1">
+    <div class="spec-top">Processamento</div>
+    <div class="spec-val"><span class="num">100</span><span class="unit">% local</span></div>
+    <div class="spec-key">Servidor privado. A casa funciona com ou sem internet, e seus dados ficam com você.</div>
+  </div>
+  <div class="spec reveal d2">
+    <div class="spec-top">Garantia</div>
+    <div class="spec-val"><span class="num">5</span><span class="unit">anos</span></div>
+    <div class="spec-key">Cobertura da Linha AVX e da integração, com revisões preventivas anuais inclusas.</div>
+  </div>
+</section>
+
+<!-- ===================== ECOSSISTEMA ===================== -->
+<section class="eco">
+  <div class="eco-block reveal">
+    <div class="eco-lbl"><span class="t">Linha AVX</span><span class="s">Hardware próprio — desenhado na Europa, especificado, instalado e garantido por nós.</span></div>
+    <div class="eco-own">
+      <span>Central de Controle</span><span>Iluminação</span><span>Elétrica &amp; Acabamentos</span><span>Climatização</span><span>Cortinas &amp; Persianas</span><span>Multimídia</span><span>AI Security</span><span>Comunicação &amp; Continuidade</span>
+    </div>
+  </div>
+
+  <div class="eco-block reveal">
+    <div class="eco-lbl"><span class="t">Integramos com</span><span class="s">2.500+ dispositivos de terceiros, unificados numa interface só.</span></div>
+    <div class="mq-wrap">
+      <div class="marquee" aria-label="Marcas integradas">
+        <span>Lutron</span><span>Crestron</span><span>Savant</span><span>Control4</span><span>KNX</span><span>Josh.ai</span><span>Sonos</span><span>Bang &amp; Olufsen</span><span>Bowers &amp; Wilkins</span><span>McIntosh</span><span>Harman Kardon</span><span>Bose</span><span>JBL</span><span>Denon</span><span>Marantz</span><span>Apple HomeKit</span><span>Google Home</span><span>Alexa</span><span>Philips Hue</span><span>WEG</span><span>Somfy</span><span>Hunter Douglas</span><span>Intelbras</span><span>Yale</span><span>Ring</span><span>Arlo</span><span>Ubiquiti</span><span>Starlink</span><span>Samsung SmartThings</span><span>LG ThinQ</span>
+        <span aria-hidden="true">Lutron</span><span aria-hidden="true">Crestron</span><span aria-hidden="true">Savant</span><span aria-hidden="true">Control4</span><span aria-hidden="true">KNX</span><span aria-hidden="true">Josh.ai</span><span aria-hidden="true">Sonos</span><span aria-hidden="true">Bang &amp; Olufsen</span><span aria-hidden="true">Bowers &amp; Wilkins</span><span aria-hidden="true">McIntosh</span><span aria-hidden="true">Harman Kardon</span><span aria-hidden="true">Bose</span><span aria-hidden="true">JBL</span><span aria-hidden="true">Denon</span><span aria-hidden="true">Marantz</span><span aria-hidden="true">Apple HomeKit</span><span aria-hidden="true">Google Home</span><span aria-hidden="true">Alexa</span><span aria-hidden="true">Philips Hue</span><span aria-hidden="true">WEG</span><span aria-hidden="true">Somfy</span><span aria-hidden="true">Hunter Douglas</span><span aria-hidden="true">Intelbras</span><span aria-hidden="true">Yale</span><span aria-hidden="true">Ring</span><span aria-hidden="true">Arlo</span><span aria-hidden="true">Ubiquiti</span><span aria-hidden="true">Starlink</span><span aria-hidden="true">Samsung SmartThings</span><span aria-hidden="true">LG ThinQ</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== PROJETOS ===================== -->
+<section class="projects" id="projetos">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <p class="eyebrow reveal">Portfólio</p>
+        <h2 class="display reveal d1">Residências entregues.</h2>
+      </div>
+      <p class="lead reveal d2">Uma seleção dos empreendimentos em que a AVX assinou o sistema.</p>
+    </div>
+    <div class="grid3">
+      <a class="pcard reveal" href="#contato">
+        <span class="dev">Construtora Paschoalotto</span>
+        <span class="name">Yachthouse by Pininfarina</span>
+        <div class="pspecs">
+          <div class="r"><span class="k">Local</span><span class="v">Balneário Camboriú · SC</span></div>
+          <div class="r"><span class="k">Tipologia</span><span class="v">Apartamento</span></div>
+          <div class="r"><span class="k">Sistema</span><span class="v">Iluminação · Clima · Multimídia · Cortinas · Segurança</span></div>
+        </div>
+      </a>
+      <a class="pcard reveal d1" href="#contato">
+        <span class="dev">Construtora FG</span>
+        <span class="name">FG Sky Tower</span>
+        <div class="pspecs">
+          <div class="r"><span class="k">Local</span><span class="v">Balneário Camboriú · SC</span></div>
+          <div class="r"><span class="k">Tipologia</span><span class="v">Cobertura duplex</span></div>
+          <div class="r"><span class="k">Sistema</span><span class="v">Iluminação · Clima · Multimídia · Cortinas · Segurança</span></div>
+        </div>
+      </a>
+      <a class="pcard reveal d2" href="#contato">
+        <span class="dev">Construtora N1</span>
+        <span class="name">The One Palace</span>
+        <div class="pspecs">
+          <div class="r"><span class="k">Local</span><span class="v">Itapema · SC</span></div>
+          <div class="r"><span class="k">Tipologia</span><span class="v">Cobertura</span></div>
+          <div class="r"><span class="k">Sistema</span><span class="v">Iluminação · Clima · Multimídia · Cortinas · Segurança</span></div>
+        </div>
+      </a>
+      <a class="pcard reveal" href="#contato">
+        <span class="dev">Construtora FG</span>
+        <span class="name">FG Seas Palace</span>
+        <div class="pspecs">
+          <div class="r"><span class="k">Local</span><span class="v">Balneário Camboriú · SC</span></div>
+          <div class="r"><span class="k">Tipologia</span><span class="v">Apartamento</span></div>
+          <div class="r"><span class="k">Sistema</span><span class="v">Iluminação · Clima · Multimídia · Cortinas · Segurança</span></div>
+        </div>
+      </a>
+      <a class="pcard reveal d1" href="#contato">
+        <span class="dev">Construtora WF</span>
+        <span class="name">Albamar Residence</span>
+        <div class="pspecs">
+          <div class="r"><span class="k">Local</span><span class="v">Itapema · SC</span></div>
+          <div class="r"><span class="k">Tipologia</span><span class="v">Apartamento</span></div>
+          <div class="r"><span class="k">Sistema</span><span class="v">Iluminação · Clima · Multimídia · Cortinas · Segurança</span></div>
+        </div>
+      </a>
+      <a class="pcard reveal d2" href="#contato">
+        <span class="dev">Construtora Laguna</span>
+        <span class="name">Trevi</span>
+        <div class="pspecs">
+          <div class="r"><span class="k">Local</span><span class="v">Batel · Curitiba · PR</span></div>
+          <div class="r"><span class="k">Tipologia</span><span class="v">Apartamento</span></div>
+          <div class="r"><span class="k">Sistema</span><span class="v">Iluminação · Clima · Multimídia · Cortinas · Segurança</span></div>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CONTATO ===================== -->
+<section class="contact" id="contato">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <p class="eyebrow reveal">Sem compromisso</p>
+        <h2 class="display reveal d1">Inicie seu projeto.</h2>
+      </div>
+      <p class="lead reveal d2">Conte um pouco sobre sua casa e seu projeto. Retornamos para agendar a consultoria.</p>
+    </div>
+  </div>
+
+  <form class="cform reveal" id="contact-form" action="https://formspree.io/f/xdajpylk" method="POST" novalidate>
+    <div>
+      <label for="cf-name">Nome</label>
+      <input type="text" id="cf-name" name="name" required autocomplete="name">
+    </div>
+    <div>
+      <label for="cf-email">E-mail</label>
+      <input type="email" id="cf-email" name="email" required autocomplete="email">
+    </div>
+    <div>
+      <label for="cf-phone">Telefone / WhatsApp <span style="text-transform:none;letter-spacing:0">(opcional)</span></label>
+      <input type="tel" id="cf-phone" name="phone" autocomplete="tel">
+    </div>
+    <div>
+      <label for="cf-subject">Tipo de projeto</label>
+      <select id="cf-subject" name="subject" required>
+        <option value="" disabled selected>Selecione</option>
+        <optgroup label="Residencial">
+          <option value="projeto-residencial">Projeto Residencial</option>
+          <option value="continuidade">Continuidade &amp; Comunicação (AVX-Command)</option>
+          <option value="viabilidade">Estudo de Viabilidade (a partir da planta)</option>
+          <option value="incorporadora">Incorporadora / Multiunidades</option>
+          <option value="parceria">Parceria Arquiteto / Designer</option>
+        </optgroup>
+        <optgroup label="Comercial &amp; Corporativo">
+          <option value="varejo">Loja / Varejo</option>
+          <option value="escritorio">Escritório / Corporativo</option>
+          <option value="hospitalidade">Hotel / Restaurante / Hospitalidade</option>
+        </optgroup>
+        <optgroup label="Industrial &amp; Logística">
+          <option value="industria">Indústria / Fábrica</option>
+          <option value="galpao">Galpão / Centro de Distribuição</option>
+          <option value="silo">Silo / Almoxarifado</option>
+        </optgroup>
+        <option value="outro">Outro</option>
+      </select>
+    </div>
+    <div>
+      <label for="cf-state">Estado</label>
+      <select id="cf-state" name="state" required>
+        <option value="" disabled selected>Selecione o estado</option>
+      </select>
+    </div>
+    <div>
+      <label for="cf-city">Cidade</label>
+      <select id="cf-city" name="city" disabled>
+        <option value="" disabled selected>Selecione o estado primeiro</option>
+      </select>
+    </div>
+    <div class="f-full">
+      <label for="cf-message">Mensagem</label>
+      <textarea id="cf-message" name="message" placeholder="Conte sobre o imóvel, a metragem, o prazo da obra e o que você espera do sistema."></textarea>
+    </div>
+    <div class="f-full f-msg" id="form-ok" role="status">Mensagem enviada. Entraremos em contato em breve.</div>
+    <div class="f-full f-msg" id="form-err" role="alert">Não foi possível enviar agora. Tente novamente em instantes ou escreva para sac@avxautomacao.com.br.</div>
+    <div class="f-full">
+      <button type="submit" class="btn" id="form-submit"><span id="form-submit-text">Enviar mensagem</span></button>
+    </div>
+    <p class="f-full f-legal">Seus dados são tratados conforme a LGPD e usados apenas para contato sobre seu projeto.</p>
+  </form>
+</section>
+
+</main>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="footer">
+  <div class="footer-grid">
+    <div>
+      <span class="brand">AVX<span class="dot">.</span></span>
+      <span class="brand-tagline">A casa que age.</span>
+      <p>Tecnologia com identidade de luxo. Cor-assinatura <span style="color:var(--avx)">Vermelho AVX</span> (#DA291C), White Glove Service e suporte onde os outros não chegam. Sediada em Florianópolis (SC) e presente na maioria das cidades do Sul do Brasil.</p>
+    </div>
+    <div>
+      <h4>Sistema</h4>
+      <ul>
+        <li><a href="#linhas">Linhas</a></li>
+        <li><a href="#continuidade">Continuidade</a></li>
+        <li><a href="catalogo.html">Catálogo</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Empresa</h4>
+      <ul>
+        <li><a href="#projetos">Projetos</a></li>
+        <li><a href="#contato">Contato</a></li>
+        <li><a href="mailto:sac@avxautomacao.com.br">sac@avxautomacao.com.br</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Privacidade</h4>
+      <ul>
+        <li><a href="#" id="open-consent-link">Preferências de cookies</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="compliance">
+    <div class="compliance-row">
+      <span class="compliance-lbl">Normas &amp; Conformidade</span>
+      <span>Padrão AVX</span><span>NBR-5410</span><span>NR-10</span><span>NR-12</span><span>LGPD</span><span>ANATEL</span>
+    </div>
+    <div class="compliance-row soft">
+      <span class="compliance-lbl">Práticas alinhadas a</span>
+      <span>ISO 9001</span><span>ISO/IEC 27001</span>
+    </div>
+  </div>
+
+  <div class="footer-base">
+    <span>© 2026 AVX</span>
+    <span>Engenharia Bespoke</span>
+  </div>
+</footer>
+
+<!-- ===================== COOKIES (LGPD) ===================== -->
+<div class="cookie" id="cookie-banner" role="dialog" aria-label="Aviso de cookies" aria-live="polite">
+  <div class="cookie-in">
+    <p>Usamos cookies para medir o tráfego e melhorar sua experiência. Os cookies de análise só são ativados com o seu consentimento.</p>
+    <div class="cookie-btns">
+      <button class="ck-decline" id="ck-decline">Recusar</button>
+      <button class="ck-accept" id="ck-accept">Aceitar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ---------- menu mobile ---------- */
+(function(){
+  const burger=document.getElementById('burger'), sheet=document.getElementById('sheet');
+  burger.addEventListener('click',()=>{
+    const open=document.body.classList.toggle('menu-open');
+    burger.setAttribute('aria-expanded',open?'true':'false');
+  });
+  sheet.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{
+    document.body.classList.remove('menu-open');
+    burger.setAttribute('aria-expanded','false');
+  }));
+  addEventListener('keydown',e=>{
+    if(e.key==='Escape'&&document.body.classList.contains('menu-open')){
+      document.body.classList.remove('menu-open');
+      burger.setAttribute('aria-expanded','false');
+    }
+  });
+})();
+
+/* ---------- reveal ---------- */
+(function(){
+  const els=[...document.querySelectorAll('.reveal')];
+  if(!('IntersectionObserver' in window)||matchMedia('(prefers-reduced-motion:reduce)').matches){
+    els.forEach(e=>e.classList.add('in')); return;
+  }
+  const io=new IntersectionObserver((entries,obs)=>{
+    entries.forEach(en=>{ if(en.isIntersecting){ en.target.classList.add('in'); obs.unobserve(en.target); } });
+  },{rootMargin:'0px 0px -8% 0px',threshold:.08});
+  els.forEach(e=>io.observe(e));
+})();
+
+/* ---------- formulário (Formspree + GA4) ---------- */
+(function(){
+  const form=document.getElementById('contact-form');
+  if(!form) return;
+  const btn=document.getElementById('form-submit');
+  const btnText=document.getElementById('form-submit-text');
+  const ok=document.getElementById('form-ok');
+  const err=document.getElementById('form-err');
+
+  form.addEventListener('submit',async e=>{
+    e.preventDefault();
+    ok.classList.remove('show'); err.classList.remove('show');
+    if(!form.checkValidity()){ form.reportValidity(); return; }
+    btn.disabled=true; btnText.textContent='Enviando...';
+    if(window.gtag) gtag('event','form_submit_contact');
+    try{
+      const res=await fetch(form.action,{method:'POST',body:new FormData(form),headers:{'Accept':'application/json'}});
+      if(res.ok){
+        ok.classList.add('show'); form.reset();
+        if(window.__avxResetCity) window.__avxResetCity();
+        if(window.gtag) gtag('event','form_success_contact');
+      }else{ err.classList.add('show'); }
+    }catch(_){ err.classList.add('show'); }
+    finally{ btn.disabled=false; btnText.textContent='Enviar mensagem'; }
+  });
+})();
+
+/* ---------- estado → cidade (IBGE, com degradação para texto livre) ---------- */
+(function(){
+  const stateSel=document.getElementById('cf-state');
+  let citySel=document.getElementById('cf-city');
+  if(!stateSel||!citySel) return;
+  let fallback=false;
+  const UFS=[['AC','Acre'],['AL','Alagoas'],['AP','Amapá'],['AM','Amazonas'],['BA','Bahia'],['CE','Ceará'],['DF','Distrito Federal'],['ES','Espírito Santo'],['GO','Goiás'],['MA','Maranhão'],['MT','Mato Grosso'],['MS','Mato Grosso do Sul'],['MG','Minas Gerais'],['PA','Pará'],['PB','Paraíba'],['PR','Paraná'],['PE','Pernambuco'],['PI','Piauí'],['RJ','Rio de Janeiro'],['RN','Rio Grande do Norte'],['RS','Rio Grande do Sul'],['RO','Rondônia'],['RR','Roraima'],['SC','Santa Catarina'],['SP','São Paulo'],['SE','Sergipe'],['TO','Tocantins']];
+  UFS.forEach(([uf,nome])=>{ const o=document.createElement('option'); o.value=uf; o.textContent=nome; stateSel.appendChild(o); });
+
+  function setCity(msg,disabled){
+    citySel.innerHTML='';
+    const o=document.createElement('option'); o.value=''; o.disabled=true; o.selected=true; o.textContent=msg;
+    citySel.appendChild(o); citySel.disabled=!!disabled;
+  }
+  /* Doc. Interno v8.1 · 18.4 — nenhuma dependência externa pode impedir a conversão */
+  function toText(){
+    if(fallback) return; fallback=true;
+    const txt=document.createElement('input');
+    txt.type='text'; txt.id='cf-city'; txt.name='city'; txt.placeholder='Digite sua cidade';
+    citySel.replaceWith(txt); citySel=txt;
+  }
+  async function loadCities(uf){
+    if(fallback) return;
+    setCity('Carregando cidades...',true);
+    const ctrl=new AbortController();
+    const to=setTimeout(()=>ctrl.abort(),6000);
+    try{
+      const res=await fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${uf}/municipios`,{signal:ctrl.signal});
+      if(!res.ok) throw 0;
+      const data=await res.json();
+      data.sort((a,b)=>a.nome.localeCompare(b.nome,'pt'));
+      citySel.innerHTML='';
+      const ph=document.createElement('option'); ph.value=''; ph.disabled=true; ph.selected=true; ph.textContent='Selecione a cidade';
+      citySel.appendChild(ph);
+      data.forEach(m=>{ const o=document.createElement('option'); o.value=m.nome; o.textContent=m.nome; citySel.appendChild(o); });
+      citySel.disabled=false;
+    }catch(_){ toText(); }
+    finally{ clearTimeout(to); }
+  }
+  stateSel.addEventListener('change',()=>{ if(stateSel.value) loadCities(stateSel.value); });
+  window.__avxResetCity=()=>{ if(!fallback) setCity('Selecione o estado primeiro',true); };
+})();
+
+/* ---------- pré-preenchimento vindo do catálogo ---------- */
+(function(){
+  try{
+    const summary=sessionStorage.getItem('avxProjectSummary');
+    if(summary){
+      const msg=document.getElementById('cf-message');
+      const subj=document.getElementById('cf-subject');
+      if(msg) msg.value=summary;
+      if(subj) subj.value='projeto-residencial';
+      sessionStorage.removeItem('avxProjectSummary');
+      const c=document.getElementById('contato');
+      if(c && location.hash==='#contato') setTimeout(()=>c.scrollIntoView({behavior:'smooth'}),200);
+    }
+  }catch(e){}
+})();
+
+/* ---------- consentimento (LGPD) ---------- */
+(function(){
+  const banner=document.getElementById('cookie-banner');
+  const accept=document.getElementById('ck-accept');
+  const decline=document.getElementById('ck-decline');
+  const link=document.getElementById('open-consent-link');
+  const KEY='avxConsent';
+  function show(){ banner.classList.add('show'); }
+  function hide(){ banner.classList.remove('show'); }
+  function set(v){
+    try{ localStorage.setItem(KEY,v); }catch(e){}
+    if(window.gtag && v==='granted'){
+      gtag('consent','update',{ad_storage:'granted',ad_user_data:'granted',ad_personalization:'granted',analytics_storage:'granted'});
+    }
+    hide();
+  }
+  let saved=null; try{ saved=localStorage.getItem(KEY); }catch(e){}
+  if(!saved) setTimeout(show,900);
+  accept.addEventListener('click',()=>set('granted'));
+  decline.addEventListener('click',()=>set('denied'));
+  link&&link.addEventListener('click',e=>{ e.preventDefault(); show(); });
+})();
+</script>
+</body>
+</html>
