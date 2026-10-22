@@ -81,7 +81,7 @@
 
       <section id="formulario" aria-labelledby="t3">
         <h2 id="t3">3. O formulário de contato</h2>
-        <p>Quando você toca em enviar, o formulário vai para uma automação (n8n) operada pela <strong>RXSync</strong>, empresa que presta esse serviço à AVX. A automação confere os campos e <strong>só repassa o aviso</strong> com os seus dados para a equipe da AVX no <strong>Telegram</strong>. Ela não guarda o contato em banco de dados, não usa os dados para outra finalidade e não os mistura com os dados de outros clientes da RXSync.</p>
+        <p>Quando você toca em enviar, o formulário vai para uma automação (n8n) operada pela <strong>RXSync</strong>, empresa que presta esse serviço à AVX. A automação confere os campos e <strong>só repassa o aviso</strong> com os seus dados para a equipe da AVX no <strong>Telegram</strong>. Ela não grava o contato em nenhuma tabela, não usa os dados para outra finalidade e não os mistura com os dados de outros clientes da RXSync. Como toda automação desse tipo, o n8n guarda um histórico técnico de cada envio (com os dados), usado só para corrigir falhas, pelo prazo da seção 7.</p>
         <p>O aviso fica no chat fechado do Telegram onde a equipe recebe os contatos, para que possamos responder e acompanhar o contato, pelo prazo da seção 7.</p>
         <p>A lista de cidades do formulário é buscada, no seu navegador, no serviço público de localidades do IBGE. Vai só a sigla do estado escolhido; nenhum dado seu é enviado ao IBGE.</p>
         <p>O formulário tem um campo escondido para barrar robôs. Se ele vier preenchido, o envio é descartado sem aviso.</p>
@@ -103,7 +103,7 @@
             <thead><tr><th>Quem</th><th>Para quê</th><th>Dados</th><th>Onde</th></tr></thead>
             <tbody>
               <tr><td>GitHub, Inc. (GitHub Pages)</td><td>Hospedagem das páginas do site</td><td>Endereço IP e dados técnicos do acesso</td><td>Exterior</td></tr>
-              <tr><td>RXSync</td><td>Recebe o formulário na automação (n8n) e repassa o aviso à equipe da AVX, sem guardar em banco de dados (seção 3)</td><td>Os dados do formulário</td><td>Brasil (servidor contratado pela RXSync junto à Hostinger)</td></tr>
+              <tr><td>RXSync</td><td>Recebe o formulário na automação (n8n) e repassa o aviso à equipe da AVX, sem gravar o contato em nenhuma tabela (seção 3)</td><td>Os dados do formulário</td><td>Brasil (servidor contratado pela RXSync junto à Hostinger)</td></tr>
               <tr><td>Telegram</td><td>Aviso interno à equipe da AVX sobre cada contato recebido</td><td>Os dados do formulário</td><td>Exterior</td></tr>
               <tr><td>Google LLC (Google Analytics)</td><td>Medição de audiência, só se você aceitar os cookies</td><td>Dados de navegação (seção 2)</td><td>Exterior</td></tr>
               <tr><td>Unsplash</td><td>Fotos ilustrativas da página inicial</td><td>Endereço IP e dados técnicos do acesso às fotos</td><td>Exterior</td></tr>
@@ -128,7 +128,7 @@
             <thead><tr><th>Dado</th><th>Prazo</th></tr></thead>
             <tbody>
               <tr><td>Aviso do formulário no Telegram</td><td><span class="confirmar">a confirmar: prazo para apagar os avisos</span>. Se você contratar um projeto, os dados passam a seguir o contrato.</td></tr>
-              <tr><td>Registro técnico da automação (n8n)</td><td>O envio que dá certo não fica registrado. O envio que falha pode ficar registrado, com os dados, por <span class="confirmar">a confirmar: prazo</span>, só para corrigir a falha.</td></tr>
+              <tr><td>Registro técnico da automação (n8n)</td><td>Por <span class="confirmar">a confirmar: prazo do histórico de execuções do n8n</span>, só para corrigir falhas. Depois, o histórico é apagado automaticamente.</td></tr>
               <tr><td>E-mails trocados com o sac@avxautomacao.com.br</td><td><span class="confirmar">a confirmar: prazo</span></td></tr>
               <tr><td>Google Analytics</td><td>Até <span class="confirmar">a confirmar: 2 ou 14 meses</span>, conforme a configuração de retenção da AVX no Google Analytics. Os relatórios agregados, sem identificar ninguém, podem ser mantidos depois disso.</td></tr>
               <tr><td>Escolhas do catálogo e sua escolha no aviso de cookies</td><td>No seu navegador, até você apagar os dados do site ou recomeçar o projeto.</td></tr>
@@ -158,7 +158,7 @@
 
       <section id="seguranca" aria-labelledby="t9">
         <h2 id="t9">9. Segurança</h2>
-        <p>O site é servido só por conexão segura (HTTPS). A automação do formulário recusa campos fora do formato, corta textos longos demais e não guarda os dados em banco. Os avisos chegam a um chat do Telegram fechado, usado só para responder aos contatos.</p>
+        <p>O site é servido só por conexão segura (HTTPS). A automação do formulário recusa campos fora do formato, corta textos longos demais e não grava o contato em nenhuma tabela. Os avisos chegam a um chat do Telegram fechado, usado só para responder aos contatos.</p>
         <p>Nenhum sistema é totalmente imune a falhas. Se acontecer um incidente de segurança que possa trazer risco ou dano relevante a você, avisaremos você e a Autoridade Nacional de Proteção de Dados (ANPD), como pede a LGPD.</p>
       </section>
 
