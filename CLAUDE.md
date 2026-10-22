@@ -20,5 +20,6 @@
 - O formulário de contato fala com o n8n (endereço e cabeçalho conferidos pelo `scripts/verificar_site.mjs`). Mudar o formulário exige um PR no repositório do n8n também, com a ordem do Merge.
 - `app.html` (demonstração do App AVX): tudo simulado na página, sem servidor, sem Google Analytics e sem nada guardado no navegador; nenhum assistente de voz nem serviço de música de terceiros. Os tokens e os cartões ficam organizados no começo do arquivo para virar o painel do cliente. Mexeu nela: `node scripts/app_telas.mjs` (nenhum texto cortado em 12 tamanhos de tela, toque e arrasto, fotos para o PR).
 - Ao mudar uma página, atualize o `lastmod` dela no `sitemap.xml`. Página nova entra no sitemap.
+- Ao mudar `privacidade.html` ou `termos.html`, atualize a versão e a data no topo do próprio documento (e o `lastmod`). Tudo o que o site coleta ou para quem manda dados (serviço novo, campo novo no formulário, cookie) entra na Política no mesmo PR. Ponto em aberto fica marcado com `class="confirmar"` e o `verificar_site.mjs` avisa enquanto existir.
 - PR: use o modelo `.github/pull_request_template.md`.
 - Antes de abrir o PR: `node scripts/verificar_site.mjs`.

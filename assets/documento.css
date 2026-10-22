@@ -1,0 +1,84 @@
+/* Documentos legais da AVX (privacidade.html e termos.html).
+   Mesmo padrão de marca do site: paleta, Inter do próprio site, escala de letter-spacing. */
+:root{
+  --ink:#0b0b0c; --ink-soft:#141416; --panel:#111113;
+  --bone:#ece8e1; --bone-dim:#b6b2aa; --ash:#8d8980;
+  --avx:#da291c; --avx-hover:#c1241a;
+  --line:rgba(236,232,225,.12); --line-soft:rgba(236,232,225,.07);
+  --ease:cubic-bezier(.4,0,0,1);
+  --shell:clamp(1.25rem,5vw,6.5rem); --max:1320px; --navh:64px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+::selection{background:var(--avx);color:#fff}
+body{font-family:'Inter','Helvetica Neue',Arial,sans-serif;background:var(--ink);color:var(--bone);line-height:1.6;font-weight:400;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit}
+.skip-link{position:absolute;left:-9999px;top:0;z-index:200;background:var(--avx);color:#fff;padding:.7rem 1.2rem;font-size:.85rem}
+.skip-link:focus{left:0}
+
+/* Barra do topo */
+.nav{position:sticky;top:0;z-index:50;height:var(--navh);padding:0 var(--shell);display:flex;align-items:center;justify-content:space-between;background:rgba(11,11,12,.86);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.brand{font-weight:600;font-size:1.5rem;letter-spacing:.02em;text-decoration:none;display:inline-flex;align-items:center;min-height:44px}
+.brand .dot{color:var(--avx)}
+.voltar{display:inline-flex;align-items:center;min-height:44px;font-size:.72rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--bone-dim);text-decoration:none}
+.voltar:hover{color:var(--bone)}
+
+/* Cabeçalho do documento */
+.doc-topo{max-width:var(--max);margin:0 auto;padding:clamp(3rem,9vh,6rem) var(--shell) 2rem}
+.eyebrow{font-size:11px;font-weight:600;letter-spacing:.26em;text-transform:uppercase;color:var(--ash)}
+.eyebrow .dot{color:var(--avx)}
+.regua{width:58px;height:2px;background:var(--avx);margin:1.4rem 0}
+h1{font-weight:400;font-size:clamp(2.2rem,5vw,3.6rem);line-height:1.1;letter-spacing:-.025em}
+.versao{margin-top:1rem;color:var(--ash);font-size:.9rem;letter-spacing:.02em}
+
+/* Corpo */
+.doc-grade{max-width:var(--max);margin:0 auto;padding:0 var(--shell) clamp(4rem,10vh,7rem);display:grid;grid-template-columns:minmax(0,1fr);gap:2.5rem}
+@media (min-width:1000px){.doc-grade{grid-template-columns:260px minmax(0,1fr);gap:4rem}}
+.sumario{align-self:start;border-top:1px solid var(--line);padding-top:1.2rem}
+@media (min-width:1000px){.sumario{position:sticky;top:calc(var(--navh) + 1.5rem)}}
+.sumario h2{font-size:.7rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--bone);margin-bottom:.6rem}
+.sumario ol{list-style:none}
+.sumario a{display:flex;align-items:center;min-height:44px;padding:.3rem 0;color:var(--ash);font-size:.88rem;text-decoration:none;line-height:1.4}
+.sumario a:hover{color:var(--bone)}
+.doc{max-width:72ch}
+.doc section{scroll-margin-top:calc(var(--navh) + 1rem)}
+.doc h2{font-weight:500;font-size:1.3rem;letter-spacing:-.025em;line-height:1.25;margin:3rem 0 1rem;padding-top:1.4rem;border-top:1px solid var(--line)}
+.doc section:first-of-type h2{margin-top:0}
+.doc h3{font-weight:600;font-size:1rem;margin:1.6rem 0 .5rem;color:var(--bone)}
+.doc p,.doc li{color:var(--bone-dim);font-weight:300;font-size:1rem;line-height:1.75}
+.doc p{margin:.8rem 0}
+.doc ul{margin:.8rem 0 .8rem 1.2rem}
+.doc li{margin:.4rem 0}
+.doc li::marker{color:var(--avx)}
+.doc strong{color:var(--bone);font-weight:500}
+.doc a{color:var(--bone);text-decoration:underline;text-decoration-color:var(--avx);text-underline-offset:3px}
+.doc a:hover{color:#fff}
+.resumo{border-left:2px solid var(--avx);background:var(--ink-soft);padding:1.1rem 1.3rem;margin:0 0 2rem}
+.resumo p{margin:0;color:var(--bone)}
+.tabela{overflow-x:auto;margin:1rem 0;border:1px solid var(--line)}
+.doc table{width:100%;min-width:34rem;border-collapse:collapse;font-size:.9rem}
+.doc th{background:var(--panel);text-align:left;font-weight:600;color:var(--bone);font-size:.7rem;letter-spacing:.2em;text-transform:uppercase}
+.doc th,.doc td{border-bottom:1px solid var(--line-soft);padding:.75rem .9rem;vertical-align:top;color:var(--bone-dim);font-weight:300;line-height:1.6}
+.doc td:first-child{color:var(--bone);font-weight:400}
+
+/* Ponto que o Jean ainda precisa preencher antes de publicar */
+.confirmar{background:rgba(218,41,28,.16);border:1px dashed var(--avx);color:var(--bone);padding:0 .3em;font-weight:500}
+
+/* Escolha dos cookies (seção de cookies da política) */
+.escolha{display:flex;flex-wrap:wrap;gap:.8rem;margin:1.2rem 0}
+.botao{font:inherit;font-size:.72rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;min-height:44px;padding:0 1.3rem;border:1px solid var(--line);background:transparent;color:var(--bone);cursor:pointer;transition:background .3s var(--ease),border-color .3s var(--ease)}
+.botao:hover{border-color:var(--bone)}
+.botao.primario{background:var(--avx);border-color:var(--avx);color:#fff}
+.botao.primario:hover{background:var(--avx-hover);border-color:var(--avx-hover)}
+.escolha-estado{color:var(--ash);font-size:.9rem}
+
+/* Rodapé */
+.rodape{border-top:1px solid var(--line);padding:2.2rem var(--shell)}
+.rodape-grade{max-width:var(--max);margin:0 auto;display:flex;flex-wrap:wrap;gap:1rem 2rem;align-items:center;justify-content:space-between;color:var(--ash);font-size:.85rem}
+.rodape-grade nav{display:flex;flex-wrap:wrap;gap:0 1.6rem}
+.rodape-grade nav a{display:inline-flex;align-items:center;min-height:44px;color:var(--ash);text-decoration:none}
+.rodape-grade nav a:hover,.rodape-grade nav a[aria-current]{color:var(--bone)}
+.assinatura{line-height:1.5}
+.assinatura b{color:var(--bone);font-weight:600}
+.assinatura b span{color:var(--avx)}
