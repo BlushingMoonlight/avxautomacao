@@ -14,7 +14,7 @@
   - Tipografia: Inter servida pelo próprio site (`assets/fontes/`: arquivo variável com os pesos 300 a 700 e a licença OFL junto), nunca pelo Google Fonts, com `font-family:'Inter','Helvetica Neue',Arial,sans-serif`. Letter-spacing só na escala fechada: -.025em títulos display, .02em texto, .1em botões, .2em rótulos, .26em eyebrows. Régua vermelha: 58px × 2px.
   - Layout web: `--max 1320px`, `--navh 64px`, `--shell clamp(1.25rem, 5vw, 6.5rem)`, easing `cubic-bezier(.4, 0, 0, 1)`.
   - Categorias (o texto exibido segue esta lista): Central de Controle · Iluminação · Elétrica & Acabamentos · Climatização · Cortinas & Persianas · Multimídia · AI Security.
-- Fotos de banco de imagens levam a legenda "Imagem ilustrativa". O portfólio não cita construtora. Não invente projeto, cliente, número nem certificação.
+- Fotos de banco de imagens levam a legenda "Imagem ilustrativa". O portfólio não cita construtora. Não invente projeto, cliente, número nem certificação. Certificações da AVX: só ISO 9001 e ISO 27001. NR-10, NR-12, NBR 5410, LGPD, o método PMI, projetos compatíveis com LEED e o Padrão AVX (selo de qualidade próprio) ficam em "Normas e métodos que seguimos", nunca como certificação (o `verificar_site.mjs` confere).
 - Google Analytics em modo básico: nada é carregado nem enviado antes do aceite dos cookies (o script do Google só entra pela `avxCarregarGA()`).
 - Contato público: `sac@avxautomacao.com.br` e o formulário do site. **WhatsApp nunca no site** (nem link, nem número): o canal digital de entrada é o formulário.
 - O formulário de contato fala com o n8n (endereço e cabeçalho conferidos pelo `scripts/verificar_site.mjs`). Mudar o formulário exige um PR no repositório do n8n também, com a ordem do Merge.
