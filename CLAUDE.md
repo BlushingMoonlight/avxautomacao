@@ -1,0 +1,20 @@
+# Instruções para o Claude neste repositório
+
+- Site público da AVX (GitHub Pages, domínio em `CNAME`). Tudo aqui é público, inclusive este arquivo e o `README.md`: nunca coloque token, senha, dado de cliente nem detalhe interno da empresa.
+- O dono (Jean) trabalha só pelo iPad. Toda entrega é um **pull request** em português, com resumo do que muda e o que conferir. Nunca faça merge nem push direto na `main`.
+- Nunca abra Issue aqui (tudo é público). Pendências vão listadas no fim da descrição do PR.
+- O padrão de marca abaixo é a fonte única. Se uma página divergir, corrija a página (ou peça para mudar o padrão); os dois nunca convivem.
+  - Marca: **AVX** (logo "AVX." com o ponto em Vermelho AVX). Tagline: "A casa que age." Descriptor: "Automação Residencial Bespoke". Copyright: "© 2026 AVX". Assinatura de documentos: "AVX. / A casa que age. / Engenharia Bespoke / avxautomacao.com.br".
+  - "Bespoke" com maiúscula quando é conceito. "&" em nomes de produto e categoria; "e" no texto corrido.
+  - Claims com redação fechada (copiar literalmente): "instalação sem obras, em média 7 dias úteis"; "5 anos de garantia com check-ups anuais inclusos"; "2.500+ dispositivos compatíveis" (no texto corrido: "mais de 2.500 dispositivos"); "processamento 100% local — a casa funciona com ou sem internet".
+  - Valorização: só "valorização estimada de até 11,3%*", com o asterisco e a fonte na mesma página ("Média apurada em imóveis automatizados pela AVX e decorados para venda no litoral de Santa Catarina"). Nunca como garantia. "~22% mais rápido" só com a ressalva de amostra limitada.
+  - Marcas de referência (Rolls-Royce, Patek Philippe, Tesla, Palantir, Anduril, SpaceX/Starlink): só como inspiração de princípio de engenharia, nunca como parceria, collab ou produto conjunto, e sempre com o aviso "A AVX não possui vínculo, parceria ou endosso oficial dessas marcas."
+  - Paleta (tokens): `--ink #0B0B0C`, `--ink-soft #141416`, `--panel #111113`, `--paper #F0EDE7`, `--bone #ECE8E1`, `--bone-dim #B6B2AA`, `--ash #8D8980`, `--avx #DA291C` (Vermelho AVX, acento único), `--avx-hover #C1241A`. Hairlines `rgba(236,232,225,.12)` (suave `.07`). As cores de categoria do catálogo são de interface, não de marca.
+  - Tipografia: Inter, importada sempre como `wght@300;400;500;600;700`, com `font-family:'Inter','Helvetica Neue',Arial,sans-serif`. Letter-spacing só na escala fechada: -.025em títulos display, .02em texto, .1em botões, .2em rótulos, .26em eyebrows. Régua vermelha: 58px × 2px.
+  - Layout web: `--max 1320px`, `--navh 64px`, `--shell clamp(1.25rem, 5vw, 6.5rem)`, easing `cubic-bezier(.4, 0, 0, 1)`.
+  - Categorias (o texto exibido segue esta lista): Central de Controle · Iluminação · Elétrica & Acabamentos · Climatização · Cortinas & Persianas · Multimídia · AI Security.
+- Contato público: `sac@avxautomacao.com.br` e o formulário do site. **WhatsApp nunca no site** (nem link, nem número): o canal digital de entrada é o formulário.
+- O formulário de contato fala com o n8n (endereço e cabeçalho conferidos pelo `scripts/verificar_site.mjs`). Mudar o formulário exige um PR no repositório do n8n também, com a ordem do Merge.
+- Ao mudar uma página, atualize o `lastmod` dela no `sitemap.xml`. Página nova entra no sitemap.
+- PR: use o modelo `.github/pull_request_template.md`.
+- Antes de abrir o PR: `node scripts/verificar_site.mjs`.
