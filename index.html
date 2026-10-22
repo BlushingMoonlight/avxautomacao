@@ -330,6 +330,7 @@ body.menu-open .sheet{opacity:1;visibility:visible}
 .cform .submit-row{grid-column:1/-1;display:flex;flex-direction:column;gap:1rem;margin-top:.6rem}
 .cform .btn{justify-content:center;width:100%;border:0;cursor:pointer;font-family:inherit}
 .cform .btn[disabled]{opacity:.6;cursor:wait}
+.cform .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
 .form-msg{display:none;padding:1rem 1.2rem;border-radius:12px;font-size:.9rem;font-weight:500}
 .form-msg.show{display:block}
 .form-msg.ok{background:rgba(34,120,60,.14);border:1px solid rgba(80,200,120,.35);color:#9fe0b4}
@@ -747,7 +748,7 @@ body.menu-open .sheet{opacity:1;visibility:visible}
     <p class="lead reveal d2">Conte um pouco sobre sua casa e seu projeto. Retornamos para agendar a consultoria.</p>
   </div>
 
-  <form id="contact-form" class="cform reveal d2" action="https://formspree.io/f/xdajpylk" method="POST">
+  <form id="contact-form" class="cform reveal d2" action="https://rxsync-n8n-e38038-187-127-49-110.sslip.io/webhook/formulario-avx" method="POST">
     <div class="field">
       <label for="cf-name">Nome</label>
       <input type="text" id="cf-name" name="name" required placeholder="Seu nome completo">
@@ -757,7 +758,7 @@ body.menu-open .sheet{opacity:1;visibility:visible}
       <input type="email" id="cf-email" name="email" required placeholder="seu@email.com">
     </div>
     <div class="field">
-      <label for="cf-phone">Telefone / WhatsApp <span class="opt">(opcional)</span></label>
+      <label for="cf-phone">Telefone <span class="opt">(opcional)</span></label>
       <input type="tel" id="cf-phone" name="phone" placeholder="(47) 9 0000-0000">
     </div>
     <div class="field">
@@ -796,7 +797,11 @@ body.menu-open .sheet{opacity:1;visibility:visible}
     </div>
     <div class="field full">
       <label for="cf-message">Mensagem</label>
-      <textarea id="cf-message" name="message" required placeholder="Descreva seu projeto, número de ambientes, prazo..."></textarea>
+      <textarea id="cf-message" name="message" required maxlength="3000" placeholder="Descreva seu projeto, número de ambientes, prazo..."></textarea>
+    </div>
+    <div class="hp" aria-hidden="true">
+      <label for="cf-website">Deixe em branco</label>
+      <input type="text" id="cf-website" name="website" tabindex="-1" autocomplete="off">
     </div>
     <div class="submit-row">
       <div id="form-ok" class="form-msg ok">✓ Mensagem enviada. Entraremos em contato em breve.</div>
@@ -899,7 +904,7 @@ sheet.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>document.b
   go(0); start();
 })();
 
-/* ---------- contact form (Formspree + GA4) ---------- */
+/* ---------- contact form (n8n + GA4) ---------- */
 (function(){
   const form=document.getElementById('contact-form');
   if(!form) return;
@@ -907,18 +912,22 @@ sheet.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>document.b
   const btnText=document.getElementById('form-submit-text');
   const ok=document.getElementById('form-ok');
   const err=document.getElementById('form-err');
+  const errPadrao=err.textContent;
 
   form.addEventListener('submit',async e=>{
     e.preventDefault();
-    ok.classList.remove('show'); err.classList.remove('show');
+    ok.classList.remove('show'); err.classList.remove('show'); err.textContent=errPadrao;
     btn.disabled=true; btnText.textContent='Enviando...';
     if(window.gtag) gtag('event','form_submit_contact');
     try{
-      const res=await fetch(form.action,{method:'POST',body:new FormData(form),headers:{'Accept':'application/json'}});
-      if(res.ok){
+      const dados=Object.fromEntries(new FormData(form));
+      const res=await fetch(form.action,{method:'POST',body:JSON.stringify(dados),headers:{'Content-Type':'application/json','Accept':'application/json','x-avx-origem':'avx-site-2026'}});
+      const resp=await res.json().catch(()=>({}));
+      if(res.ok && resp.ok){
         ok.classList.add('show'); form.reset(); if(window.__avxResetCity) window.__avxResetCity();
         if(window.gtag) gtag('event','form_success_contact');
       }else{
+        if(resp.mensagem) err.textContent=resp.mensagem;
         err.classList.add('show');
       }
     }catch(_){
