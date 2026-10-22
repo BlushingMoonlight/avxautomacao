@@ -70,6 +70,29 @@ for (const f of htmls) {
     if (antigo.test(fs.readFileSync(f, 'utf8'))) erro(`${f}: cita o serviço de formulário antigo; o formulário vai ao n8n`);
   }
 }
+// Demonstração do App AVX (app.html): tudo simulado na página. Nenhum pedido a servidor, nada guardado no navegador,
+// nenhum script de fora (os ícones do Lucide ficam dentro da página), sem Google Analytics, o selo sempre presente e
+// nenhum assistente de voz, plataforma de automação ou serviço de música de terceiros.
+{
+  const arq = 'app.html';
+  if (!fs.existsSync(arq)) erro(`${arq}: não existe`);
+  else {
+    const s = fs.readFileSync(arq, 'utf8');
+    const PROIBIDOS = [[/\bfetch\s*\(|XMLHttpRequest|sendBeacon|WebSocket|EventSource|\bimport\s*\(/, 'pedido a servidor'],
+      [/localStorage|sessionStorage|indexedDB|document\.cookie|caches\./, 'algo guardado no navegador'],
+      [/googletagmanager|gtag\(|google-analytics/i, 'Google Analytics'],
+      [/<script[^>]*\bsrc=/i, 'script de fora (os ícones ficam dentro da página)'],
+      [new RegExp(['Home ' + 'Assistant', 'Alexa', 'Siri', 'Google Home', 'HomeKit', 'Spotify', 'Deezer', 'YouTube', 'Apple Music', 'Amazon Music', 'Tidal'].join('|'), 'i'), 'nome de assistente, plataforma ou serviço de terceiros']];
+    for (const [re, nome] of PROIBIDOS) { const m = s.match(re); if (m) erro(`${arq}: ${nome} não pode aparecer na demonstração (achei "${m[0]}")`); }
+    // <link> que baixa algo (o canonical só aponta o endereço da própria página): só a fonte Inter vem de fora.
+    for (const m of s.matchAll(/<link\b([^>]*)>/g)) {
+      const href = (m[1].match(/href="([^"]+)"/) || [])[1] || '', rel = (m[1].match(/rel="([^"]+)"/) || [])[1] || '';
+      if (/^https?:/.test(href) && rel !== 'canonical' && !/^https:\/\/fonts\.(googleapis|gstatic)\.com/.test(href)) erro(`${arq}: carrega coisa de fora (${href})`);
+    }
+    if (!s.includes('Demonstração · casa simulada')) erro(`${arq}: falta o selo "Demonstração · casa simulada"`);
+    if (!/aria-live="polite"/.test(s)) erro(`${arq}: o resumo das cenas é anunciado com aria-live="polite"`);
+  }
+}
 if (avisos) console.log(`⚠️ ${avisos} aviso(s) (não bloqueiam).`);
 console.log(erros ? `${erros} problema(s).` : `Tudo certo (${htmls.length} páginas).`);
 process.exit(erros ? 1 : 0);

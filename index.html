@@ -402,6 +402,18 @@ body.menu-open .sheet{opacity:1;visibility:visible}
   .grid3{grid-template-columns:1fr}
 }
 
+/* ---------- App AVX (seção de apresentação; a demonstração fica em app.html) ---------- */
+.app-demo{padding:clamp(5rem,10vh,8rem) var(--shell);border-top:1px solid var(--line)}
+.app-demo-in{max-width:var(--max);margin:0 auto;display:grid;grid-template-columns:1fr 1.1fr;gap:clamp(2rem,5vw,5rem);align-items:center}
+.app-demo h2{font-size:clamp(2.2rem,4.5vw,3.6rem);margin:.9rem 0 1.1rem}
+.app-demo-lista{list-style:none;margin:1.6rem 0 2.2rem;display:grid;gap:.6rem;color:var(--bone-dim);font-weight:300;font-size:.95rem}
+.app-demo-lista li{display:flex;gap:.8rem}
+.app-demo-lista li::before{content:"";width:18px;height:1px;background:var(--avx);margin-top:.8em;flex-shrink:0}
+.app-demo-previa{display:block;border:1px solid var(--line);border-radius:18px;overflow:hidden;background:var(--panel);transition:border-color .4s var(--ease)}
+.app-demo-previa svg{display:block;width:100%;height:auto}
+@media(hover:hover){.app-demo-previa:hover{border-color:var(--bone-dim)}}
+@media(max-width:920px){.app-demo-in{grid-template-columns:1fr}}
+
 /* ============================================================
    ACCESSIBILITY
    ============================================================ */
@@ -448,6 +460,7 @@ body.menu-open .sheet{opacity:1;visibility:visible}
   <div class="nav-links">
     <a href="#top">Produtos</a>
     <a href="#projetos">Projetos</a>
+    <a href="app.html">App</a>
     <a href="catalogo.html" class="cat">Catálogo</a>
     <a href="#contato" class="nav-cta">Iniciar Projeto</a>
   </div>
@@ -458,8 +471,9 @@ body.menu-open .sheet{opacity:1;visibility:visible}
 <div class="sheet" id="sheet">
   <a href="#top"><span class="num">01</span>Produtos</a>
   <a href="#projetos"><span class="num">02</span>Projetos</a>
-  <a href="catalogo.html"><span class="num">03</span>Catálogo</a>
-  <a href="#contato"><span class="num">04</span>Iniciar Projeto</a>
+  <a href="app.html"><span class="num">03</span>App</a>
+  <a href="catalogo.html"><span class="num">04</span>Catálogo</a>
+  <a href="#contato"><span class="num">05</span>Iniciar Projeto</a>
 </div>
 
 <main id="conteudo">
@@ -661,6 +675,44 @@ body.menu-open .sheet{opacity:1;visibility:visible}
   </div>
 </section>
 
+<!-- ===================== APP AVX (demonstração em app.html) ===================== -->
+<section class="app-demo" id="app">
+  <div class="app-demo-in">
+    <div>
+      <p class="eyebrow reveal">Demonstração <span class="dot">·</span> casa simulada</p>
+      <h2 class="display reveal d1">App AVX.</h2>
+      <p class="lead reveal d2">Uma cobertura de frente para o mar, simulada na tela. Toque num ambiente, escolha uma cena e veja a casa agir.</p>
+      <ul class="app-demo-lista reveal d2">
+        <li>Luzes, cortinas, clima e som de cada ambiente</li>
+        <li>Cenas: Chegada, Cinema, Jantar, Dormir, Ausente e Modo Recluso</li>
+        <li>Acelere o dia e veja a casa agir sozinha</li>
+      </ul>
+      <a href="app.html" class="btn reveal d3" id="abrir-app">Abrir a demonstração <span class="arw">→</span></a>
+    </div>
+    <a class="app-demo-previa reveal d1" href="app.html" tabindex="-1" aria-hidden="true">
+      <svg viewBox="0 0 520 400" role="img" aria-label="Prévia do App AVX: a planta da cobertura com as luzes acesas e os cartões de um ambiente">
+        <defs><radialGradient id="pv-luz"><stop offset="0" stop-color="rgb(242,196,141)" stop-opacity=".85"/><stop offset=".5" stop-color="rgb(242,196,141)" stop-opacity=".28"/><stop offset="1" stop-color="rgb(242,196,141)" stop-opacity="0"/></radialGradient>
+          <clipPath id="pv-l"><rect x="150" y="128" width="190" height="96"/></clipPath><clipPath id="pv-s"><rect x="30" y="128" width="120" height="126"/></clipPath><clipPath id="pv-h"><rect x="200" y="30" width="70" height="98"/></clipPath></defs>
+        <rect x="30" y="268" width="460" height="22" fill="rgba(127,166,184,.22)"/>
+        <g clip-path="url(#pv-l)"><circle cx="245" cy="176" r="150" fill="url(#pv-luz)"/></g>
+        <g clip-path="url(#pv-s)"><circle cx="90" cy="190" r="90" fill="url(#pv-luz)" opacity=".45"/></g>
+        <g clip-path="url(#pv-h)"><circle cx="235" cy="80" r="80" fill="url(#pv-luz)" opacity=".7"/></g>
+        <g fill="none" stroke="rgba(236,232,225,.14)" stroke-width="1.2">
+          <rect x="30" y="30" width="110" height="98"/><rect x="140" y="30" width="60" height="98"/><rect x="200" y="30" width="70" height="98"/><rect x="270" y="30" width="110" height="98"/><rect x="380" y="30" width="110" height="98"/>
+          <rect x="30" y="128" width="120" height="126"/><rect x="150" y="128" width="190" height="96"/><rect x="340" y="128" width="150" height="96"/><rect x="150" y="224" width="340" height="30"/></g>
+        <rect x="151" y="129" width="188" height="94" fill="none" stroke="#DA291C" stroke-width="1.5"/>
+        <g stroke="rgba(236,232,225,.5)" stroke-width="2"><line x1="160" y1="224" x2="330" y2="224"/><line x1="45" y1="254" x2="135" y2="254"/></g>
+        <g font-family="Inter,Helvetica Neue,Arial,sans-serif" font-size="11" fill="#B6B2AA"><text x="158" y="144">Living e jantar</text><text x="38" y="144">Suíte</text><text x="207" y="46">Hall</text><text x="348" y="144">Cinema</text><text x="38" y="285" fill="#8D8980">Mar</text></g>
+        <circle cx="440" cy="279" r="6" fill="rgb(242,196,141)"/>
+        <g font-family="Inter,Helvetica Neue,Arial,sans-serif">
+          <rect x="30" y="306" width="148" height="66" rx="12" fill="#141416" stroke="rgba(236,232,225,.12)"/><circle cx="56" cy="332" r="13" fill="rgba(192,168,122,.22)"/><text x="78" y="330" font-size="12" fill="#ECE8E1" font-weight="500">Sanca</text><text x="78" y="346" font-size="11" fill="#B6B2AA">50%</text><rect x="44" y="356" width="120" height="3" rx="1.5" fill="rgba(236,232,225,.12)"/><rect x="44" y="356" width="60" height="3" rx="1.5" fill="#C0A87A"/>
+          <rect x="186" y="306" width="148" height="66" rx="12" fill="#141416" stroke="rgba(236,232,225,.07)"/><circle cx="212" cy="332" r="13" fill="rgba(154,143,174,.18)"/><text x="234" y="330" font-size="12" fill="#ECE8E1" font-weight="500">Voil</text><text x="234" y="346" font-size="11" fill="#B6B2AA">Aberta</text><rect x="200" y="356" width="120" height="3" rx="1.5" fill="#9A8FAE"/>
+          <rect x="342" y="306" width="148" height="66" rx="12" fill="#141416" stroke="rgba(236,232,225,.12)"/><circle cx="368" cy="332" r="13" fill="rgba(127,166,184,.22)"/><text x="390" y="330" font-size="12" fill="#ECE8E1" font-weight="500">Clima</text><text x="390" y="346" font-size="11" fill="#B6B2AA">Ligado · 23 °C</text></g>
+      </svg>
+    </a>
+  </div>
+</section>
+
 <!-- ===================== PROJECTS ===================== -->
 <section class="projects" id="projetos">
   <div class="head">
@@ -824,7 +876,7 @@ body.menu-open .sheet{opacity:1;visibility:visible}
     </div>
     <div>
       <h4>Produtos</h4>
-      <ul><li><a href="#top">Linha AVX</a></li><li><a href="#projetos">Projetos</a></li><li><a href="catalogo.html">Catálogo</a></li></ul>
+      <ul><li><a href="#top">Linha AVX</a></li><li><a href="#projetos">Projetos</a></li><li><a href="app.html">App</a></li><li><a href="catalogo.html">Catálogo</a></li></ul>
     </div>
     <div>
       <h4>Empresa</h4>
@@ -936,6 +988,12 @@ sheet.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>document.b
       btn.disabled=false; btnText.textContent='Enviar Mensagem';
     }
   });
+})();
+
+/* ---------- App AVX: clique no "Abrir a demonstração" (GA4) ---------- */
+(function(){
+  const b=document.getElementById('abrir-app');
+  if(b) b.addEventListener('click',()=>{ if(window.gtag) gtag('event','abrir_app_demo'); });
 })();
 
 /* ---------- estado → cidade (API IBGE · oficial, sem chave) ---------- */

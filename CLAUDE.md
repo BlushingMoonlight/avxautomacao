@@ -15,6 +15,7 @@
   - Categorias (o texto exibido segue esta lista): Central de Controle · Iluminação · Elétrica & Acabamentos · Climatização · Cortinas & Persianas · Multimídia · AI Security.
 - Contato público: `sac@avxautomacao.com.br` e o formulário do site. **WhatsApp nunca no site** (nem link, nem número): o canal digital de entrada é o formulário.
 - O formulário de contato fala com o n8n (endereço e cabeçalho conferidos pelo `scripts/verificar_site.mjs`). Mudar o formulário exige um PR no repositório do n8n também, com a ordem do Merge.
+- `app.html` (demonstração do App AVX): tudo simulado na página, sem servidor, sem Google Analytics e sem nada guardado no navegador; nenhum assistente de voz nem serviço de música de terceiros. Os tokens e os cartões ficam organizados no começo do arquivo para virar o painel do cliente.
 - Ao mudar uma página, atualize o `lastmod` dela no `sitemap.xml`. Página nova entra no sitemap.
 - PR: use o modelo `.github/pull_request_template.md`.
 - Antes de abrir o PR: `node scripts/verificar_site.mjs`.
