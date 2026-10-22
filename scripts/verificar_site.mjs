@@ -79,6 +79,30 @@ for (const f of htmls) {
   if (grupo) for (const m of grupo[1].matchAll(/<b>([^<]+)<\/b>/g)) if (!CERTIFICACOES.includes(m[1].trim())) erro(`${f}: "${m[1].trim()}" está em "Certificações", mas a AVX só tem ${CERTIFICACOES.join(' e ')}`);
   for (const m of texto.replace(/\s+/g, ' ').matchAll(/\b(LEED|PMI|LGPD)\b[^.]{0,40}certifica|certifica\w*[^.]{0,40}\b(LEED|PMI|LGPD)\b/gi)) erro(`${f}: ${m[1] || m[2]} aparece como certificação da AVX ("${m[0]}"); é norma ou método que seguimos`);
 }
+// Documentos legais: versão e data no topo; os links do rodapé e o "Saiba mais" dos cookies levam a eles.
+// Ponto ainda em aberto (class="confirmar") só avisa: quem decide publicar é o Jean.
+for (const doc of ['privacidade.html', 'termos.html']) {
+  if (!fs.existsSync(doc)) { erro(`${doc}: não existe`); continue; }
+  const s = fs.readFileSync(doc, 'utf8');
+  if (!/Versão \d{4}-\d{2}-v\d+ · Vigente a partir de \d{1,2} de [a-zç]+ de \d{4}/.test(s)) erro(`${doc}: falta "Versão AAAA-MM-vN · Vigente a partir de D de mês de AAAA" no topo`);
+  if (!/href="assets\/documento\.css"/.test(s)) erro(`${doc}: falta o estilo dos documentos (assets/documento.css)`);
+  if (/googletagmanager/.test(s)) erro(`${doc}: o documento legal não carrega o Google Analytics`);
+  const abertos = (s.match(/class="confirmar"/g) || []).length;
+  if (abertos) aviso(`${doc}: ${abertos} ponto(s) "a confirmar" ainda em aberto (preencha antes do Merge)`);
+}
+for (const f of ['index.html', 'catalogo.html']) {
+  if (!fs.existsSync(f)) continue;
+  const s = fs.readFileSync(f, 'utf8');
+  if (!/<a href="privacidade\.html">Privacidade<\/a>/.test(s)) erro(`${f}: o link "Privacidade" do rodapé leva a privacidade.html`);
+  if (!/<a href="termos\.html">Termos de Uso<\/a>/.test(s)) erro(`${f}: o link "Termos de Uso" do rodapé leva a termos.html`);
+  if (/id="cookie-banner"/.test(s) && !/<a href="privacidade\.html#cookies">Saiba mais<\/a>/.test(s)) erro(`${f}: o "Saiba mais" do aviso de cookies leva a privacidade.html#cookies`);
+}
+// Estilos próprios em assets/ (fora a fonte) seguem a paleta e a escala
+for (const c of todos.filter(f => f.endsWith('.css') && !f.includes('fontes'))) {
+  const css = fs.readFileSync(c, 'utf8');
+  for (const m of css.matchAll(/#([0-9a-fA-F]{6}|[0-9a-fA-F]{3})\b/g)) if (!CORES.has(m[1].toUpperCase())) erro(`${c}: cor fora da paleta (#${m[1]})`);
+  for (const m of css.matchAll(/letter-spacing:\s*([^;}"]+)/g)) { const v = m[1].trim(); if (!ESCALA.has(v) && v !== 'inherit') erro(`${c}: letter-spacing fora da escala (${v})`); }
+}
 // Fonte do próprio site: o arquivo e a licença
 for (const a of ['assets/fontes/fontes.css', 'assets/fontes/inter-variavel.woff2', 'assets/fontes/OFL-inter.txt']) if (!fs.existsSync(a)) erro(`${a}: não existe`);
 // Claims com redação fechada (15.2) no index.html: literais
