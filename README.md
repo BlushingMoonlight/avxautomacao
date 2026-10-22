@@ -9,7 +9,8 @@ O site público da AVX (avxautomacao.com.br), publicado pelo GitHub Pages a part
 | `index.html` | página inicial, com o formulário de contato |
 | `catalogo.html` | simulador de projeto (catálogo de dispositivos) |
 | `app.html` | demonstração do App AVX (casa simulada; não chama servidor nem guarda nada) |
-| `assets/` | favicon e imagem de compartilhamento |
+| `assets/` | favicon, imagens de compartilhamento, prévia do app e a fonte Inter (`assets/fontes/`, com a licença) |
+| `scripts/` | `verificar_site.mjs` (roda em todo PR) e `app_telas.mjs` (fotos e conferência da demonstração, roda no computador) |
 
 ## No dia a dia
 
