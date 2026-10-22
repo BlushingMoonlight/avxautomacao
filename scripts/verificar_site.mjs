@@ -1,5 +1,6 @@
 // Conferência do site em todo pull request: <title>, links e imagens internos, nada de localhost, nenhum WhatsApp nem
-// telefone, o padrão de marca (valorização, aviso das marcas de referência, Inter), o sitemap e o formulário no n8n.
+// telefone, o padrão de marca (claims, valorização, aviso das marcas, paleta, escala tipográfica, Inter do próprio site),
+// o Google Analytics só depois do aceite, o sitemap, o formulário no n8n e a demonstração do App AVX.
 import fs from 'node:fs'; import path from 'node:path';
 const N8N = 'https://rxsync-n8n-e38038-187-127-49-110.sslip.io';   // o mesmo do site da RXSync
 const FORMULARIO = N8N + '/webhook/formulario-avx', ORIGEM = 'avx-site-2026';
@@ -14,6 +15,12 @@ const visivel = s => s.replace(/<(script|style)[\s\S]*?<\/\1>/gi, ' ').replace(/
 const MARCAS = /\b(Rolls-Royce|Patek Philippe|Tesla|Palantir|Anduril|SpaceX|Starlink)\b/g;
 const AVISO_MARCAS = 'A AVX não possui vínculo, parceria ou endosso oficial dessas marcas.';
 const FONTE_VALORIZACAO = 'Média apurada em imóveis automatizados pela AVX e decorados para venda no litoral de Santa Catarina';
+// Faixa de integrações (decisão do Jean): marca citada como compatibilidade leva esta linha, não o aviso de inspiração.
+const LINHA_COMPATIBILIDADE = 'As marcas citadas pertencem aos seus donos. Compatibilidade, sem vínculo oficial.';
+// Paleta (15.4) + cores de categoria e de estado (funcionais); #000 e #FFF só para máscara e texto sobre o vermelho.
+const CORES = new Set(['0B0B0C', '141416', '111113', 'F0EDE7', 'ECE8E1', 'B6B2AA', '8D8980', 'DA291C', 'C1241A', '76AFA5', 'C0A87A', '8FA987', '7FA6B8', '9A8FAE', 'B88A9E', '9FE0B4', 'F0A89F', '000', '000000', 'FFF', 'FFFFFF']);
+// Escala fechada de letter-spacing (15.5)
+const ESCALA = new Set(['-.025em', '.02em', '.1em', '.2em', '.26em']);
 for (const f of htmls) {
   const s = fs.readFileSync(f, 'utf8'), texto = visivel(s);
   if (!/<title>[^<]+<\/title>/i.test(s)) erro(`${f}: página sem <title>`);
@@ -36,15 +43,44 @@ for (const f of htmls) {
   // Valorização (15.2): só "valorização estimada de até 11,3%*", com a fonte na mesma página.
   for (const m of s.matchAll(/valoriza[çc][ãa]o.{0,40}/gi)) if (!/^valorização estimada de até 11,3%\*/i.test(m[0])) erro(`${f}: "valorização" fora da redação fechada ("valorização estimada de até 11,3%*"): ${m[0]}`);
   if (/valoriza[çc][ãa]o/i.test(s) && !s.includes(FONTE_VALORIZACAO)) erro(`${f}: cita a valorização sem a fonte do asterisco ("${FONTE_VALORIZACAO}")`);
-  // Marcas de referência (15.2): com o aviso de não vínculo. Starlink sozinha, como integração compatível, só avisa
-  // até o PR de marca decidir (tirar da lista ou pôr o aviso).
-  const marcas = [...new Set([...texto.matchAll(MARCAS)].map(m => m[1]))];
-  if (marcas.length && !texto.replace(/\s+/g, ' ').includes(AVISO_MARCAS)) {
-    const msg = `${f}: cita ${marcas.join(', ')} sem o aviso "${AVISO_MARCAS}"`;
-    if (marcas.every(m => m === 'Starlink')) aviso(msg + ' (Starlink como integração: só aviso até o PR de marca)'); else erro(msg);
-  }
-  // Tipografia (15.5): Google Fonts só com a Inter, pesos 300 a 700.
-  for (const m of s.matchAll(/fonts\.googleapis\.com\/css2?\?([^"'\s>]*)/g)) if (m[1].replace(/&(amp;)?display=swap/, '') !== 'family=Inter:wght@300;400;500;600;700') erro(`${f}: Google Fonts fora do padrão (${m[1]}); só family=Inter:wght@300;400;500;600;700`);
+  // Marcas de referência (15.2): como inspiração, com o aviso de não vínculo. A faixa de integrações (.marquee) cita
+  // marcas como compatibilidade e leva a linha de compatibilidade logo abaixo (decisão do Jean).
+  let semFaixa = s;
+  if (s.includes(LINHA_COMPATIBILIDADE)) semFaixa = s.replace(/<div class="marquee">[\s\S]*?<\/div>/, ' ');
+  else if (/<div class="marquee">/.test(s)) erro(`${f}: a faixa de integrações precisa da linha "${LINHA_COMPATIBILIDADE}"`);
+  const marcas = [...new Set([...visivel(semFaixa).matchAll(MARCAS)].map(m => m[1]))];
+  if (marcas.length && !texto.replace(/\s+/g, ' ').includes(AVISO_MARCAS)) erro(`${f}: cita ${marcas.join(', ')} sem o aviso "${AVISO_MARCAS}"`);
+  // "Bespoke" com maiúscula (15.1)
+  for (const m of texto.matchAll(/\bbespoke\b/g)) erro(`${f}: "bespoke" com minúscula; é "Bespoke"`);
+  for (const m of s.matchAll(/(?:title|alt|content|aria-label)="[^"]*\bbespoke\b/g)) erro(`${f}: "bespoke" com minúscula num atributo`);
+  // Tipografia (15.5): a Inter vem do próprio site (assets/fontes), nunca do Google Fonts
+  if (/fonts\.(googleapis|gstatic)\.com/.test(s)) erro(`${f}: carrega a fonte do Google; use assets/fontes/fontes.css`);
+  if (!/<link rel="stylesheet" href="assets\/fontes\/fontes\.css">/.test(s)) erro(`${f}: falta a fonte do próprio site (assets/fontes/fontes.css)`);
+  // Paleta e escala tipográfica no CSS da página
+  const css = [...s.matchAll(/<style>([\s\S]*?)<\/style>/g)].map(m => m[1]).join('\n') + [...s.matchAll(/style="([^"]*)"/g)].map(m => m[1]).join(';');
+  for (const m of css.matchAll(/#([0-9a-fA-F]{6}|[0-9a-fA-F]{3})\b/g)) if (!CORES.has(m[1].toUpperCase())) erro(`${f}: cor fora da paleta (#${m[1]})`);
+  for (const m of css.matchAll(/letter-spacing:\s*([^;}"]+)/g)) { const v = m[1].trim(); if (!ESCALA.has(v) && v !== 'inherit' && !/^var\(--ls-/.test(v)) erro(`${f}: letter-spacing fora da escala (${v}; só -.025em, .02em, .1em, .2em, .26em)`); }
+  // Google Analytics em modo básico (decisão do Jean): nada carregado antes do aceite. O script do Google só entra pela
+  // avxCarregarGA(), chamada no aceite.
+  if (/<script[^>]*src="https:\/\/www\.googletagmanager\.com/.test(s)) erro(`${f}: o Google Analytics carrega antes do aceite (tire o <script src> do googletagmanager; use a avxCarregarGA)`);
+  if (/googletagmanager/.test(s) && !/function avxCarregarGA\(\)/.test(s)) erro(`${f}: o Google Analytics precisa passar pela avxCarregarGA() (só depois do aceite)`);
+  // Nenhum script de fora carregado de saída (ícones dentro da página; o jsPDF só no "Baixar PDF")
+  for (const m of s.matchAll(/<script[^>]*\bsrc="(https?:[^"]+)"/g)) erro(`${f}: script de fora carregado de saída (${m[1]})`);
+  // Fotos do banco de imagens com a legenda "Imagem ilustrativa"
+  if (/images\.unsplash\.com/.test(s)) { const fotos = (s.match(/class="slide-bg/g) || []).length, legendas = (s.match(/>Imagem ilustrativa</g) || []).length; if (legendas < fotos) erro(`${f}: ${fotos} fotos do banco de imagens e só ${legendas} legendas "Imagem ilustrativa"`); }
+  // Portfólio sem nome de construtora (decisão do Jean)
+  if (/Construtora/.test(texto)) erro(`${f}: cita construtora (o portfólio não leva o nome das construtoras)`);
+  // "Certificações" leva à lista, não a "#"
+  if (/>Certificações</.test(s) && (/href="#">Certificações</.test(s) || !/id="certificacoes"/.test(s))) erro(`${f}: o link "Certificações" leva à lista (#certificacoes)`);
+}
+// Fonte do próprio site: o arquivo e a licença
+for (const a of ['assets/fontes/fontes.css', 'assets/fontes/inter-variavel.woff2', 'assets/fontes/OFL-inter.txt']) if (!fs.existsSync(a)) erro(`${a}: não existe`);
+// Claims com redação fechada (15.2) no index.html: literais
+{
+  const ix = fs.existsSync('index.html') ? visivel(fs.readFileSync('index.html', 'utf8')).replace(/\s+/g, ' ') : '';
+  for (const c of ['instalação sem obras, em média 7 dias úteis', '5 anos de garantia com check-ups anuais inclusos', '2.500+ dispositivos compatíveis', 'processamento 100% local — a casa funciona com ou sem internet'])
+    if (!ix.includes(c)) erro(`index.html: falta o claim com a redação fechada "${c}"`);
+  for (const velho of ['Cobertura total de hardware', '% privado', 'Servidor privado', 'sem quebrar paredes', 'Cor-assinatura']) if (ix.includes(velho)) erro(`index.html: ainda tem o texto antigo "${velho}"`);
 }
 // Sitemap: toda página pública (sem noindex) está nele, e todo endereço dele existe.
 {
@@ -82,13 +118,21 @@ for (const f of htmls) {
       [/localStorage|sessionStorage|indexedDB|document\.cookie|caches\./, 'algo guardado no navegador'],
       [/googletagmanager|gtag\(|google-analytics/i, 'Google Analytics'],
       [/<script[^>]*\bsrc=/i, 'script de fora (os ícones ficam dentro da página)'],
+      [/html\.embed[^{]*\.selo[^{]*\{[^}]*display:\s*none/, 'o selo escondido no modo embed (ele fica visível dentro do index)'],
       [new RegExp(['Home ' + 'Assistant', 'Alexa', 'Siri', 'Google Home', 'HomeKit', 'Spotify', 'Deezer', 'YouTube', 'Apple Music', 'Amazon Music', 'Tidal'].join('|'), 'i'), 'nome de assistente, plataforma ou serviço de terceiros']];
     for (const [re, nome] of PROIBIDOS) { const m = s.match(re); if (m) erro(`${arq}: ${nome} não pode aparecer na demonstração (achei "${m[0]}")`); }
-    // <link> que baixa algo (o canonical só aponta o endereço da própria página): só a fonte Inter vem de fora.
+    // <link> que baixa algo (o canonical só aponta o endereço da própria página): nada vem de fora.
     for (const m of s.matchAll(/<link\b([^>]*)>/g)) {
       const href = (m[1].match(/href="([^"]+)"/) || [])[1] || '', rel = (m[1].match(/rel="([^"]+)"/) || [])[1] || '';
-      if (/^https?:/.test(href) && rel !== 'canonical' && !/^https:\/\/fonts\.(googleapis|gstatic)\.com/.test(href)) erro(`${arq}: carrega coisa de fora (${href})`);
+      if (/^https?:/.test(href) && rel !== 'canonical') erro(`${arq}: carrega coisa de fora (${href})`);
     }
+    // O modelo AVX fica só na folha de detalhes, nunca no cartão
+    const cartao = (s.match(/function cartao\(d\) \{([\s\S]*?)\n\}/) || [])[1] || '';
+    if (!cartao) erro(`${arq}: não achei a função cartao()`); else if (/modelo/.test(cartao)) erro(`${arq}: o cartão mostra o modelo AVX; ele fica só na folha de detalhes`);
+    if (!/class="tile-mais"/.test(s)) erro(`${arq}: falta o "⋯" dos cartões (os detalhes não podem depender de segurar o dedo)`);
+    // O index.html mostra o app de verdade numa moldura, carregando só quando a seção aparece
+    const ix = fs.existsSync('index.html') ? fs.readFileSync('index.html', 'utf8') : '';
+    if (!/<iframe src="app\.html\?embed=1" loading="lazy"/.test(ix)) erro('index.html: a seção App AVX mostra o app num <iframe src="app.html?embed=1" loading="lazy">');
     if (!s.includes('Demonstração · casa simulada')) erro(`${arq}: falta o selo "Demonstração · casa simulada"`);
     if (!/aria-live="polite"/.test(s)) erro(`${arq}: o resumo das cenas é anunciado com aria-live="polite"`);
   }
