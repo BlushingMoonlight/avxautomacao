@@ -1,0 +1,982 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AVX | App AVX · Demonstração</title>
+<meta name="description" content="Demonstração do App AVX: uma cobertura de frente para o mar, simulada na tela. Toque num ambiente, escolha uma cena e veja a casa agir.">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#0b0b0c">
+<meta name="author" content="AVX">
+<link rel="canonical" href="https://avxautomacao.com.br/app.html">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-avx.png">
+<link rel="apple-touch-icon" href="/assets/favicon-avx.png">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:site_name" content="AVX">
+<meta property="og:url" content="https://avxautomacao.com.br/app.html">
+<meta property="og:title" content="App AVX · Demonstração">
+<meta property="og:description" content="Uma cobertura de frente para o mar, simulada na tela. Toque num ambiente, escolha uma cena e veja a casa agir.">
+<meta property="og:image" content="https://avxautomacao.com.br/assets/og-avx.png">
+<meta property="og:image:alt" content="AVX — Automação Residencial Bespoke">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<!--
+  App AVX · demonstração (casa simulada).
+  Tudo roda nesta página: nenhum pedido a servidor, nada guardado no navegador, sem Google Analytics
+  (o scripts/verificar_site.mjs confere). A única coisa de fora é a fonte Inter (padrão de marca 15.5).
+
+  Organização, para reaproveitar no painel do cliente:
+    1. TOKENS (:root): cores, luz, tamanhos, tipografia e movimento, num lugar só.
+    2. BASE e LAYOUT da página (barra, planta, cenas, painel, registro, linha do tempo).
+    3. CARTÕES: o cartão base (.tile) e uma seção por tipo (luz, fita, cortina, clima, som, sensor, tomada, central).
+    4. JS: os dados da casa (AMBIENTES), as CENAS, os EVENTOS do dia e o motor que aplica tudo.
+-->
+<style>
+/* =====================================================================
+   1. TOKENS
+   ===================================================================== */
+:root{
+  /* 1.1 Marca: paleta oficial (padrão de marca 15.4). Não mude aqui sem mudar o padrão. */
+  --ink:#0B0B0C;            /* fundo escuro */
+  --ink-soft:#141416;       /* superfícies elevadas */
+  --panel:#111113;          /* painéis */
+  --paper:#F0EDE7;          /* fundo claro */
+  --bone:#ECE8E1;           /* texto sobre escuro */
+  --bone-dim:#B6B2AA;       /* texto secundário */
+  --ash:#8D8980;            /* rótulos e microtexto */
+  --avx:#DA291C;            /* Vermelho AVX: acento único (ambiente escolhido, alertas, botão principal) */
+  --avx-hover:#C1241A;
+  --line:rgba(236,232,225,.12);       /* hairline */
+  --line-soft:rgba(236,232,225,.07);  /* hairline suave */
+  --font:'Inter','Helvetica Neue',Arial,sans-serif;
+
+  /* 1.2 Cores de categoria (funcionais, como no catálogo; só nos ícones dos cartões) */
+  --cat-central:#76AFA5;
+  --cat-iluminacao:#C0A87A;
+  --cat-eletrica:#8FA987;
+  --cat-clima:#7FA6B8;
+  --cat-cortinas:#9A8FAE;
+  --cat-multimidia:#B88A9E;
+  --cat-seguranca:#DA291C;
+  --estado-ok:#9FE0B4;      /* verde funcional (padrão 15.4) */
+
+  /* 1.3 Luz na planta (r, g, b; o JS mistura com a intensidade) */
+  --luz-quente:242,196,141;
+  --luz-fria:196,214,232;
+  --mar:127,166,184;        /* a mesma família do azul de Climatização */
+  --piso-noite:rgba(236,232,225,.025);
+  --piso-dia:rgba(236,232,225,.075);
+
+  /* 1.4 Superfícies do app */
+  --app-bg:var(--ink);
+  --barra-bg:rgba(11,11,12,.88);
+  --card-bg:var(--ink-soft);
+  --card-borda:var(--line-soft);
+  --card-borda-ativo:var(--line);
+  --card-brilho-ativo:rgba(242,196,141,.07);   /* o cartão ligado ganha um brilho quente leve */
+
+  /* 1.5 Tamanhos */
+  --max:1320px;
+  --shell:clamp(1rem,4vw,2rem);
+  --barra-h:56px;
+  --dock-h:84px;
+  --raio-card:16px;
+  --raio-chip:100px;
+  --gap:12px;
+  --card-min:156px;          /* largura mínima de um cartão na grade */
+  --toque:44px;              /* alvo mínimo de toque */
+  --icone:20px;
+
+  /* 1.6 Tipografia: escala fechada de letter-spacing (padrão 15.5) */
+  --ls-display:-.025em;
+  --ls-texto:.02em;
+  --ls-botao:.1em;
+  --ls-rotulo:.2em;
+  --ls-eyebrow:.26em;
+
+  /* 1.7 Movimento */
+  --ease:cubic-bezier(.4,0,0,1);
+  --t-rapido:.25s;
+  --t-luz:.7s;
+  --passo-cena:160;          /* ms entre um passo e outro de uma cena (lido pelo JS) */
+}
+
+/* =====================================================================
+   2. BASE E LAYOUT
+   ===================================================================== */
+*{margin:0;padding:0;box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{font-family:var(--font);background:var(--app-bg);color:var(--bone);line-height:1.5;font-weight:400;
+  -webkit-font-smoothing:antialiased;padding-bottom:calc(var(--dock-h) + env(safe-area-inset-bottom))}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;-webkit-tap-highlight-color:transparent}
+:focus-visible{outline:2px solid var(--avx);outline-offset:2px}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.ic{width:var(--icone);height:var(--icone);fill:none;stroke:currentColor;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.eyebrow{font-size:10.5px;font-weight:600;letter-spacing:var(--ls-eyebrow);text-transform:uppercase;color:var(--ash);display:flex;align-items:center;gap:.6em}
+.eyebrow::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--avx);flex-shrink:0}
+.regua{width:58px;height:2px;background:var(--avx);border:0}
+
+/* 2.1 Barra do topo, com o selo sempre visível */
+.barra{position:sticky;top:0;z-index:20;height:var(--barra-h);display:flex;align-items:center;gap:.9rem;
+  padding:0 var(--shell);padding-top:env(safe-area-inset-top);background:var(--barra-bg);
+  -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-bottom:1px solid var(--line-soft)}
+.marca{font-weight:700;font-size:1.3rem;letter-spacing:var(--ls-texto)}
+.marca .ponto{color:var(--avx)}
+.barra-titulo{font-size:.72rem;font-weight:600;letter-spacing:var(--ls-rotulo);text-transform:uppercase;color:var(--bone-dim)}
+.selo{margin-left:auto;font-size:.68rem;font-weight:600;letter-spacing:var(--ls-botao);text-transform:uppercase;color:var(--bone-dim);
+  border:1px solid var(--line);border-radius:var(--raio-chip);padding:.38rem .8rem;white-space:nowrap}
+.relogio{display:flex;align-items:center;gap:.4rem;font-size:.85rem;font-weight:400;letter-spacing:var(--ls-texto);color:var(--bone);font-variant-numeric:tabular-nums}
+.relogio .ic{--icone:16px;color:var(--cat-iluminacao)}
+@media(max-width:520px){.barra-titulo{display:none}.selo{font-size:.6rem;padding:.34rem .6rem}}
+
+/* 2.2 Grade da página: uma coluna no celular; planta + painel lado a lado no iPad deitado e no computador */
+.app{max-width:var(--max);margin:0 auto;padding:1rem var(--shell) 2rem;display:grid;gap:1.25rem;
+  grid-template-columns:minmax(0,1fr);grid-template-areas:"planta" "cenas" "ambiente" "registro" "rodape"}
+.area-planta{grid-area:planta}.area-cenas{grid-area:cenas}.area-ambiente{grid-area:ambiente}
+.area-registro{grid-area:registro}.rodape-app{grid-area:rodape}
+@media(min-width:900px){
+  .app{grid-template-columns:minmax(0,1.45fr) minmax(330px,1fr);
+    grid-template-areas:"cenas cenas" "planta ambiente" "registro ambiente" "rodape rodape";align-items:start}
+  .area-planta{position:sticky;top:calc(var(--barra-h) + 1rem)}
+}
+
+/* 2.3 Planta */
+.planta-topo{display:flex;justify-content:space-between;align-items:center;gap:1rem;margin-bottom:.7rem}
+.dica{font-size:.78rem;font-weight:300;color:var(--ash);letter-spacing:var(--ls-texto)}
+.planta-moldura{background:var(--panel);border:1px solid var(--line-soft);border-radius:var(--raio-card);overflow:hidden;position:relative}
+#planta{display:block;width:100%;height:auto;touch-action:manipulation}
+#planta .piso{fill:var(--piso-noite);transition:fill 1.2s var(--ease)}
+#planta.dia .piso{fill:var(--piso-dia)}
+#planta .parede{fill:none;stroke:var(--line);stroke-width:2}
+#planta .vidro{stroke:rgba(236,232,225,.55);stroke-width:3.5;stroke-linecap:round}
+#planta .porta{fill:none;stroke:rgba(236,232,225,.3);stroke-width:1.5;stroke-dasharray:4 5}
+#planta .brilho{opacity:0;transition:opacity var(--t-luz) var(--ease)}
+#planta .cortina{transform-box:fill-box;transition:transform var(--t-luz) var(--ease)}
+#planta .cortina.blackout{fill:rgba(182,178,170,.9)}
+#planta .cortina.voil{fill:rgba(236,232,225,.45)}
+#planta .cortina.persiana{fill:rgba(182,178,170,.7)}
+#planta .rotulo{font-family:var(--font);font-size:25px;font-weight:500;letter-spacing:var(--ls-texto);fill:var(--bone-dim);pointer-events:none}
+#planta .rotulo.circ{font-size:19px;fill:var(--ash)}
+#planta .clima-txt{font-family:var(--font);font-size:22px;font-weight:400;fill:var(--cat-clima);pointer-events:none;font-variant-numeric:tabular-nums}
+#planta .ponto-sensor{fill:var(--bone-dim);opacity:0;transition:opacity var(--t-rapido)}
+#planta .ponto-sensor.on{opacity:.9}
+#planta .ponto-sensor.vigia{opacity:.9;fill:var(--estado-ok)}
+#planta .ponto-sensor.alerta{opacity:1;fill:var(--avx)}
+#planta .anel-alerta{fill:none;stroke:var(--avx);stroke-width:2;opacity:0}
+#planta .anel-alerta.on{opacity:1;animation:pulso 1.2s var(--ease) infinite}
+@keyframes pulso{from{transform:scale(.6);opacity:1}to{transform:scale(1.8);opacity:0}}
+#planta .alvo{fill:transparent;cursor:pointer}
+#planta .alvo:focus-visible{outline:none}
+#planta .alvo:focus-visible + .selecao,#planta .ambiente:focus-within .selecao{stroke:var(--bone-dim)}
+#planta .selecao{fill:none;stroke:transparent;stroke-width:3;pointer-events:none;transition:stroke var(--t-rapido)}
+#planta .ambiente.escolhido .selecao{stroke:var(--avx)}
+#planta .mar{transition:fill 1.2s var(--ease)}
+#planta .astro{transition:transform .3s linear}
+.estado-casa{position:absolute;right:10px;bottom:10px;font-size:.68rem;font-weight:600;letter-spacing:var(--ls-rotulo);text-transform:uppercase;
+  color:var(--estado-ok);border:1px solid rgba(159,224,180,.35);border-radius:var(--raio-chip);padding:.3rem .7rem;background:rgba(11,11,12,.7)}
+.estado-casa[hidden]{display:none}
+.estado-casa.alerta{color:#fff;background:var(--avx);border-color:var(--avx)}
+
+/* 2.4 Cenas */
+.cenas{display:flex;gap:.6rem;overflow-x:auto;scrollbar-width:none;padding:.15rem .1rem .35rem;scroll-snap-type:x proximity}
+.cenas::-webkit-scrollbar{display:none}
+.cena{display:flex;align-items:center;gap:.55rem;min-height:var(--toque);padding:.6rem 1.05rem;border-radius:var(--raio-chip);
+  border:1px solid var(--line);background:var(--card-bg);white-space:nowrap;scroll-snap-align:start;
+  font-size:.74rem;font-weight:600;letter-spacing:var(--ls-botao);text-transform:uppercase;color:var(--bone-dim);
+  transition:border-color var(--t-rapido),color var(--t-rapido),background var(--t-rapido)}
+.cena .ic{--icone:17px}
+.cena[aria-pressed="true"]{border-color:var(--avx);color:var(--bone);background:rgba(218,41,28,.1)}
+@media(hover:hover){.cena:hover{color:var(--bone);border-color:var(--bone-dim)}}
+
+/* 2.5 Painel do ambiente */
+.ambiente-topo{display:flex;align-items:flex-end;justify-content:space-between;gap:1rem;margin-bottom:.35rem}
+.ambiente-nome{font-size:clamp(1.5rem,3.4vw,2rem);font-weight:300;letter-spacing:var(--ls-display);line-height:1.1}
+.ambiente-medida{font-size:.85rem;color:var(--bone-dim);letter-spacing:var(--ls-texto);white-space:nowrap;font-variant-numeric:tabular-nums}
+.ambiente-parede{font-size:.78rem;font-weight:300;color:var(--ash);letter-spacing:var(--ls-texto);margin-bottom:1rem}
+.grupo{margin-top:1.1rem}
+.grupo .eyebrow{margin-bottom:.6rem}
+.grade{display:grid;gap:var(--gap);grid-template-columns:repeat(auto-fill,minmax(var(--card-min),1fr))}
+
+/* 2.6 Registro ("A casa agiu") */
+.registro{list-style:none;margin-top:.7rem;display:grid;gap:.45rem;font-size:.82rem;font-weight:300;color:var(--bone-dim);letter-spacing:var(--ls-texto)}
+.registro li{display:flex;gap:.7rem;align-items:baseline;animation:entra .4s var(--ease)}
+.registro .hora{font-variant-numeric:tabular-nums;color:var(--ash);font-size:.75rem;min-width:3.2em}
+.registro li.alerta{color:var(--bone)}
+.registro li.alerta .hora{color:var(--avx)}
+.registro li.vazio{color:var(--ash)}
+@keyframes entra{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+
+/* 2.7 Rodapé */
+.rodape-app{border-top:1px solid var(--line-soft);padding-top:1.4rem;display:grid;gap:.5rem;font-size:.78rem;font-weight:300;color:var(--ash);letter-spacing:var(--ls-texto)}
+.rodape-app .marca{font-size:1rem}
+.rodape-app a{color:var(--bone-dim);text-decoration:underline;text-underline-offset:3px}
+
+/* 2.8 Linha do tempo do dia (fixa embaixo) */
+.dock{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--barra-bg);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
+  border-top:1px solid var(--line-soft);padding:.6rem var(--shell) calc(.6rem + env(safe-area-inset-bottom))}
+.dock-in{max-width:var(--max);margin:0 auto;display:flex;align-items:center;gap:1rem}
+.dia-trilho{flex:1;min-width:0}
+.dia-marcas{display:flex;justify-content:space-between;font-size:.62rem;color:var(--ash);letter-spacing:var(--ls-texto);font-variant-numeric:tabular-nums;padding:0 2px}
+.acelerar{display:flex;align-items:center;gap:.5rem;min-height:var(--toque);padding:.6rem 1.1rem;border-radius:var(--raio-chip);background:var(--avx);color:#fff;
+  font-size:.7rem;font-weight:600;letter-spacing:var(--ls-botao);text-transform:uppercase;white-space:nowrap;transition:background var(--t-rapido)}
+.acelerar .ic{--icone:16px}
+.acelerar[aria-pressed="true"]{background:transparent;color:var(--bone);box-shadow:inset 0 0 0 1px var(--avx)}
+@media(hover:hover){.acelerar:hover{background:var(--avx-hover)}.acelerar[aria-pressed="true"]:hover{background:rgba(218,41,28,.12)}}
+@media(max-width:520px){.acelerar .rotulo-longo{display:none}}
+
+/* Controle deslizante (o do próprio navegador, com o visual da marca) */
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:var(--toque);background:transparent;cursor:pointer;touch-action:pan-y}
+input[type=range]::-webkit-slider-runnable-track{height:4px;border-radius:4px;background:linear-gradient(to right,var(--trilho-cor,var(--bone-dim)) var(--p,0%),var(--line) var(--p,0%))}
+input[type=range]::-moz-range-track{height:4px;border-radius:4px;background:var(--line)}
+input[type=range]::-moz-range-progress{height:4px;border-radius:4px;background:var(--trilho-cor,var(--bone-dim))}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;margin-top:-9px;border-radius:50%;background:var(--bone);border:0;box-shadow:0 2px 10px rgba(0,0,0,.5)}
+input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:var(--bone);border:0}
+input[type=range]:disabled{opacity:.35}
+
+/* =====================================================================
+   3. CARTÕES ("tile")
+   ===================================================================== */
+
+/* 3.1 Cartão base: ícone da categoria, nome, modelo AVX e estado. O topo é um botão (liga e desliga). */
+.tile{--cor:var(--bone-dim);background:var(--card-bg);border:1px solid var(--card-borda);border-radius:var(--raio-card);padding:.85rem .9rem .7rem;
+  display:flex;flex-direction:column;gap:.35rem;min-width:0;transition:border-color var(--t-rapido),background var(--t-rapido)}
+.tile[data-ativo="true"]{border-color:var(--card-borda-ativo);background:linear-gradient(var(--card-brilho-ativo),var(--card-brilho-ativo)),var(--card-bg)}
+.tile-topo{display:grid;grid-template-columns:auto minmax(0,1fr);grid-template-rows:auto auto;column-gap:.7rem;align-items:center;text-align:left;width:100%;min-height:var(--toque)}
+.tile-icone{grid-row:1/3;width:38px;height:38px;border-radius:50%;display:grid;place-items:center;color:var(--cor);background:rgba(236,232,225,.05);
+  transition:background var(--t-rapido),color var(--t-rapido)}
+.tile[data-ativo="true"] .tile-icone{background:color-mix(in srgb,var(--cor) 22%,transparent)}
+.tile-nome{font-size:.9rem;font-weight:500;letter-spacing:var(--ls-texto);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tile-estado{font-size:.78rem;font-weight:400;color:var(--bone-dim);letter-spacing:var(--ls-texto);font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tile-modelo{font-size:.66rem;font-weight:600;letter-spacing:var(--ls-rotulo);text-transform:uppercase;color:var(--ash)}
+.tile-linha{display:flex;align-items:center;gap:.5rem}
+.tile-linha .rot{font-size:.66rem;color:var(--ash);letter-spacing:var(--ls-texto);min-width:3.2em}
+.tile-botoes{display:flex;gap:.4rem;flex-wrap:wrap}
+.mini{min-height:36px;padding:.35rem .8rem;border-radius:var(--raio-chip);border:1px solid var(--line);font-size:.66rem;font-weight:600;
+  letter-spacing:var(--ls-botao);text-transform:uppercase;color:var(--bone-dim);display:inline-flex;align-items:center;gap:.35rem}
+.mini .ic{--icone:15px}
+.mini[aria-pressed="true"]{color:var(--bone);border-color:var(--bone-dim)}
+@media(hover:hover){.mini:hover{color:var(--bone);border-color:var(--bone-dim)}}
+
+/* 3.2 Luz (AVX-Dimmer, AVX-Plus, AVX-Touchpad) */
+.tile-luz{--cor:var(--cat-iluminacao);--trilho-cor:var(--cat-iluminacao)}
+
+/* 3.3 Fita de LED (AVX-RGBW): brilho e tom, do quente ao frio */
+.tile-fita{--cor:var(--cat-iluminacao);--trilho-cor:var(--cat-iluminacao)}
+.tile-fita .tom{--trilho-cor:rgb(var(--luz-fria))}
+
+/* 3.4 Cortina e persiana (AVX-Curtain, AVX-2PM): abertura em % */
+.tile-cortina{--cor:var(--cat-cortinas);--trilho-cor:var(--cat-cortinas)}
+
+/* 3.5 Clima (AVX-RM com o AVX-H&T): ajuste em °C, temperatura e umidade medidas */
+.tile-clima{--cor:var(--cat-clima)}
+.clima-alvo{display:flex;align-items:center;justify-content:space-between;gap:.5rem}
+.clima-alvo .valor{font-size:1.6rem;font-weight:300;letter-spacing:var(--ls-display);font-variant-numeric:tabular-nums}
+.redondo{width:var(--toque);height:var(--toque);border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;color:var(--bone-dim);font-size:1.1rem}
+.redondo:disabled{opacity:.35}
+
+/* 3.6 Som (AVX-IP): tocar, volume e a faixa da "Playlist da casa" */
+.tile-som{--cor:var(--cat-multimidia);--trilho-cor:var(--cat-multimidia)}
+.faixa{font-size:.76rem;font-weight:300;color:var(--bone-dim);letter-spacing:var(--ls-texto);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* 3.7 Sensor (AVX-MMWave, AVX-Door Window, AVX-GasGLP, AVX-Flood, AVX-Smoke): só leitura, com teste */
+.tile-sensor{--cor:var(--cat-seguranca)}
+.tile-sensor .tile-topo{cursor:default}
+.tile-sensor[data-alerta="true"]{border-color:var(--avx);background:linear-gradient(rgba(218,41,28,.12),rgba(218,41,28,.12)),var(--card-bg)}
+.tile-sensor[data-alerta="true"] .tile-estado{color:var(--bone)}
+
+/* 3.8 Tomada (AVX-Socket): liga, desliga e mostra o consumo */
+.tile-tomada{--cor:var(--cat-eletrica)}
+
+/* 3.9 Central de Controle (AVX-Pro-Server) */
+.tile-central{--cor:var(--cat-central);grid-column:1/-1}
+.central-linhas{display:grid;gap:.25rem;font-size:.78rem;font-weight:300;color:var(--bone-dim);letter-spacing:var(--ls-texto)}
+.central-linhas b{font-weight:500;color:var(--bone)}
+
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition-duration:.01ms!important}
+}
+</style>
+</head>
+<body>
+<!-- Ícones: Lucide 0.468.0 (a mesma biblioteca do catálogo), copiados para dentro da página.
+     Lucide: ISC License. Copyright (c) for portions of Lucide are held by Cole Bemis 2013-2022 as part of Feather (MIT).
+     All other copyright (c) for Lucide are held by Lucide Contributors 2022. Texto completo: https://lucide.dev/license -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-bed-double" viewBox="0 0 24 24"><path d="M2 20v-8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v8" /><path d="M4 10V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4" /><path d="M12 4v6" /><path d="M2 18h20" /></symbol>
+  <symbol id="i-blinds" viewBox="0 0 24 24"><path d="M3 3h18" /><path d="M20 7H8" /><path d="M20 11H8" /><path d="M10 19h10" /><path d="M8 15h12" /><path d="M4 3v14" /><circle cx="4" cy="19" r="2" /></symbol>
+  <symbol id="i-cloud-fog" viewBox="0 0 24 24"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242" /><path d="M16 17H7" /><path d="M17 21H9" /></symbol>
+  <symbol id="i-door-open" viewBox="0 0 24 24"><path d="M13 4h3a2 2 0 0 1 2 2v14" /><path d="M2 20h3" /><path d="M13 20h9" /><path d="M10 12v.01" /><path d="M13 4.562v16.157a1 1 0 0 1-1.242.97L5 20V5.562a2 2 0 0 1 1.515-1.94l4-1A2 2 0 0 1 13 4.561Z" /></symbol>
+  <symbol id="i-eye-off" viewBox="0 0 24 24"><path d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49" /><path d="M14.084 14.158a3 3 0 0 1-4.242-4.242" /><path d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143" /><path d="m2 2 20 20" /></symbol>
+  <symbol id="i-fast-forward" viewBox="0 0 24 24"><polygon points="13 19 22 12 13 5 13 19" /><polygon points="2 19 11 12 2 5 2 19" /></symbol>
+  <symbol id="i-film" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2" /><path d="M7 3v18" /><path d="M3 7.5h4" /><path d="M3 12h18" /><path d="M3 16.5h4" /><path d="M17 3v18" /><path d="M17 7.5h4" /><path d="M17 16.5h4" /></symbol>
+  <symbol id="i-flame" viewBox="0 0 24 24"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z" /></symbol>
+  <symbol id="i-lightbulb" viewBox="0 0 24 24"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5" /><path d="M9 18h6" /><path d="M10 22h4" /></symbol>
+  <symbol id="i-log-in" viewBox="0 0 24 24"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" /><polyline points="10 17 15 12 10 7" /><line x1="15" x2="3" y1="12" y2="12" /></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" /></symbol>
+  <symbol id="i-music" viewBox="0 0 24 24"><path d="M9 18V5l12-2v13" /><circle cx="6" cy="18" r="3" /><circle cx="18" cy="16" r="3" /></symbol>
+  <symbol id="i-palette" viewBox="0 0 24 24"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor" /><circle cx="17.5" cy="10.5" r=".5" fill="currentColor" /><circle cx="8.5" cy="7.5" r=".5" fill="currentColor" /><circle cx="6.5" cy="12.5" r=".5" fill="currentColor" /><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z" /></symbol>
+  <symbol id="i-pause" viewBox="0 0 24 24"><rect x="14" y="4" width="4" height="16" rx="1" /><rect x="6" y="4" width="4" height="16" rx="1" /></symbol>
+  <symbol id="i-plug-zap" viewBox="0 0 24 24"><path d="M6.3 20.3a2.4 2.4 0 0 0 3.4 0L12 18l-6-6-2.3 2.3a2.4 2.4 0 0 0 0 3.4Z" /><path d="m2 22 3-3" /><path d="M7.5 13.5 10 11" /><path d="M10.5 16.5 13 14" /><path d="m18 3-4 4h6l-4 4" /></symbol>
+  <symbol id="i-radar" viewBox="0 0 24 24"><path d="M19.07 4.93A10 10 0 0 0 6.99 3.34" /><path d="M4 6h.01" /><path d="M2.29 9.62A10 10 0 1 0 21.31 8.35" /><path d="M16.24 7.76A6 6 0 1 0 8.23 16.67" /><path d="M12 18h.01" /><path d="M17.99 11.66A6 6 0 0 1 15.77 16.67" /><circle cx="12" cy="12" r="2" /><path d="m13.41 10.59 5.66-5.66" /></symbol>
+  <symbol id="i-server" viewBox="0 0 24 24"><rect width="20" height="8" x="2" y="2" rx="2" ry="2" /><rect width="20" height="8" x="2" y="14" rx="2" ry="2" /><line x1="6" x2="6.01" y1="6" y2="6" /><line x1="6" x2="6.01" y1="18" y2="18" /></symbol>
+  <symbol id="i-shield-check" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" /><path d="m9 12 2 2 4-4" /></symbol>
+  <symbol id="i-siren" viewBox="0 0 24 24"><path d="M7 18v-6a5 5 0 1 1 10 0v6" /><path d="M5 21a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-1a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2z" /><path d="M21 12h1" /><path d="M18.5 4.5 18 5" /><path d="M2 12h1" /><path d="M12 2v1" /><path d="m4.929 4.929.707.707" /><path d="M12 12v6" /></symbol>
+  <symbol id="i-snowflake" viewBox="0 0 24 24"><line x1="2" x2="22" y1="12" y2="12" /><line x1="12" x2="12" y1="2" y2="22" /><path d="m20 16-4-4 4-4" /><path d="m4 8 4 4-4 4" /><path d="m16 4-4 4-4-4" /><path d="m8 20 4-4 4 4" /></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" /><path d="M12 2v2" /><path d="M12 20v2" /><path d="m4.93 4.93 1.41 1.41" /><path d="m17.66 17.66 1.41 1.41" /><path d="M2 12h2" /><path d="M20 12h2" /><path d="m6.34 17.66-1.41 1.41" /><path d="m19.07 4.93-1.41 1.41" /></symbol>
+  <symbol id="i-utensils" viewBox="0 0 24 24"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2" /><path d="M7 2v20" /><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7" /></symbol>
+  <symbol id="i-waves" viewBox="0 0 24 24"><path d="M2 6c.6.5 1.2 1 2.5 1C7 7 7 5 9.5 5c2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1" /><path d="M2 12c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1" /><path d="M2 18c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1" /></symbol>
+  <symbol id="i-zap" viewBox="0 0 24 24"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z" /></symbol>
+</svg>
+
+<header class="barra">
+  <a class="marca" href="index.html" aria-label="AVX, voltar ao site">AVX<span class="ponto">.</span></a>
+  <span class="barra-titulo">App AVX</span>
+  <span class="selo" role="note">Demonstração · casa simulada</span>
+  <span class="relogio" aria-hidden="true"><svg class="ic" id="relogio-ic"><use href="#i-sun"/></svg><span id="relogio">17:30</span></span>
+</header>
+
+<main class="app" id="conteudo">
+  <h1 class="sr-only">App AVX: demonstração com uma casa simulada</h1>
+
+  <section class="area-planta" aria-labelledby="planta-titulo">
+    <div class="planta-topo">
+      <h2 class="eyebrow" id="planta-titulo">Cobertura · vista mar</h2>
+      <p class="dica">Toque num ambiente</p>
+    </div>
+    <div class="planta-moldura">
+      <svg id="planta" viewBox="0 0 1000 640" role="group" aria-label="Planta da cobertura. Cada ambiente é um botão.">
+        <defs>
+          <radialGradient id="g-quente"><stop offset="0" stop-color="rgb(242,196,141)" stop-opacity=".85"/><stop offset=".5" stop-color="rgb(242,196,141)" stop-opacity=".3"/><stop offset="1" stop-color="rgb(242,196,141)" stop-opacity="0"/></radialGradient>
+          <radialGradient id="g-fria"><stop offset="0" stop-color="rgb(196,214,232)" stop-opacity=".75"/><stop offset=".5" stop-color="rgb(196,214,232)" stop-opacity=".26"/><stop offset="1" stop-color="rgb(196,214,232)" stop-opacity="0"/></radialGradient>
+          <linearGradient id="g-mar" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".9"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+        </defs>
+      </svg>
+      <p class="estado-casa" id="estado-casa" hidden></p>
+    </div>
+  </section>
+
+  <section class="area-cenas" aria-label="Cenas">
+    <div class="cenas" id="cenas"></div>
+  </section>
+
+  <section class="area-ambiente" id="painel" aria-labelledby="ambiente-nome"></section>
+
+  <section class="area-registro" aria-labelledby="registro-titulo">
+    <h2 class="eyebrow" id="registro-titulo">A casa agiu</h2>
+    <ol class="registro" id="registro"><li class="vazio">Escolha uma cena ou acelere o dia.</li></ol>
+  </section>
+
+  <footer class="rodape-app">
+    <span class="marca">AVX<span class="ponto" style="color:var(--avx)">.</span> <span style="font-weight:300;font-size:.85rem;letter-spacing:var(--ls-texto)">A casa que age.</span></span>
+    <span>Casa simulada: nada aqui sai desta página. No App AVX de verdade, processamento 100% local — a casa funciona com ou sem internet.</span>
+    <span>© 2026 AVX · <a href="index.html">Voltar ao site</a></span>
+  </footer>
+</main>
+
+<div class="dock" role="region" aria-label="Linha do tempo do dia">
+  <div class="dock-in">
+    <div class="dia-trilho">
+      <label class="sr-only" for="dia">Hora do dia</label>
+      <input type="range" id="dia" min="0" max="1439" step="1" value="1050" aria-valuetext="17:30">
+      <div class="dia-marcas" aria-hidden="true"><span>00</span><span>06</span><span>12</span><span>18</span><span>24</span></div>
+    </div>
+    <button class="acelerar" id="acelerar" aria-pressed="false"><svg class="ic"><use href="#i-fast-forward"/></svg><span id="acelerar-txt">Acelerar <span class="rotulo-longo">o dia</span></span></button>
+  </div>
+</div>
+
+<div class="sr-only" id="anuncio" aria-live="polite"></div>
+
+<script>
+'use strict';
+(() => {
+/* =====================================================================
+   4. JS · 4.1 Utilidades
+   ===================================================================== */
+const $ = (s, el = document) => el.querySelector(s);
+const NS = 'http://www.w3.org/2000/svg';
+const PASSO = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--passo-cena'), 10) || 160;
+const movimento = matchMedia('(prefers-reduced-motion: reduce)');
+let reduzido = movimento.matches;
+if (movimento.addEventListener) movimento.addEventListener('change', e => { reduzido = e.matches; });
+const svgEl = (tag, attrs = {}, pai) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (pai) pai.appendChild(e); return e; };
+const icone = (nome, cls = 'ic') => `<svg class="${cls}" aria-hidden="true"><use href="#i-${nome}"/></svg>`;
+const hhmm = m => { m = ((Math.round(m) % 1440) + 1440) % 1440; return String(Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0'); };
+const num = (v, casas = 1) => v.toFixed(casas).replace('.', ',');
+const limitar = (v, a, b) => Math.min(b, Math.max(a, v));
+
+/* =====================================================================
+   4.2 A casa: ambientes, posição na planta (viewBox 1000 × 640, mar embaixo) e dispositivos
+   ===================================================================== */
+// Categorias com os nomes do padrão de marca (15.7).
+const CATEGORIAS = [
+  ['iluminacao', 'Iluminação'], ['cortinas', 'Cortinas & Persianas'], ['clima', 'Climatização'],
+  ['multimidia', 'Multimídia'], ['seguranca', 'AI Security'], ['eletrica', 'Elétrica & Acabamentos'], ['central', 'Central de Controle']];
+const CATEGORIA_DO_TIPO = { luz: 'iluminacao', fita: 'iluminacao', cortina: 'cortinas', clima: 'clima', som: 'multimidia', sensor: 'seguranca', tomada: 'eletrica', central: 'central' };
+
+const luz = (id, nome, modelo, o = {}) => ({ id, tipo: 'luz', nome, modelo, on: !!o.on, brilho: o.brilho ?? 70, dim: o.dim !== false, zona: o.zona });
+const fita = (id, nome) => ({ id, tipo: 'fita', nome, modelo: 'AVX-RGBW', on: false, brilho: 40, tom: 15 });
+const cortina = (id, nome, modelo, estilo, abertura = 100) => ({ id, tipo: 'cortina', nome, modelo, estilo, abertura });
+const clima = (id, o = {}) => ({ id, tipo: 'clima', nome: 'Clima', modelo: 'AVX-RM · AVX-H&T', on: !!o.on, alvo: o.alvo ?? 23, temp: o.temp ?? 25.6, umid: 64, desvio: o.desvio ?? 0 });
+const som = (id, o = {}) => ({ id, tipo: 'som', nome: 'Som', modelo: 'AVX-IP', tocando: !!o.tocando, volume: o.volume ?? 25, faixa: 0 });
+const sensor = (id, sub, nome, modelo) => ({ id, tipo: 'sensor', sub, nome, modelo, aberto: false, alerta: false });
+const tomada = (id, nome, modelo, watts) => ({ id, tipo: 'tomada', nome, modelo, on: true, watts });
+
+// Janelas: [x1, y1, x2, y2] na parede e as cortinas que correm nelas (a de fora primeiro).
+const AMBIENTES = [
+  { id: 'living', nome: 'Living e jantar', curto: 'Living e jantar', x: 320, y: 270, w: 400, h: 200, parede: 'Na parede: AVX-Touchpad 4',
+    janelas: [{ seg: [340, 470, 700, 470], cortinas: ['living.blackout', 'living.voil'] }],
+    disp: [luz('living.sanca', 'Sanca', 'AVX-Dimmer', { brilho: 50 }), luz('living.pendente', 'Pendente do jantar', 'AVX-Dimmer', { brilho: 70 }), fita('living.fita', 'Fita da sanca'),
+      cortina('living.blackout', 'Blackout', 'AVX-Curtain', 'blackout'), cortina('living.voil', 'Voil', 'AVX-Curtain', 'voil'),
+      clima('living.clima', { on: true, alvo: 23, temp: 23.4 }), som('living.som', { tocando: true, volume: 20 }), sensor('living.presenca', 'presenca', 'Presença', 'AVX-MMWave')] },
+  { id: 'varanda', nome: 'Varanda gourmet', curto: 'Varanda', x: 320, y: 470, w: 640, h: 70, parede: 'Na parede: AVX-Touchpad 2',
+    janelas: [{ seg: [740, 540, 960, 540], cortinas: ['varanda.persiana'] }],
+    disp: [luz('varanda.luz', 'Luz da varanda', 'AVX-Plus-2', { dim: false }), luz('varanda.spots', 'Spots', 'AVX-Plus-2', { brilho: 60 }),
+      cortina('varanda.persiana', 'Persiana', 'AVX-2PM', 'persiana'), sensor('varanda.porta', 'porta', 'Porta de correr', 'AVX-Door Window'), som('varanda.som', { volume: 20 })] },
+  { id: 'suite', nome: 'Suíte master', curto: 'Suíte master', x: 40, y: 270, w: 280, h: 270, parede: 'Na parede: AVX-Touchpad 4',
+    janelas: [{ seg: [70, 540, 300, 540], cortinas: ['suite.blackout', 'suite.voil'] }, { seg: [40, 320, 40, 500], cortinas: ['suite.blackout', 'suite.voil'] }],
+    disp: [luz('suite.luz', 'Luz principal', 'AVX-Dimmer', { brilho: 60 }), fita('suite.cabeceira', 'Fita da cabeceira'), luz('suite.banho', 'Luz do banho', 'AVX-Plus-1', { dim: false }),
+      cortina('suite.blackout', 'Blackout', 'AVX-Curtain', 'blackout'), cortina('suite.voil', 'Voil', 'AVX-Curtain', 'voil'),
+      clima('suite.clima', { alvo: 22, temp: 25.1, desvio: -.3 }), som('suite.som', { volume: 15 }),
+      sensor('suite.presenca', 'presenca', 'Presença', 'AVX-MMWave'), sensor('suite.agua', 'agua', 'Água no banho', 'AVX-Flood')] },
+  { id: 'cinema', nome: 'Sala de cinema', curto: 'Cinema', x: 720, y: 270, w: 240, h: 200, parede: 'Na parede: AVX-Touchpad 3',
+    janelas: [{ seg: [960, 300, 960, 440], cortinas: ['cinema.blackout'] }],
+    disp: [luz('cinema.luz', 'Luz principal', 'AVX-Dimmer', { brilho: 60 }), fita('cinema.fita', 'Fita do teto'), cortina('cinema.blackout', 'Blackout', 'AVX-Curtain', 'blackout'),
+      som('cinema.som', { volume: 40 }), clima('cinema.clima', { alvo: 22, temp: 25.8, desvio: .3 })] },
+  { id: 'hall', nome: 'Hall de entrada', curto: 'Hall', x: 420, y: 40, w: 140, h: 230, parede: 'Na parede: AVX-Touchpad 2',
+    porta: [450, 40, 530, 40],
+    disp: [luz('hall.luz', 'Luz do hall', 'AVX-Dimmer', { brilho: 60 }), luz('hall.caminho', 'Luz de caminho', 'AVX-Plus-1', { brilho: 10, zona: 'circ' }),
+      sensor('hall.porta', 'porta', 'Porta social', 'AVX-Door Window'), sensor('hall.presenca', 'presenca', 'Presença', 'AVX-MMWave')] },
+  { id: 'cozinha', nome: 'Cozinha', curto: 'Cozinha', x: 560, y: 40, w: 230, h: 230, parede: 'Na parede: AVX-Touchpad 2',
+    vidros: [[600, 40, 750, 40]],
+    disp: [luz('cozinha.luz', 'Luz principal', 'AVX-Touchpad 2', { dim: false }), luz('cozinha.armarios', 'Luz sob os armários', 'AVX-Plus-1', { dim: false }),
+      tomada('cozinha.tomada', 'Tomada da bancada', 'AVX-Socket 1', 6),
+      sensor('cozinha.gas', 'gas', 'Gás', 'AVX-GasGLP'), sensor('cozinha.agua', 'agua', 'Água', 'AVX-Flood'), sensor('cozinha.fumaca', 'fumaca', 'Fumaça', 'AVX-Smoke')] },
+  { id: 'escritorio', nome: 'Escritório', curto: 'Escritório', x: 790, y: 40, w: 170, h: 230, parede: 'Na parede: AVX-Touchpad 2',
+    janelas: [{ seg: [960, 80, 960, 230], cortinas: ['escritorio.persiana'] }],
+    disp: [luz('escritorio.luz', 'Luz da mesa', 'AVX-Dimmer', { brilho: 80 }), cortina('escritorio.persiana', 'Persiana', 'AVX-2PM', 'persiana'),
+      clima('escritorio.clima', { alvo: 23, temp: 26.0, desvio: .4 }), tomada('escritorio.tomada', 'Tomadas da mesa', 'AVX-Socket 2', 42)] },
+  { id: 'hospedes', nome: 'Suíte de hóspedes', curto: 'Hóspedes', x: 40, y: 40, w: 220, h: 230, parede: 'Na parede: AVX-Touchpad 2',
+    janelas: [{ seg: [40, 90, 40, 230], cortinas: ['hospedes.cortina'] }],
+    disp: [luz('hospedes.luz', 'Luz principal', 'AVX-Touchpad 2', { dim: false }), cortina('hospedes.cortina', 'Cortina', 'AVX-Curtain', 'blackout'),
+      clima('hospedes.clima', { alvo: 23, temp: 25.4 })] },
+  { id: 'tecnica', nome: 'Área técnica', curto: 'Técnica', x: 260, y: 40, w: 160, h: 120, parede: 'No quadro: AVX-Pro-4 · AVX-Ethernet',
+    disp: [{ id: 'tecnica.central', tipo: 'central', nome: 'Central de Controle', modelo: 'AVX-Pro-Server', internet: true },
+      sensor('tecnica.sirene', 'sirene', 'Sirene', 'AVX-Siren')] },
+];
+const CIRCULACAO = { x: 260, y: 160, w: 160, h: 110 };   // corredor entre as suítes e o hall (luz de caminho)
+
+const DISP = {}, AMB_DO_DISP = {};
+for (const a of AMBIENTES) for (const d of a.disp) { DISP[d.id] = d; AMB_DO_DISP[d.id] = a; }
+const ambiente = id => AMBIENTES.find(a => a.id === id);
+
+// "Playlist da casa": nomes inventados, sem música, artista ou serviço real.
+const FAIXAS = ['Ambiente · Fim de tarde', 'Ambiente · Jantar', 'Ambiente · Manhã', 'Trilha do cinema', 'Ambiente · Silêncio'];
+
+/* =====================================================================
+   4.3 Estado geral da casa
+   ===================================================================== */
+const casa = { minuto: 1050, escolhido: 'living', vigiando: false, recluso: false, cenaAtiva: null, acelerando: false };
+
+/* =====================================================================
+   4.4 Descrever um dispositivo (registro e cartões)
+   ===================================================================== */
+function estadoTexto(d) {
+  switch (d.tipo) {
+    case 'luz': return d.on ? (d.dim ? `${d.brilho}%` : 'Acesa') : 'Apagada';
+    case 'fita': return d.on ? `${d.brilho}% · ${d.tom < 35 ? 'quente' : d.tom > 65 ? 'fria' : 'neutra'}` : 'Apagada';
+    case 'cortina': return d.abertura >= 100 ? 'Aberta' : d.abertura <= 0 ? 'Fechada' : `Aberta ${d.abertura}%`;
+    case 'clima': return d.on ? `Ligado · ${d.alvo} °C` : 'Desligado';
+    case 'som': return d.tocando ? `Tocando · ${d.volume}%` : 'Pausado';
+    case 'tomada': return d.on ? `${d.watts} W` : 'Desligada';
+    case 'sensor': return sensorTexto(d);
+    case 'central': return d.internet ? 'Funcionando · com internet' : 'Funcionando · sem internet';
+  }
+  return '';
+}
+function sensorTexto(d) {
+  if (d.alerta) return { gas: 'Gás detectado', agua: 'Água detectada', fumaca: 'Fumaça detectada', porta: 'Aberta com a casa vigiando', sirene: 'Tocando' }[d.sub] || 'Alerta';
+  if (d.sub === 'presenca') return casa.vigiando ? 'Vigiando' : (ocupado(AMB_DO_DISP[d.id]) ? 'Presença' : 'Ninguém');
+  if (d.sub === 'porta') return d.aberto ? 'Aberta' : 'Fechada';
+  if (d.sub === 'sirene') return casa.vigiando ? 'Armada' : 'Pronta';
+  return casa.vigiando ? 'Vigiando · normal' : 'Normal';
+}
+const ocupado = a => !casa.vigiando && a.disp.some(d => (d.tipo === 'luz' || d.tipo === 'fita') && d.on && !d.zona || (d.tipo === 'som' && d.tocando));
+const ativo = d => ({ luz: d.on, fita: d.on, cortina: d.abertura > 0, clima: d.on, som: d.tocando, tomada: d.on, sensor: d.alerta || (d.sub === 'porta' && d.aberto), central: true })[d.tipo];
+
+/* =====================================================================
+   4.5 Planta (SVG montado a partir de AMBIENTES)
+   ===================================================================== */
+const planta = $('#planta');
+const brilhos = {};       // ambiente → [círculo quente, círculo frio]
+const cortinasSvg = {};   // id da cortina → [retângulos]
+const climaTxt = {}, pontos = {}, aneis = {};
+let marRect, marBrilho, astro, astroIc;
+
+function montarPlanta() {
+  // Mar e o astro (sol ou lua) que anda com a hora
+  marRect = svgEl('rect', { class: 'mar', x: 0, y: 556, width: 1000, height: 84 }, planta);
+  marBrilho = svgEl('rect', { x: 0, y: 556, width: 1000, height: 84, fill: 'url(#g-mar)', opacity: 0 }, planta);
+  for (let i = 0; i < 3; i++) svgEl('line', { x1: 60 + i * 37, y1: 590 + i * 14, x2: 940 - i * 61, y2: 590 + i * 14, stroke: 'rgba(236,232,225,.08)', 'stroke-width': 1 }, planta);
+  svgEl('text', { class: 'rotulo circ', x: 24, y: 628 }, planta).textContent = 'Mar';
+  astro = svgEl('g', { class: 'astro' }, planta);
+  astroIc = svgEl('circle', { cx: 0, cy: 0, r: 13, fill: 'rgb(242,196,141)' }, astro);
+
+  const pisos = svgEl('g', {}, planta), luzes = svgEl('g', {}, planta), paredes = svgEl('g', {}, planta);
+  const detalhes = svgEl('g', {}, planta), textos = svgEl('g', {}, planta), alvos = svgEl('g', {}, planta);
+
+  const brilhoEm = (chave, r) => {
+    const clip = svgEl('clipPath', { id: 'clip-' + chave }, planta.querySelector('defs'));
+    svgEl('rect', { x: r.x, y: r.y, width: r.w, height: r.h }, clip);
+    const g = svgEl('g', { 'clip-path': `url(#clip-${chave})` }, luzes);
+    const raio = Math.max(r.w, r.h) * .78, cx = r.x + r.w / 2, cy = r.y + r.h / 2;
+    brilhos[chave] = [svgEl('circle', { class: 'brilho', cx, cy, r: raio, fill: 'url(#g-quente)' }, g), svgEl('circle', { class: 'brilho', cx, cy, r: raio, fill: 'url(#g-fria)' }, g)];
+  };
+
+  // Corredor (luz de caminho)
+  svgEl('rect', { class: 'piso', ...ret(CIRCULACAO) }, pisos);
+  brilhoEm('circ', CIRCULACAO);
+  svgEl('text', { class: 'rotulo circ', x: CIRCULACAO.x + 14, y: CIRCULACAO.y + CIRCULACAO.h - 16 }, textos).textContent = 'Circulação';
+
+  for (const a of AMBIENTES) {
+    svgEl('rect', { class: 'piso', ...ret(a) }, pisos);
+    brilhoEm(a.id, a);
+    svgEl('rect', { class: 'parede', ...ret(a) }, paredes);
+    for (const v of a.vidros || []) svgEl('line', { class: 'vidro', x1: v[0], y1: v[1], x2: v[2], y2: v[3] }, detalhes);
+    if (a.porta) { const [x1, y1, x2] = a.porta; svgEl('path', { class: 'porta', d: `M${x1} ${y1} A ${x2 - x1} ${x2 - x1} 0 0 1 ${x2} ${y1 + (x2 - x1)}` }, detalhes); }
+    for (const j of a.janelas || []) {
+      const [x1, y1, x2, y2] = j.seg, horiz = y1 === y2;
+      svgEl('line', { class: 'vidro', x1, y1, x2, y2 }, detalhes);
+      // Para dentro do ambiente: a cortina de fora encosta no vidro; as outras vêm 7 px para dentro.
+      const dentro = horiz ? Math.sign((a.y + a.h / 2) - y1) : Math.sign((a.x + a.w / 2) - x1);
+      j.cortinas.forEach((cid, k) => {
+        const d = DISP[cid], off = (5 + k * 7) * dentro, esp = 4, metade = (horiz ? x2 - x1 : y2 - y1) / 2;
+        const ra = horiz ? { x: x1, y: y1 + off - esp / 2, width: metade, height: esp } : { x: x1 + off - esp / 2, y: y1, width: esp, height: metade };
+        const rb = horiz ? { x: x1 + metade, y: y1 + off - esp / 2, width: metade, height: esp } : { x: x1 + off - esp / 2, y: y1 + metade, width: esp, height: metade };
+        const a1 = svgEl('rect', { class: 'cortina ' + d.estilo, ...ra }, detalhes), a2 = svgEl('rect', { class: 'cortina ' + d.estilo, ...rb }, detalhes);
+        a1.style.transformOrigin = horiz ? 'left center' : 'center top';
+        a2.style.transformOrigin = horiz ? 'right center' : 'center bottom';
+        a1.dataset.eixo = a2.dataset.eixo = horiz ? 'X' : 'Y';
+        (cortinasSvg[cid] = cortinasSvg[cid] || []).push(a1, a2);
+      });
+    }
+    svgEl('text', { class: 'rotulo', x: a.x + 14, y: a.y + 32 }, textos).textContent = a.curto;
+    climaTxt[a.id] = svgEl('text', { class: 'clima-txt', x: a.x + a.w - 14, y: a.y + 32, 'text-anchor': 'end' }, textos);
+    const px = a.x + a.w - 18, py = a.y + a.h - 18;
+    aneis[a.id] = svgEl('circle', { class: 'anel-alerta', cx: px, cy: py, r: 10, style: `transform-origin:${px}px ${py}px` }, textos);
+    pontos[a.id] = svgEl('circle', { class: 'ponto-sensor', cx: px, cy: py, r: 6 }, textos);
+
+    // O ambiente inteiro é um botão
+    const g = svgEl('g', { class: 'ambiente', 'data-amb': a.id }, alvos);
+    const alvo = svgEl('rect', { class: 'alvo', ...ret(a), tabindex: 0, role: 'button', 'aria-label': a.nome }, g);
+    svgEl('rect', { class: 'selecao', x: a.x + 1.5, y: a.y + 1.5, width: a.w - 3, height: a.h - 3, rx: 2 }, g);
+    alvo.addEventListener('click', () => escolher(a.id, true));
+    alvo.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); escolher(a.id, true); } });
+  }
+}
+function ret(r) { return { x: r.x, y: r.y, width: r.w, height: r.h }; }
+
+function desenharPlanta() {
+  const nivel = { circ: [0, 0] };
+  for (const a of AMBIENTES) nivel[a.id] = [0, 0];
+  for (const d of Object.values(DISP)) {
+    if (!(d.tipo === 'luz' || d.tipo === 'fita') || !d.on) continue;
+    const chave = d.zona || AMB_DO_DISP[d.id].id, b = d.brilho / 100;
+    if (d.tipo === 'fita') { const f = d.tom / 100; nivel[chave][0] = Math.max(nivel[chave][0], b * (1 - f) * .8); nivel[chave][1] = Math.max(nivel[chave][1], b * f * .8); }
+    else nivel[chave][0] = Math.max(nivel[chave][0], d.dim ? b : .85);
+  }
+  for (const k in brilhos) { brilhos[k][0].style.opacity = Math.min(1, nivel[k][0] * 1.15).toFixed(2); brilhos[k][1].style.opacity = Math.min(1, nivel[k][1] * 1.15).toFixed(2); }
+  for (const cid in cortinasSvg) {
+    const fechado = (100 - DISP[cid].abertura) / 100;
+    for (const r of cortinasSvg[cid]) r.style.transform = `scale${r.dataset.eixo}(${fechado.toFixed(3)})`;
+  }
+  for (const a of AMBIENTES) {
+    const c = a.disp.find(d => d.tipo === 'clima');
+    climaTxt[a.id].textContent = c && c.on ? `${c.alvo}°` : '';
+    const sens = a.disp.filter(d => d.tipo === 'sensor');
+    const alerta = sens.some(d => d.alerta);
+    const p = pontos[a.id];
+    p.classList.toggle('alerta', alerta);
+    p.classList.toggle('vigia', !alerta && casa.vigiando && sens.length > 0);
+    p.classList.toggle('on', !alerta && !casa.vigiando && ocupado(a));
+    aneis[a.id].classList.toggle('on', alerta);
+    planta.querySelector(`[data-amb="${a.id}"]`).classList.toggle('escolhido', a.id === casa.escolhido);
+  }
+  const algumAlerta = Object.values(DISP).some(d => d.alerta);
+  const ec = $('#estado-casa');
+  ec.hidden = !(algumAlerta || casa.vigiando || casa.recluso);
+  ec.classList.toggle('alerta', algumAlerta);
+  ec.textContent = algumAlerta ? 'Alerta' : casa.vigiando ? 'Casa vigiando' : 'Modo Recluso';
+}
+
+/* Dia e noite: tom do mar, posição do sol ou da lua e o piso mais claro de dia */
+function desenharDia() {
+  const h = casa.minuto / 60;
+  const luzDia = limitar(Math.sin(Math.PI * (h - 5.8) / 13), 0, 1);           // 0 à noite, 1 ao meio-dia
+  const dourada = Math.max(0, 1 - Math.abs(h - 6.3) / 1.1) + Math.max(0, 1 - Math.abs(h - 18.2) / 1.1);
+  marRect.setAttribute('fill', `rgba(${COR_MAR},${(.07 + .25 * luzDia).toFixed(3)})`);
+  marBrilho.setAttribute('opacity', (dourada * .12).toFixed(3));
+  marBrilho.setAttribute('fill', dourada > 0 ? 'rgba(242,196,141,1)' : 'url(#g-mar)');
+  const dia = h >= 6.5 && h < 18.5;
+  planta.classList.toggle('dia', dia);
+  // O mar fica a leste: o sol nasce sobre ele e anda da esquerda para a direita durante o dia; a lua, à noite.
+  const t = dia ? (h - 6) / 12.5 : ((h < 6 ? h + 24 : h) - 18.5) / 11.5;
+  astro.style.transform = `translate(${(60 + 880 * limitar(t, 0, 1)).toFixed(1)}px, ${(608 - 34 * Math.sin(Math.PI * limitar(t, 0, 1))).toFixed(1)}px)`;
+  astroIc.setAttribute('fill', dia ? 'rgb(242,196,141)' : 'rgb(236,232,225)');
+  astroIc.setAttribute('r', dia ? 13 : 9);
+  astroIc.setAttribute('opacity', dia ? .95 : .7);
+  $('#relogio').textContent = hhmm(casa.minuto);
+  $('#relogio-ic use').setAttribute('href', dia ? '#i-sun' : '#i-moon');
+  const dial = $('#dia');
+  dial.value = Math.round(casa.minuto) % 1440;
+  dial.setAttribute('aria-valuetext', hhmm(casa.minuto));
+  dial.style.setProperty('--p', (dial.value / 14.39).toFixed(1) + '%');
+}
+const COR_MAR = getComputedStyle(document.documentElement).getPropertyValue('--mar').trim();
+const ehDia = () => { const h = casa.minuto / 60; return h >= 6.5 && h < 18.5; };
+
+/* =====================================================================
+   4.6 Painel do ambiente: os cartões
+   ===================================================================== */
+const painel = $('#painel');
+function montarPainel() {
+  const a = ambiente(casa.escolhido);
+  const grupos = CATEGORIAS.map(([cat, nome]) => [nome, a.disp.filter(d => CATEGORIA_DO_TIPO[d.tipo] === cat)]).filter(g => g[1].length);
+  painel.innerHTML = `
+    <div class="ambiente-topo"><h2 class="ambiente-nome" id="ambiente-nome">${a.nome}</h2><span class="ambiente-medida" id="ambiente-medida"></span></div>
+    <p class="ambiente-parede">${a.parede}</p>
+    ${grupos.map(([nome, ds]) => `<div class="grupo"><h3 class="eyebrow">${nome}</h3><div class="grade">${ds.map(cartao).join('')}</div></div>`).join('')}`;
+  for (const d of a.disp) sincronizar(d.id);
+  medidaAmbiente();
+}
+function medidaAmbiente() {
+  const a = ambiente(casa.escolhido), c = a.disp.find(d => d.tipo === 'clima'), el = $('#ambiente-medida');
+  if (el) el.textContent = c ? `${num(c.temp)} °C · ${Math.round(c.umid)}%` : '';
+}
+
+// Um modelo por tipo de cartão
+function cartao(d) {
+  const topo = (ic, extra = '') => `
+    <button class="tile-topo" data-acao="alternar" ${extra}>
+      <span class="tile-icone">${icone(ic)}</span>
+      <span class="tile-nome">${d.nome}</span>
+      <span class="tile-estado" data-campo="estado"></span>
+    </button>`;
+  const deslizante = (prop, rot, min = 0, max = 100, cls = '') =>
+    `<label class="tile-linha ${cls}"><span class="rot">${rot}</span><span class="sr-only">${rot} · ${d.nome}</span><input type="range" min="${min}" max="${max}" step="1" data-prop="${prop}"></label>`;
+  const modelo = `<span class="tile-modelo">${d.modelo}</span>`;
+  switch (d.tipo) {
+    case 'luz': return `<article class="tile tile-luz" data-id="${d.id}">${topo('lightbulb', 'aria-pressed="false"')}${d.dim ? deslizante('brilho', 'Brilho') : ''}${modelo}</article>`;
+    case 'fita': return `<article class="tile tile-fita" data-id="${d.id}">${topo('palette', 'aria-pressed="false"')}${deslizante('brilho', 'Brilho')}${deslizante('tom', 'Tom', 0, 100, 'tom')}${modelo}</article>`;
+    case 'cortina': return `<article class="tile tile-cortina" data-id="${d.id}">${topo('blinds', 'aria-pressed="false"')}${deslizante('abertura', 'Abertura')}
+      <div class="tile-botoes"><button class="mini" data-acao="abrir">Abrir</button><button class="mini" data-acao="fechar">Fechar</button></div>${modelo}</article>`;
+    case 'clima': return `<article class="tile tile-clima" data-id="${d.id}">${topo('snowflake', 'aria-pressed="false"')}
+      <div class="clima-alvo"><button class="redondo" data-acao="menos" aria-label="Baixar a temperatura">−</button><span class="valor" data-campo="alvo"></span><button class="redondo" data-acao="mais" aria-label="Subir a temperatura">+</button></div>
+      <span class="faixa" data-campo="medida"></span>${modelo}</article>`;
+    case 'som': return `<article class="tile tile-som" data-id="${d.id}">${topo('music', 'aria-pressed="false"')}<span class="faixa" data-campo="faixa"></span>
+      ${deslizante('volume', 'Volume')}<div class="tile-botoes"><button class="mini" data-acao="proxima">${icone('fast-forward')} Próxima</button></div>${modelo}</article>`;
+    case 'tomada': return `<article class="tile tile-tomada" data-id="${d.id}">${topo('plug-zap', 'aria-pressed="false"')}${modelo}</article>`;
+    case 'sensor': {
+      const ic = { presenca: 'radar', porta: 'door-open', gas: 'flame', agua: 'waves', fumaca: 'cloud-fog', sirene: 'siren' }[d.sub];
+      const teste = d.sub === 'porta' ? `<button class="mini" data-acao="porta">Abrir ou fechar</button>`
+        : ['gas', 'agua', 'fumaca', 'sirene'].includes(d.sub) ? `<button class="mini" data-acao="testar">Testar alerta</button>` : '';
+      return `<article class="tile tile-sensor" data-id="${d.id}"><div class="tile-topo"><span class="tile-icone">${icone(ic)}</span><span class="tile-nome">${d.nome}</span><span class="tile-estado" data-campo="estado"></span></div>
+        ${teste ? `<div class="tile-botoes">${teste}</div>` : ''}${modelo}</article>`;
+    }
+    case 'central': return `<article class="tile tile-central" data-id="${d.id}"><div class="tile-topo"><span class="tile-icone">${icone('server')}</span><span class="tile-nome">${d.nome}</span><span class="tile-estado" data-campo="estado"></span></div>
+      <div class="central-linhas"><span>Processamento 100% local — a casa funciona com ou sem internet.</span><span data-campo="contagem"></span></div>
+      <div class="tile-botoes"><button class="mini" data-acao="internet" aria-pressed="true">${icone('zap')} Internet</button></div>${modelo}</article>`;
+  }
+  return '';
+}
+
+// Atualiza o cartão de um dispositivo sem montar de novo (o dedo pode estar no controle)
+function sincronizar(id) {
+  const d = DISP[id], el = painel.querySelector(`[data-id="${CSS.escape(id)}"]`);
+  if (!el) return;
+  el.dataset.ativo = String(!!ativo(d));
+  if (d.tipo === 'sensor') el.dataset.alerta = String(!!d.alerta);
+  const est = el.querySelector('[data-campo="estado"]'); if (est) est.textContent = estadoTexto(d);
+  const btn = el.querySelector('[data-acao="alternar"]'); if (btn) btn.setAttribute('aria-pressed', String(!!ativo(d)));
+  for (const r of el.querySelectorAll('input[type=range]')) {
+    const v = d[r.dataset.prop];
+    if (document.activeElement !== r || r.dataset.arrastando !== '1') r.value = v;
+    r.style.setProperty('--p', v + '%');
+    r.setAttribute('aria-valuetext', r.dataset.prop === 'tom' ? (v < 35 ? 'quente' : v > 65 ? 'fria' : 'neutra') : v + '%');
+  }
+  if (d.tipo === 'clima') {
+    el.querySelector('[data-campo="alvo"]').textContent = `${d.alvo}°`;
+    el.querySelector('[data-campo="medida"]').textContent = `Medido: ${num(d.temp)} °C · ${Math.round(d.umid)}% de umidade`;
+  }
+  if (d.tipo === 'som') el.querySelector('[data-campo="faixa"]').textContent = `Playlist da casa · ${FAIXAS[d.faixa]}`;
+  if (d.tipo === 'central') {
+    el.querySelector('[data-campo="contagem"]').innerHTML = `<b>${Object.keys(DISP).length}</b> dispositivos em ${AMBIENTES.length} ambientes`;
+    el.querySelector('[data-acao="internet"]').setAttribute('aria-pressed', String(d.internet));
+  }
+}
+function sincronizarAmbiente(a) { for (const d of a.disp) sincronizar(d.id); }
+
+/* =====================================================================
+   4.7 Aplicar uma mudança (cartão, cena ou relógio). Tudo passa por aqui.
+   ===================================================================== */
+function aplicar(id, mudanca) {
+  const d = DISP[id];
+  Object.assign(d, mudanca);
+  if ((d.tipo === 'luz' || d.tipo === 'fita') && 'brilho' in mudanca && !('on' in mudanca)) d.on = d.brilho > 0;
+  if ((d.tipo === 'luz' || d.tipo === 'fita') && mudanca.on && d.brilho <= 0) d.brilho = 60;
+  if (d.tipo === 'tomada') d.watts = d.on ? (id === 'cozinha.tomada' ? 6 : 42) : 0;
+  sincronizar(id);
+  // A presença e os pontos da planta dependem das luzes e do som do ambiente
+  for (const s of AMB_DO_DISP[id].disp) if (s.tipo === 'sensor') sincronizar(s.id);
+  desenharPlanta();
+}
+function descrever(id) { const a = AMB_DO_DISP[id], d = DISP[id]; return `${a.curto} · ${d.nome}: ${estadoTexto(d).toLowerCase()}`; }
+
+/* Registro visível e anúncio para o leitor de tela (só um resumo por cena ou evento) */
+const registro = $('#registro'), anuncio = $('#anuncio');
+function registrar(texto, o = {}) {
+  const vazio = registro.querySelector('.vazio'); if (vazio) vazio.remove();
+  const li = document.createElement('li');
+  if (o.alerta) li.className = 'alerta';
+  const h = document.createElement('span'); h.className = 'hora'; h.textContent = o.hora ?? hhmm(casa.minuto);
+  const t = document.createElement('span'); t.textContent = texto;
+  li.append(h, t); registro.prepend(li);
+  while (registro.children.length > 8) registro.lastElementChild.remove();
+}
+function anunciar(texto) { anuncio.textContent = ''; setTimeout(() => { anuncio.textContent = texto; }, 60); }
+
+/* Fila de passos: em cascata (a casa que age) ou tudo de uma vez com movimento reduzido */
+let fila = [];
+function cancelarFila() { fila.forEach(clearTimeout); fila = []; }
+function executar(passos, fim) {
+  let t = 0;
+  for (const p of passos) {
+    const fazer = () => { if (p.id) { aplicar(p.id, p.m); registrar(p.texto || descrever(p.id), p); } else if (p.fazer) p.fazer(); };
+    if (reduzido) { if (!p.depois) fazer(); else fila.push(setTimeout(fazer, 0)); continue; }
+    t += p.espera ?? PASSO;
+    fila.push(setTimeout(fazer, (p.depois || 0) + t));
+  }
+  const ultimo = reduzido ? 0 : t + PASSO;
+  if (fim) fila.push(setTimeout(fim, ultimo));
+}
+
+/* =====================================================================
+   4.8 Cenas
+   ===================================================================== */
+const luzesDe = (...amb) => Object.values(DISP).filter(d => (d.tipo === 'luz' || d.tipo === 'fita') && (!amb.length || amb.includes(AMB_DO_DISP[d.id].id)));
+const doTipo = tipo => Object.values(DISP).filter(d => d.tipo === tipo);
+const passo = (id, m, extra = {}) => ({ id, m, ...extra });
+
+const CENAS = [
+  { id: 'chegada', nome: 'Chegada', ic: 'log-in',
+    passos() {
+      const p = [];
+      // A casa já ligou o clima antes: ela sabe que você está a caminho.
+      p.push(passo('living.clima', { on: true, alvo: 23 }, { espera: 0, hora: 'Antes', texto: 'Living · Clima já ligado em 23 °C: a casa sabia que você estava a caminho' }));
+      if (casa.vigiando) p.push({ fazer: () => { casa.vigiando = false; registrar('Alarme desarmado'); desenharPlanta(); sincronizarAmbiente(ambiente(casa.escolhido)); } });
+      p.push(passo('hall.luz', { on: true, brilho: 60 }), passo('hall.caminho', { on: true, brilho: 30 }),
+        passo('living.sanca', { on: true, brilho: 50 }), passo('living.fita', { on: true, brilho: 30, tom: 10 }));
+      if (ehDia()) p.push(passo('living.voil', { abertura: 100 }), passo('living.blackout', { abertura: 100 }));
+      p.push(passo('living.som', { tocando: true, volume: 20, faixa: 0 }));
+      return p;
+    },
+    resumo: () => `Cena Chegada: o clima do living já estava ligado antes da sua chegada; hall, caminho e living acesos${ehDia() ? ', cortinas abertas' : ''} e som baixo.` },
+  { id: 'cinema', nome: 'Cinema', ic: 'film',
+    passos: () => [passo('cinema.luz', { on: true, brilho: 35 }), passo('cinema.blackout', { abertura: 0 }), passo('cinema.luz', { brilho: 12 }),
+      passo('cinema.luz', { on: false, brilho: 0 }), passo('cinema.fita', { on: true, brilho: 10, tom: 0 }), passo('cinema.som', { tocando: true, volume: 45, faixa: 3 }),
+      passo('cinema.clima', { on: true, alvo: 22 }), passo('living.pendente', { on: false }), passo('living.sanca', { on: true, brilho: 15 })],
+    resumo: () => 'Cena Cinema: luz do cinema apagada, fita em 10% âmbar, blackout fechado, som em 45% e clima em 22 °C. O living ficou com luz de caminho.' },
+  { id: 'jantar', nome: 'Jantar', ic: 'utensils',
+    passos: () => [passo('living.pendente', { on: true, brilho: 70 }), passo('living.sanca', { on: true, brilho: 30 }), passo('living.fita', { on: true, brilho: 20, tom: 5 }),
+      passo('living.voil', { abertura: 50 }), passo('varanda.spots', { on: true, brilho: 40 }), passo('living.som', { tocando: true, volume: 25, faixa: 1 })],
+    resumo: () => 'Cena Jantar: pendente em 70% quente, sanca em 30%, voil pela metade, spots da varanda em 40% e som em 25%.' },
+  { id: 'dormir', nome: 'Dormir', ic: 'bed-double',
+    passos() {
+      const p = luzesDe().filter(d => d.on && d.id !== 'hall.caminho').map(d => passo(d.id, { on: false }));
+      p.push(passo('hall.caminho', { on: true, brilho: 5 }, { texto: 'Circulação · Luz de caminho em 5%: apaga sozinha em 1 minuto' }));
+      p.push(passo('suite.blackout', { abertura: 0 }), passo('hospedes.cortina', { abertura: 0 }), passo('suite.clima', { on: true, alvo: 22 }));
+      for (const s of doTipo('som').filter(s => s.tocando)) p.push(passo(s.id, { tocando: false }));
+      p.push({ fazer: () => { const abertas = doTipo('sensor').filter(s => s.sub === 'porta' && s.aberto); registrar(abertas.length ? `Atenção: ${abertas.map(s => s.nome.toLowerCase()).join(' e ')} aberta` : 'Portas conferidas: todas fechadas', { alerta: abertas.length > 0 }); } });
+      p.push(passo('hall.caminho', { on: false }, { depois: 5000, texto: 'Circulação · Luz de caminho apagada' }));
+      return p;
+    },
+    resumo: () => 'Cena Dormir: luzes apagadas em cascata, caminho em 5% por um minuto, blackouts fechados, suíte em 22 °C, som desligado e portas conferidas.' },
+  { id: 'ausente', nome: 'Ausente', ic: 'shield-check',
+    passos() {
+      const p = luzesDe().filter(d => d.on).map(d => passo(d.id, { on: false }));
+      for (const c of doTipo('cortina').filter(c => c.abertura > 0)) p.push(passo(c.id, { abertura: 0 }));
+      for (const c of doTipo('clima').filter(c => c.on)) p.push(passo(c.id, { on: false }));
+      for (const s of doTipo('som').filter(s => s.tocando)) p.push(passo(s.id, { tocando: false }));
+      p.push({ fazer: () => { casa.vigiando = true; casa.recluso = false; registrar('Casa vigiando: sensores armados'); desenharPlanta(); sincronizarAmbiente(ambiente(casa.escolhido)); } });
+      return p;
+    },
+    resumo: () => 'Cena Ausente: tudo apagado, cortinas fechadas, clima e som desligados. A casa está vigiando.' },
+  { id: 'recluso', nome: 'Modo Recluso', ic: 'eye-off',
+    passos: () => [passo('living.voil', { abertura: 0 }), passo('suite.voil', { abertura: 0 }), passo('varanda.persiana', { abertura: 0 }), passo('escritorio.persiana', { abertura: 0 }),
+      passo('hall.luz', { on: false }), passo('living.sanca', { on: true, brilho: 40 }), passo('living.fita', { on: true, brilho: 40, tom: 0 }),
+      passo('living.som', { tocando: true, volume: 15, faixa: 4 }),
+      { fazer: () => { casa.recluso = true; registrar('Avisos não urgentes em silêncio. Gás, água e fumaça continuam avisando.'); desenharPlanta(); } }],
+    resumo: () => 'Modo Recluso: voils e persianas fechados, hall apagado, luzes em 40% quente, som baixo e avisos não urgentes em silêncio. Gás, água e fumaça continuam avisando.' },
+];
+
+function rodarCena(id) {
+  const c = CENAS.find(x => x.id === id);
+  cancelarFila();
+  if (id !== 'recluso') casa.recluso = false;
+  if (id !== 'ausente' && id !== 'chegada' && casa.vigiando) { casa.vigiando = false; registrar('Alarme desarmado'); }
+  casa.cenaAtiva = id; marcarCenas();
+  registrar(`Cena ${c.nome}`);
+  executar(c.passos(), () => anunciar(c.resumo()));
+  desenharPlanta();
+}
+function marcarCenas() { for (const b of document.querySelectorAll('.cena')) b.setAttribute('aria-pressed', String(b.dataset.cena === casa.cenaAtiva)); }
+
+/* =====================================================================
+   4.9 O dia: a casa age sozinha nos horários
+   ===================================================================== */
+const EVENTOS = [
+  { min: 390, nome: 'Amanhecer sobre o mar', passos: () => [passo('suite.voil', { abertura: 100 }), passo('suite.blackout', { abertura: 30 }, { espera: PASSO * 3 }),
+      passo('suite.blackout', { abertura: 60 }, { espera: PASSO * 3 }), passo('suite.blackout', { abertura: 100 }, { espera: PASSO * 3 }), passo('hospedes.cortina', { abertura: 100 })],
+    resumo: '06:30 · Amanhecer sobre o mar: as cortinas da suíte abriram aos poucos.' },
+  { min: 420, nome: 'Bom dia', passos: () => [passo('suite.clima', { alvo: 24 }, { texto: 'Suíte master · Clima saiu do modo noite: 24 °C' })],
+    resumo: '07:00 · O clima da suíte saiu do modo noite.' },
+  { min: 540, nome: 'Sol da manhã na fachada', passos: () => [passo('living.voil', { abertura: 40 }, { texto: 'Living · Voil fechou 60%: sol forte na fachada, para proteger o mobiliário' })],
+    resumo: '09:00 · Sol forte na fachada: o voil do living fechou 60% para proteger o mobiliário.' },
+  { min: 900, nome: 'O sol saiu da fachada', passos: () => [passo('living.voil', { abertura: 100 })],
+    resumo: '15:00 · O sol saiu da fachada: o voil do living abriu.' },
+  { min: 1110, nome: 'Fim de tarde', passos: () => [passo('living.blackout', { abertura: 100 }), passo('living.voil', { abertura: 100 }), passo('varanda.persiana', { abertura: 100 }),
+      passo('living.sanca', { on: true, brilho: 40 })],
+    resumo: '18:30 · Fim de tarde: cortinas abertas para a vista e sanca em 40%.' },
+  { min: 1350, nome: 'Presença no corredor', passos: () => [passo('hall.caminho', { on: true, brilho: 10 }, { texto: 'Circulação · Presença no corredor: luz de caminho em 10%' })],
+    resumo: '22:30 · Presença no corredor: a luz de caminho acendeu em 10%.' },
+  { min: 1440, nome: 'Meia-noite', cena: 'dormir', resumo: '00:00 · Meia-noite: a casa entrou na cena Dormir.' },
+];
+
+let relogio = null, decorrido = 0;
+function avancar(minutos) {
+  const antes = casa.minuto, depois = antes + minutos;
+  for (const ev of EVENTOS) {
+    for (const alvo of [ev.min, ev.min + 1440]) {
+      if (antes < alvo && depois >= alvo) {
+        if (casa.vigiando && !ev.cena) continue;   // casa vazia: as rotinas de conforto esperam
+        registrar(`A casa agiu: ${ev.nome}`, { hora: hhmm(alvo) });
+        if (ev.cena) { const c = CENAS.find(x => x.id === ev.cena); casa.cenaAtiva = ev.cena; marcarCenas(); executar(c.passos()); }
+        else executar(ev.passos());
+        anunciar(ev.resumo);
+      }
+    }
+  }
+  casa.minuto = depois >= 1440 ? depois - 1440 : depois;
+  climaPasso(minutos);
+  desenharDia();
+}
+function acelerarDia() {
+  casa.acelerando = true; decorrido = 0;
+  $('#acelerar').setAttribute('aria-pressed', 'true'); $('#acelerar-txt').textContent = 'Pausar';
+  $('#acelerar use').setAttribute('href', '#i-pause');
+  const ms = reduzido ? 1000 : 100, passoMin = reduzido ? 60 : 3.6;   // 24 h em 40 s (ou de hora em hora)
+  relogio = setInterval(() => { avancar(passoMin); decorrido += passoMin; if (decorrido >= 1440) pararDia(true); }, ms);
+}
+function pararDia(fim) {
+  casa.acelerando = false; clearInterval(relogio); relogio = null;
+  $('#acelerar').setAttribute('aria-pressed', 'false'); $('#acelerar-txt').innerHTML = 'Acelerar <span class="rotulo-longo">o dia</span>';
+  $('#acelerar use').setAttribute('href', '#i-fast-forward');
+  if (fim) anunciar('O dia acelerado terminou. A casa agiu sozinha nos horários.');
+}
+
+/* Clima: a temperatura medida anda para o ajuste (ligado) ou para a de fora (desligado) */
+function externa() { const h = casa.minuto / 60; return 22.5 + 4.5 * Math.sin(Math.PI * (h - 9) / 12); }
+function climaPasso(minutos) {
+  const k = limitar(minutos / 30, .02, .6);
+  for (const c of doTipo('clima')) {
+    const alvoT = c.on ? c.alvo : externa() + 1.2 + c.desvio, alvoU = c.on ? 52 : 66;
+    c.temp += (alvoT - c.temp) * k; c.umid += (alvoU - c.umid) * k;
+    sincronizar(c.id);
+  }
+  medidaAmbiente();
+}
+
+/* =====================================================================
+   4.10 Alertas (teste) e a porta com a casa vigiando
+   ===================================================================== */
+function alertar(id, texto) {
+  aplicar(id, { alerta: true }); aplicar('tecnica.sirene', { alerta: true });
+  registrar(texto, { alerta: true });
+  anunciar(texto);
+  // Timer próprio: uma cena nova não pode cancelar o fim do alerta
+  clearTimeout(alertas[id]);
+  alertas[id] = setTimeout(() => encerrarAlerta(id, 'Alerta encerrado (era um teste)'), 6000);
+}
+const alertas = {};
+function encerrarAlerta(id, texto) {
+  clearTimeout(alertas[id]); delete alertas[id];
+  if (!DISP[id].alerta) return;
+  aplicar(id, { alerta: false });
+  if (!Object.values(DISP).some(d => d.alerta && d.id !== 'tecnica.sirene')) aplicar('tecnica.sirene', { alerta: false });
+  registrar(texto);
+}
+
+/* =====================================================================
+   4.11 Eventos dos cartões, das cenas e do dia
+   ===================================================================== */
+function escolher(id, rolar) {
+  casa.escolhido = id; montarPainel(); desenharPlanta();
+  if (rolar && matchMedia('(max-width: 899px)').matches) painel.scrollIntoView({ behavior: reduzido ? 'auto' : 'smooth', block: 'start' });
+}
+const manual = () => { if (casa.cenaAtiva) { casa.cenaAtiva = null; marcarCenas(); } };
+
+painel.addEventListener('click', e => {
+  const b = e.target.closest('[data-acao]'); if (!b) return;
+  const id = b.closest('[data-id]').dataset.id, d = DISP[id], ac = b.dataset.acao;
+  manual();
+  if (ac === 'alternar') {
+    if (d.tipo === 'luz' || d.tipo === 'fita' || d.tipo === 'clima' || d.tipo === 'tomada') aplicar(id, { on: !d.on });
+    else if (d.tipo === 'cortina') aplicar(id, { abertura: d.abertura > 0 ? 0 : 100 });
+    else if (d.tipo === 'som') aplicar(id, { tocando: !d.tocando });
+  }
+  else if (ac === 'abrir') aplicar(id, { abertura: 100 });
+  else if (ac === 'fechar') aplicar(id, { abertura: 0 });
+  else if (ac === 'mais') aplicar(id, { on: true, alvo: Math.min(30, d.alvo + 1) });
+  else if (ac === 'menos') aplicar(id, { on: true, alvo: Math.max(16, d.alvo - 1) });
+  else if (ac === 'proxima') aplicar(id, { faixa: (d.faixa + 1) % FAIXAS.length, tocando: true });
+  else if (ac === 'internet') { aplicar(id, { internet: !d.internet }); registrar(d.internet ? 'Internet de volta' : 'Sem internet: tudo segue funcionando (processamento local)'); }
+  else if (ac === 'testar') {
+    const txt = { gas: 'Alerta: gás na cozinha. Sirene e aviso no app.', agua: `Alerta: água ${id.startsWith('suite') ? 'no banho da suíte' : 'na cozinha'}. Sirene e aviso no app.`,
+      fumaca: 'Alerta: fumaça na cozinha. Sirene e aviso no app.', sirene: 'Teste da sirene.' }[d.sub];
+    alertar(id, txt);
+  }
+  else if (ac === 'porta') {
+    aplicar(id, { aberto: !d.aberto });
+    if (!d.aberto && d.alerta) encerrarAlerta(id, `${d.nome} fechada: alerta encerrado`);
+    else if (d.aberto && casa.vigiando) alertar(id, `Alerta: ${d.nome.toLowerCase()} aberta com a casa vigiando. Sirene e aviso no app.`);
+    else if (d.aberto && casa.recluso) registrar(`${d.nome} aberta · aviso silenciado (Modo Recluso)`);
+    else registrar(`${AMB_DO_DISP[id].curto} · ${d.nome}: ${d.aberto ? 'aberta' : 'fechada'}`);
+  }
+});
+painel.addEventListener('input', e => {
+  const r = e.target; if (r.type !== 'range') return;
+  const id = r.closest('[data-id]').dataset.id;
+  r.dataset.arrastando = '1'; manual();
+  aplicar(id, { [r.dataset.prop]: Number(r.value) });
+});
+painel.addEventListener('change', e => { if (e.target.type === 'range') e.target.dataset.arrastando = ''; });
+
+$('#cenas').innerHTML = CENAS.map(c => `<button class="cena" data-cena="${c.id}" aria-pressed="false">${icone(c.ic)}${c.nome}</button>`).join('');
+$('#cenas').addEventListener('click', e => { const b = e.target.closest('.cena'); if (b) rodarCena(b.dataset.cena); });
+
+$('#acelerar').addEventListener('click', () => casa.acelerando ? pararDia(false) : acelerarDia());
+$('#dia').addEventListener('input', e => { casa.minuto = Number(e.target.value); desenharDia(); climaPasso(1); });
+
+// A casa vive devagar mesmo parada: a temperatura medida anda um pouco a cada 2 s
+setInterval(() => { if (!casa.acelerando) climaPasso(1); }, 2000);
+
+/* Começo: fim de tarde, com o living ocupado */
+montarPlanta();
+desenharDia();
+escolher('living', false);
+})();
+</script>
+</body>
+</html>
