@@ -72,6 +72,12 @@ for (const f of htmls) {
   if (/Construtora/.test(texto)) erro(`${f}: cita construtora (o portfólio não leva o nome das construtoras)`);
   // "Certificações" leva à lista, não a "#"
   if (/>Certificações</.test(s) && (/href="#">Certificações</.test(s) || !/id="certificacoes"/.test(s))) erro(`${f}: o link "Certificações" leva à lista (#certificacoes)`);
+  // Certificações da AVX: só as que ela tem (decisão do Jean). LEED, PMI e LGPD ficam em "Normas e métodos que seguimos",
+  // nunca como certificação. Certificação nova entra aqui antes de entrar na página.
+  const CERTIFICACOES = ['ISO 9001', 'ISO 27001'];
+  const grupo = s.match(/<h2[^>]*>Certificações<\/h2>\s*<ul[^>]*>([\s\S]*?)<\/ul>/);
+  if (grupo) for (const m of grupo[1].matchAll(/<b>([^<]+)<\/b>/g)) if (!CERTIFICACOES.includes(m[1].trim())) erro(`${f}: "${m[1].trim()}" está em "Certificações", mas a AVX só tem ${CERTIFICACOES.join(' e ')}`);
+  for (const m of texto.replace(/\s+/g, ' ').matchAll(/\b(LEED|PMI|LGPD)\b[^.]{0,40}certifica|certifica\w*[^.]{0,40}\b(LEED|PMI|LGPD)\b/gi)) erro(`${f}: ${m[1] || m[2]} aparece como certificação da AVX ("${m[0]}"); é norma ou método que seguimos`);
 }
 // Fonte do próprio site: o arquivo e a licença
 for (const a of ['assets/fontes/fontes.css', 'assets/fontes/inter-variavel.woff2', 'assets/fontes/OFL-inter.txt']) if (!fs.existsSync(a)) erro(`${a}: não existe`);
